@@ -7,6 +7,6 @@ set(CMAKE_AUTOMOC ON)
 
 find_package(Qt5Widgets)
 
-add_executable(BodyOfYoursApp WIN32 main.cpp)
+add_executable(BodyOfYoursApp WIN32 src/main.cpp)
 
-target_link_libraries(helloworld Qt5::Widgets)
+target_link_libraries(BodyOfYoursApp Qt5::Widgets)
