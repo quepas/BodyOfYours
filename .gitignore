@@ -26,3 +26,23 @@
 *.exe
 *.out
 *.app
+
+# Visual Studio files
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.opensdf
+*.sdf
+*.sln
+BodyOfYoursApp.dir/
+Debug/
+Win32/
+ipch/
+
+# Qt files
+*_automoc.cpp
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
