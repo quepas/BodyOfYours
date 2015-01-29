@@ -17,7 +17,8 @@ before_install:
 
 install:
   # CMake
-  - sudo apt-get install -qq cmake
+  # No need for CMake now
+  # - sudo apt-get install -qq cmake
   # g++4.8
   - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
@@ -27,10 +28,10 @@ install:
   # Qt
   - sudo apt-get install -qq qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev
 
-before_script: cmake CMakeLists.txt
+# before_script: cmake CMakeLists.txt
 
 script:
-  - qmake -version
+  - qmake -qt=qt5 -version
   - qmake -qt=qt5 BodyOfYours.pro
   - $CXX --version
   - make
