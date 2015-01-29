@@ -31,6 +31,4 @@ before_script: cmake CMakeLists.txt
 
 script:
   - $CXX --version
-  - qmake -qt=qt5 -v
-  - qmake -qt=qt5
   - make
