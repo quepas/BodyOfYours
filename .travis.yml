@@ -30,5 +30,7 @@ install:
 before_script: cmake CMakeLists.txt
 
 script:
-  - $CXX --version
+  - qmake -version
   - qmake -qt=qt5 BodyOfYours.pro
+  - $CXX --version
+  - make
