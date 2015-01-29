@@ -31,4 +31,4 @@ before_script: cmake CMakeLists.txt
 
 script:
   - $CXX --version
-  - qmake.exe BodyOfYours.pro
+  - qmake BodyOfYours.pro
