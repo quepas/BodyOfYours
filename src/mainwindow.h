@@ -15,11 +15,10 @@ public:
   explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
 
-private slots:
-  void on_refreshScansTreeButton_clicked();
-
 private:
   Ui::MainWindow *ui;
+
+  void SetupScansTree();
 };
 
 #endif // MAINWINDOW_H

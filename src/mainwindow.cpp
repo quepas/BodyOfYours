@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui(new Ui::MainWindow)
 {
   ui->setupUi(this);
+  SetupScansTree();
 }
 
 MainWindow::~MainWindow()
@@ -15,7 +16,7 @@ MainWindow::~MainWindow()
   delete ui;
 }
 
-void MainWindow::on_refreshScansTreeButton_clicked()
+void MainWindow::SetupScansTree()
 {
   QFileSystemModel* model = new QFileSystemModel;
   QString data_root_path = QDir::currentPath() + "/data/";
@@ -23,4 +24,8 @@ void MainWindow::on_refreshScansTreeButton_clicked()
   QTreeView* tree = ui->scansTree;
   tree->setModel(model);
   tree->setRootIndex(model->index(data_root_path));
+  tree->setColumnWidth(0, 150);
+  tree->setColumnWidth(1, 50);
+  tree->setColumnWidth(2, 70);
+  tree->setColumnWidth(3, 100);
 }
