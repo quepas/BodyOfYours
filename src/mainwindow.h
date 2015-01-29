@@ -9,14 +9,17 @@ class MainWindow;
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+  explicit MainWindow(QWidget *parent = 0);
+  ~MainWindow();
+
+private slots:
+  void on_refreshScansTreeButton_clicked();
 
 private:
-    Ui::MainWindow *ui;
+  Ui::MainWindow *ui;
 };
 
 #endif // MAINWINDOW_H
