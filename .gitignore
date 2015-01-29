@@ -41,6 +41,7 @@ ipch/
 
 # Qt files
 *_automoc.cpp
+*.pro.user
 
 # CMake files
 CMakeCache.txt
