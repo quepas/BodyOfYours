@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>696</width>
-    <height>323</height>
+    <width>780</width>
+    <height>378</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,13 +24,23 @@
      </rect>
     </property>
    </widget>
+   <widget class="QVTKWidget" name="scansViewer">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>10</y>
+      <width>371</width>
+      <height>321</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>696</width>
+     <width>780</width>
      <height>21</height>
     </rect>
    </property>
@@ -46,6 +56,13 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QVTKWidget</class>
+   <extends>QWidget</extends>
+   <header>QVTKWidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
