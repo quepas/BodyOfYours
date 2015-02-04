@@ -34,6 +34,7 @@
 *.opensdf
 *.sdf
 *.sln
+*.suo
 BodyOfYoursApp.dir/
 Debug/
 Win32/
@@ -42,6 +43,8 @@ ipch/
 # Qt files
 *_automoc.cpp
 *.pro.user
+*moc_*
+ui_*.h
 
 # CMake files
 CMakeCache.txt
