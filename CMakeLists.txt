@@ -5,10 +5,13 @@ project(BodyOfYours)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
 
-find_package(Qt5Widgets)
-include_directories(${Qt5Widgets_INCLUDE_DIRS})
+find_package(Qt4 4.8.0 REQUIRED QtGui QtCore)
 
-add_executable(BodyOfYoursApp WIN32 src/main.cpp)
+file (GLOB RAW_sources src/*.cpp)
+file (GLOB RAW_headers src/*.h)
+#file (GLOB RAW_gui gui/*.ui)
 
-target_link_libraries(BodyOfYoursApp Qt5::Widgets)
+add_executable(BodyOfYoursApp ${RAW_sources} ${RAW_headers})
+target_link_libraries(BodyOfYoursApp Qt4::QtCore Qt4::QtGui)
