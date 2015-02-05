@@ -4,6 +4,7 @@
 #include "scans_tree.h"
 
 #include <QFileSystemModel>
+#include <QRegExp>
 #include <QDebug>
 
 #include <pcl/visualization/pcl_visualizer.h>
@@ -32,6 +33,11 @@ MainWindow::~MainWindow()
 void MainWindow::on_scansTree_doubleClicked(const QModelIndex &index)
 {
   PointCloud<PointXYZ>::Ptr ply_cloud (new PointCloud<PointXYZ>);
-  loadPLYFile(scans_tree_->model()->fileName(index).toStdString(), *ply_cloud);
-  scans_viewer_->ShowPointCloud(ply_cloud);
+  QString file_path = scans_tree_->model()->filePath(index);
+  QRegExp ply_files_only("*.ply");
+  ply_files_only.setPatternSyntax(QRegExp::Wildcard);
+  if (ply_files_only.exactMatch(file_path)) {
+    loadPLYFile(file_path.toStdString(), *ply_cloud);
+    scans_viewer_->ShowPointCloud(ply_cloud);
+  }
 }
