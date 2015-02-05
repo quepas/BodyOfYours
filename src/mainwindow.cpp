@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "scans_viewer.h"
 
 #include <QFileSystemModel>
 #include <QDebug>
@@ -8,13 +9,10 @@
 #include <pcl/io/ply_io.h>
 
 #include <QVTKWidget.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
 
-pcl::visualization::PCLVisualizer pviz ("PCL Visualizer", false);
-pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_xyz (new pcl::PointCloud<pcl::PointXYZ>);
-pcl::PointCloud<pcl::PointXYZ>::Ptr ply_cloud (new pcl::PointCloud<pcl::PointXYZ>);
-bool ply_loaded;
+using pcl::PointCloud;
+using pcl::PointXYZ;
+using pcl::io::loadPLYFile;
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
@@ -22,11 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
   ui->setupUi(this);
   SetupScansTree();
-  ply_loaded = false;
-  vtkSmartPointer<vtkRenderWindow> renderWindow = pviz.getRenderWindow();
-  ui->scansViewer->SetRenderWindow (renderWindow);
-  pviz.setupInteractor (ui->scansViewer->GetInteractor (), ui->scansViewer->GetRenderWindow ());
-  ui->scansViewer->show();
+  scans_viewer_ = new ScansViewer(ui->scansViewer);
 }
 
 MainWindow::~MainWindow()
@@ -48,16 +42,10 @@ void MainWindow::SetupScansTree()
   tree->setColumnWidth(3, 100);
 }
 
-
 void MainWindow::on_scansTree_doubleClicked(const QModelIndex &index)
 {
+  PointCloud<PointXYZ>::Ptr ply_cloud (new PointCloud<PointXYZ>);
   QFileSystemModel* model = (QFileSystemModel*) ui->scansTree->model();
-  pcl::io::loadPLYFile(model->fileName(index).toStdString(), *ply_cloud);
-  pcl::PointCloud<pcl::PointXYZ>::ConstPtr ply_cloud2 (ply_cloud);
-  if (ply_loaded) {
-    pviz.updatePointCloud(ply_cloud2, "asd");
-  } else {
-     pviz.addPointCloud(ply_cloud2, "asd");
-  }
-  ply_loaded = true;
+  loadPLYFile(model->fileName(index).toStdString(), *ply_cloud);
+  scans_viewer_->ShowPointCloud(ply_cloud);
 }

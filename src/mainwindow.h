@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "scans_viewer.h"
+
 #include <QMainWindow>
 #include <QModelIndex>
 
@@ -21,6 +23,7 @@ private slots:
 
 private:
   Ui::MainWindow *ui;
+  ScansViewer* scans_viewer_;
 
   void SetupScansTree();
 };
