@@ -18,6 +18,7 @@ ScansViewer::ScansViewer(QVTKWidget* qvtk_widget)
 
 ScansViewer::~ScansViewer()
 {
+  visualizer_.close();
 }
 
 bool ScansViewer::ShowPointCloud(PointCloud<PointXYZ>::ConstPtr point_cloud)
