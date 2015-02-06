@@ -18,11 +18,13 @@ using pcl::io::loadPLYFile;
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    scanner3d_(new RemeScanner3D())
 {
   ui->setupUi(this);
   scans_viewer_ = new ScansViewer(ui->scansViewer);
   scans_tree_ = new ScansTree(ui->scansTree, QDir::currentPath() + "/data");
+  ui->combatibleDevicesComboBox->addItems(scanner3d_->GetCompatibleDevices());
 }
 
 MainWindow::~MainWindow()
