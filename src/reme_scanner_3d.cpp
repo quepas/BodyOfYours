@@ -12,7 +12,7 @@ RemeScanner3D::~RemeScanner3D()
 
 }
 
-QStringList RemeScanner3D::GetCompatibleDevices()
+QStringList RemeScanner3D::GetComputingDevices()
 {
   QStringList result("choose device");
 
@@ -37,7 +37,7 @@ QStringList RemeScanner3D::GetCompatibleDevices()
   return result;
 }
 
-bool RemeScanner3D::InitCompatibleDevice(int device_id)
+bool RemeScanner3D::InitComputingDevice(int device_id)
 {
   reme_options_t options;
   reme_options_create(context_, &options);

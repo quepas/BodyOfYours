@@ -24,10 +24,10 @@ MainWindow::MainWindow(QWidget *parent)
   ui->setupUi(this);
   scans_viewer_ = new ScansViewer(ui->scansViewer);
   scans_tree_ = new ScansTree(ui->scansTree, QDir::currentPath() + "/data");
-  ui->combatibleDevicesComboBox->addItems(scanner3d_->GetCompatibleDevices());
+  ui->computingDevicesComboBox->addItems(scanner3d_->GetComputingDevices());
   // set defualt icons
-  for (int i = 0; i < ui->combatibleDevicesComboBox->maxVisibleItems(); ++i) {
-    ui->combatibleDevicesComboBox->setItemIcon(i, QIcon("gui/icons/sync.ico"));
+  for (int i = 0; i < ui->computingDevicesComboBox->maxVisibleItems(); ++i) {
+    ui->computingDevicesComboBox->setItemIcon(i, QIcon("gui/icons/sync.ico"));
   }
 }
 
@@ -48,16 +48,16 @@ void MainWindow::on_scansTree_doubleClicked(const QModelIndex &index)
   }
 }
 
-void MainWindow::on_combatibleDevicesComboBox_currentIndexChanged(int index)
+void MainWindow::on_computingDevicesComboBox_currentIndexChanged(int index)
 {
   int device_id = index - 1;
   if (device_id > -1) {
-    ui->combatibleDevicesComboBox->setItemData(0, "", Qt::UserRole-1);
-    if (scanner3d_->InitCompatibleDevice(device_id)) {
-      ui->combatibleDevicesComboBox->setItemIcon(index, QIcon("gui/icons/OK.ico"));
+    ui->computingDevicesComboBox->setItemData(0, "", Qt::UserRole-1);
+    if (scanner3d_->InitComputingDevice(device_id)) {
+      ui->computingDevicesComboBox->setItemIcon(index, QIcon("gui/icons/OK.ico"));
     } else {
-      ui->combatibleDevicesComboBox->setItemIcon(index, QIcon("gui/icons/error.ico"));
-      ui->combatibleDevicesComboBox->setItemData(index, "", Qt::UserRole-1);
+      ui->computingDevicesComboBox->setItemIcon(index, QIcon("gui/icons/error.ico"));
+      ui->computingDevicesComboBox->setItemData(index, "", Qt::UserRole-1);
     }
   }
 }

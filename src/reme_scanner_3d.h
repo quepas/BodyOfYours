@@ -10,8 +10,8 @@ public:
   RemeScanner3D();
   ~RemeScanner3D();
 
-  QStringList GetCompatibleDevices() override;
-  bool InitCompatibleDevice(int device_id) override;
+  QStringList GetComputingDevices() override;
+  bool InitComputingDevice(int device_id) override;
 
 private:
   reme_context_t context_;

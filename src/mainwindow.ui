@@ -47,7 +47,7 @@
      <string>Compatible devices:</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="combatibleDevicesComboBox">
+   <widget class="QComboBox" name="computingDevicesComboBox">
     <property name="geometry">
      <rect>
       <x>110</x>
