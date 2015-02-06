@@ -15,11 +15,19 @@ TEMPLATE = app
 
 
 SOURCES += src/main.cpp \
-           src/mainwindow.cpp
+           src/mainwindow.cpp \
+           src/reme_scanner_3d.cpp \
+           src/scanner_3d.cpp \
+           src/scans_tree.cpp \
+           src/scans_viewer.cpp
 
-HEADERS  += src/mainwindow.h
+HEADERS  += src/mainwindow.h \
+            src/reme_scanner_3d.h \
+            src/scanner_3d.h \
+            src/scans_tree.h \
+            src/scans_viewer.h
 
-FORMS    += gui/mainwindow.ui
+FORMS    += src/mainwindow.ui
 
 
 INCLUDEPATH += "D:/Programowanie/Biblioteki/Tidy/pcl-1.7/include/pcl-1.7"
