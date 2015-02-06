@@ -23,6 +23,7 @@ public:
 
 private slots:
   void on_scansTree_doubleClicked(const QModelIndex& index);
+  void on_combatibleDevicesComboBox_currentIndexChanged(int index);
 
 private:
   Ui::MainWindow *ui;
