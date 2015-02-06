@@ -14,7 +14,7 @@ RemeScanner3D::~RemeScanner3D()
 
 QStringList RemeScanner3D::GetCompatibleDevices()
 {
-  QStringList result;
+  QStringList result("choose device");
 
   reme_options_t options, new_options;
   reme_options_create(context_, &options);
@@ -30,9 +30,23 @@ QStringList RemeScanner3D::GetCompatibleDevices()
   for (int idx = 0; idx < num_devices; ++idx) {
     reme_options_bind_repeated_message(context_, options, "devices", idx, new_options);
     reme_options_get(context_, new_options, "name", name, 256);
-    result.append(name);
     reme_options_get(context_, new_options, "vendor", vendor, 256);
     reme_options_get(context_, new_options, "type", type, 256);
+    result.append(QString(name).trimmed() + " [" + type + "]");
   }
   return result;
+}
+
+bool RemeScanner3D::InitCompatibleDevice(int device_id)
+{
+  reme_options_t options;
+  reme_options_create(context_, &options);
+  reme_context_bind_reconstruction_options(context_, options);
+  reme_options_set_int(context_, options, "device_id", device_id);
+  if (reme_context_compile(context_) == REME_ERROR_UNSPECIFIED) {
+    reme_context_print_errors(context_);
+    return false;
+  }
+  qDebug() << "[RemeScanner3d]: Device (id: " + QString::number(device_id) + ") initialized.";
+  return true;
 }
