@@ -3,6 +3,7 @@
 #include "scans_viewer.h"
 #include "scans_tree.h"
 #include "resources.h"
+#include "scanning_3d.h"
 
 #include <QFileSystemModel>
 #include <QRegExp>
@@ -71,5 +72,6 @@ void MainWindow::on_computingDevicesComboBox_currentIndexChanged(int index)
 
 void MainWindow::on_scanButton_clicked()
 {
-  scanner3d_->GrabCamera();
+  Scanning3D* scanning = new Scanning3D(scanner3d_);
+  scanning->start();
 }

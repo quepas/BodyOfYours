@@ -58,11 +58,11 @@ bool RemeScanner3D::InitComputingDevice(int device_id)
 
 void RemeScanner3D::GrabCamera()
 {
-  reme_sensor_grab(context_, sensor_);
-  reme_sensor_prepare_images(context_, sensor_);
-  reme_sensor_get_image(context_, sensor_, REME_IMAGE_AUX, image_aux_);
-  reme_viewer_update(context_, img_viewer_);
-  reme_context_print_errors(context_);
+  while(REME_SUCCESS(reme_sensor_grab(context_, sensor_))) {
+    reme_sensor_prepare_images(context_, sensor_);
+    reme_sensor_get_image(context_, sensor_, REME_IMAGE_AUX, image_aux_);
+    reme_viewer_update(context_, img_viewer_);
+  }
 }
 
 void RemeScanner3D::GrabDepth()
