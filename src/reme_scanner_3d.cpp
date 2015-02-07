@@ -5,11 +5,16 @@
 RemeScanner3D::RemeScanner3D()
 {
   reme_context_create(&context_);
+  reme_sensor_create(context_, "openni;kinect", true, &sensor_);
+  reme_sensor_open(context_, sensor_);
+  reme_viewer_create_image(context_, "Image viewer", &img_viewer_);
+  reme_image_create(context_, &image_aux_);
+  reme_viewer_add_image(context_, img_viewer_, image_aux_);
 }
 
 RemeScanner3D::~RemeScanner3D()
 {
-
+  reme_context_destroy(&context_);
 }
 
 QStringList RemeScanner3D::GetComputingDevices()
@@ -49,4 +54,18 @@ bool RemeScanner3D::InitComputingDevice(int device_id)
   }
   qDebug() << "[RemeScanner3d]: Device (id: " + QString::number(device_id) + ") initialized.";
   return true;
+}
+
+void RemeScanner3D::GrabCamera()
+{
+  reme_sensor_grab(context_, sensor_);
+  reme_sensor_prepare_images(context_, sensor_);
+  reme_sensor_get_image(context_, sensor_, REME_IMAGE_AUX, image_aux_);
+  reme_viewer_update(context_, img_viewer_);
+  reme_context_print_errors(context_);
+}
+
+void RemeScanner3D::GrabDepth()
+{
+
 }

@@ -10,5 +10,7 @@ public:
 
   virtual QStringList GetComputingDevices() = 0;
   virtual bool InitComputingDevice(int device_id) = 0;
+  virtual void GrabCamera() = 0;
+  virtual void GrabDepth() = 0;
 private:
 };

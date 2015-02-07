@@ -71,5 +71,5 @@ void MainWindow::on_computingDevicesComboBox_currentIndexChanged(int index)
 
 void MainWindow::on_scanButton_clicked()
 {
-
+  scanner3d_->GrabCamera();
 }
