@@ -30,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent)
   for (int i = 0; i < ui->computingDevicesComboBox->maxVisibleItems(); ++i) {
     ui->computingDevicesComboBox->setItemIcon(i, QIcon(Resources::ICON_SYNC));
   }
+  ui->scanButton->setIcon(QIcon(Resources::ICON_WARNING));
+  ui->scanButton->setDisabled(true);
 }
 
 MainWindow::~MainWindow()
@@ -56,9 +58,18 @@ void MainWindow::on_computingDevicesComboBox_currentIndexChanged(int index)
     ui->computingDevicesComboBox->setItemData(0, "", Qt::UserRole-1);
     if (scanner3d_->InitComputingDevice(device_id)) {
       ui->computingDevicesComboBox->setItemIcon(index, QIcon(Resources::ICON_OK));
+      ui->scanButton->setIcon(QIcon(Resources::ICON_OK));
+      ui->scanButton->setDisabled(false);
     } else {
       ui->computingDevicesComboBox->setItemIcon(index, QIcon(Resources::ICON_ERROR));
       ui->computingDevicesComboBox->setItemData(index, "", Qt::UserRole-1);
+      ui->scanButton->setIcon(QIcon(Resources::ICON_WARNING));
+      ui->scanButton->setDisabled(true);
     }
   }
+}
+
+void MainWindow::on_scanButton_clicked()
+{
+
 }
