@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "scans_viewer.h"
+#include "sensor_viewer.h"
 #include "scans_tree.h"
 #include "scanner_3d.h"
 #include "reme_scanner_3d.h"
@@ -29,6 +30,7 @@ private slots:
 private:
   Ui::MainWindow *ui;
   ScansViewer* scans_viewer_;
+  SensorViewer* sensor_viewer_;
   ScansTree* scans_tree_;
   Scanner3D* scanner3d_;
 };

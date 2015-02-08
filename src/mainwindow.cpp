@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
   ui->setupUi(this);
   scans_viewer_ = new ScansViewer(ui->scansViewer);
+  sensor_viewer_ = new SensorViewer(ui->sensorViewer);
   scans_tree_ = new ScansTree(ui->scansTree, Resources::SCANS_DATA_PATH);
   ui->computingDevicesComboBox->addItems(scanner3d_->GetComputingDevices());
   // set defualt icons

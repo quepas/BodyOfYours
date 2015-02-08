@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>780</width>
-    <height>378</height>
+    <height>658</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,6 +68,16 @@
     </property>
     <property name="text">
      <string>Scan</string>
+    </property>
+   </widget>
+   <widget class="QVTKWidget" name="sensorViewer">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>340</y>
+      <width>371</width>
+      <height>271</height>
+     </rect>
     </property>
    </widget>
   </widget>
