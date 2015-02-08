@@ -33,6 +33,8 @@ private:
   SensorViewer* sensor_viewer_;
   ScansTree* scans_tree_;
   Scanner3D* scanner3d_;
+
+  bool is_scanning_;
 };
 
 #endif // MAINWINDOW_H

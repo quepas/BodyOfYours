@@ -21,7 +21,8 @@ using pcl::io::loadPLYFile;
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
     ui(new Ui::MainWindow),
-    scanner3d_(new RemeScanner3D())
+    scanner3d_(new RemeScanner3D()),
+    is_scanning_(false)
 {
   ui->setupUi(this);
   scans_viewer_ = new ScansViewer(ui->scansViewer);
@@ -73,6 +74,9 @@ void MainWindow::on_computingDevicesComboBox_currentIndexChanged(int index)
 
 void MainWindow::on_scanButton_clicked()
 {
-  Scanning3D* scanning = new Scanning3D(scanner3d_);
-  scanning->start();
+  if (!is_scanning_) {
+    is_scanning_ = true;
+    Scanning3D* scanning = new Scanning3D(scanner3d_);
+    scanning->start();
+  }
 }
