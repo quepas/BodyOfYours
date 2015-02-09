@@ -18,14 +18,19 @@ SOURCES += src/main.cpp \
            src/mainwindow.cpp \
            src/reme_scanner_3d.cpp \
            src/scanner_3d.cpp \
+           src/scanning_3d.cpp \
            src/scans_tree.cpp \
-           src/scans_viewer.cpp
+           src/scans_viewer.cpp \
+           src/sensor_viewer.cpp
 
 HEADERS  += src/mainwindow.h \
             src/reme_scanner_3d.h \
+            src/resources.h \
             src/scanner_3d.h \
+            src/scanning_3d.h \
             src/scans_tree.h \
-            src/scans_viewer.h
+            src/scans_viewer.h \
+            src/sensor_viewer.h
 
 FORMS    += src/mainwindow.ui
 
