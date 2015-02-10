@@ -12,7 +12,7 @@ public:
 
   QStringList GetComputingDevices() override;
   bool InitComputingDevice(int device_id) override;
-  void GrabCamera() override;
+  bool GrabCameraFrame(FrameData* out_frame) override;
   void GrabDepth() override;
 
 private:
