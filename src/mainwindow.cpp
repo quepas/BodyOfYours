@@ -76,7 +76,14 @@ void MainWindow::on_scanButton_clicked()
 {
   if (!is_scanning_) {
     is_scanning_ = true;
-    Scanning3D* scanning = new Scanning3D(scanner3d_);
+    Scanning3D* scanning = new Scanning3D(scanner3d_, sensor_viewer_);
+    connect(scanning, SIGNAL(grabFrame(FrameData*)), this, SLOT(getFrame(FrameData*)));
     scanning->start();
   }
+}
+
+void MainWindow::getFrame(FrameData* frame)
+{
+  sensor_viewer_->ShowFrame(frame);
+  delete frame;
 }

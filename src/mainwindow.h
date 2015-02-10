@@ -27,6 +27,8 @@ private slots:
   void on_computingDevicesComboBox_currentIndexChanged(int index);
   void on_scanButton_clicked();
 
+  void getFrame(FrameData* frame);
+
 private:
   Ui::MainWindow *ui;
   ScansViewer* scans_viewer_;
