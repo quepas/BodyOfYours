@@ -1,8 +1,7 @@
 #include "scanning_3d.h"
 
-Scanning3D::Scanning3D(Scanner3D* scanner3d, SensorViewer* viewer)
-  : scanner_(scanner3d),
-    viewer_(viewer)
+Scanning3D::Scanning3D(Scanner3D* scanner3d)
+  : scanner_(scanner3d)
 {
 
 }
