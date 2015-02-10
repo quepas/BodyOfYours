@@ -2,6 +2,12 @@
 
 #include <QStringList>
 
+struct FrameData
+{
+  const void* data;
+  int width, height, length;
+};
+
 class Scanner3D
 {
 public:
@@ -10,7 +16,7 @@ public:
 
   virtual QStringList GetComputingDevices() = 0;
   virtual bool InitComputingDevice(int device_id) = 0;
-  virtual void GrabCamera() = 0;
+  virtual bool GrabCameraFrame(FrameData* out_frame) = 0;
   virtual void GrabDepth() = 0;
 private:
 };
