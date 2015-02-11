@@ -7,8 +7,7 @@ RemeScanner3D::RemeScanner3D()
   reme_context_create(&context_);
   reme_sensor_create(context_, "openni;kinect", true, &sensor_);
   reme_sensor_open(context_, sensor_);
-  reme_image_create(context_, &image_aux_);
-  reme_image_create(context_, &image_depth_);
+  reme_image_create(context_, &image_);
 }
 
 RemeScanner3D::~RemeScanner3D()
@@ -70,9 +69,9 @@ bool RemeScanner3D::GrabFrame(FrameData* out_frame, reme_sensor_image_t frame_ty
   bool is_grab_ok = REME_SUCCESS(reme_sensor_grab(context_, sensor_));
   if (is_grab_ok) {
     reme_sensor_prepare_image(context_, sensor_, frame_type);
-    reme_sensor_get_image(context_, sensor_, frame_type, image_depth_);
-    reme_image_get_bytes(context_, image_depth_, &(out_frame->data), &(out_frame->length));
-    reme_image_get_info(context_, image_depth_, &(out_frame->width), &(out_frame->height));
+    reme_sensor_get_image(context_, sensor_, frame_type, image_);
+    reme_image_get_bytes(context_, image_, &(out_frame->data), &(out_frame->length));
+    reme_image_get_info(context_, image_, &(out_frame->width), &(out_frame->height));
   }
   return is_grab_ok;
 }
