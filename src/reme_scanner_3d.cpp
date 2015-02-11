@@ -76,3 +76,8 @@ bool RemeScanner3D::GrabFrame(FrameData* out_frame, reme_sensor_image_t frame_ty
   }
   return is_grab_ok;
 }
+
+bool RemeScanner3D::GrabVolumeFrame(FrameData* out_frame)
+{
+  return GrabFrame(out_frame, REME_IMAGE_VOLUME);
+}

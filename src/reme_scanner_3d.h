@@ -14,6 +14,7 @@ public:
   bool InitComputingDevice(int device_id) override;
   bool GrabCameraFrame(FrameData* out_frame) override;
   bool GrabDepthFrame(FrameData* out_frame) override;
+  bool GrabVolumeFrame(FrameData* out_frame) override;
 
 private:
   reme_context_t context_;

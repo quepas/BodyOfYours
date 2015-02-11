@@ -18,5 +18,6 @@ public:
   virtual bool InitComputingDevice(int device_id) = 0;
   virtual bool GrabCameraFrame(FrameData* out_frame) = 0;
   virtual bool GrabDepthFrame(FrameData* out_frame) = 0;
+  virtual bool GrabVolumeFrame(FrameData* out_frame) = 0;
 private:
 };
