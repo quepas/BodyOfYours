@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
     ui(new Ui::MainWindow),
     scanner3d_(new RemeScanner3D()),
+    scanning_window_(new ScanningWindow()),
     is_scanning_(false)
 {
   ui->setupUi(this);
@@ -76,6 +77,7 @@ void MainWindow::on_computingDevicesComboBox_currentIndexChanged(int index)
 
 void MainWindow::on_scanButton_clicked()
 {
+  scanning_window_->show();
   if (!is_scanning_) {
     is_scanning_ = true;
     Scanning3D* scanning = new Scanning3D(scanner3d_);

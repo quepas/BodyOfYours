@@ -5,6 +5,7 @@
 #include "sensor_viewer.h"
 #include "scans_tree.h"
 #include "scanner_3d.h"
+#include "scanningwindow.h"
 #include "reme_scanner_3d.h"
 
 #include <QMainWindow>
@@ -33,6 +34,7 @@ private slots:
 
 private:
   Ui::MainWindow *ui;
+  ScanningWindow *scanning_window_;
   ScansViewer* scans_viewer_;
   SensorViewer* sensor_viewer_, *sensor_depth_viewer_, *sensor_volume_viewer_;
   ScansTree* scans_tree_;
