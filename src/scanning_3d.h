@@ -10,6 +10,7 @@ class Scanning3D : public QThread
 public:
   Scanning3D(Scanner3D* scanner3d);
   void ScanVolumeData(bool scan_volume_data);
+  void RestartReconstruction();
 
 protected:
   void run();

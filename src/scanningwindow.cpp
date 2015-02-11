@@ -51,3 +51,8 @@ void ScanningWindow::captureVolumeFrame(FrameData* frame)
   volume_viewer_->ShowFrame(frame);
   delete frame;
 }
+
+void ScanningWindow::on_restartScanButton_clicked()
+{
+  scanning_->RestartReconstruction();
+}

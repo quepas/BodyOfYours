@@ -31,3 +31,8 @@ void Scanning3D::ScanVolumeData(bool scan_volume_data)
 {
   scan_volume_data_ = scan_volume_data;
 }
+
+void Scanning3D::RestartReconstruction()
+{
+  scanner_->RestartReconstruction();
+}
