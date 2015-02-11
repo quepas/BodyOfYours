@@ -21,11 +21,10 @@ using pcl::io::loadPLYFile;
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
     ui(new Ui::MainWindow),
-    scanner3d_(new RemeScanner3D()),
-    scanning_window_(new ScanningWindow()),
-    is_scanning_(false)
+    scanner3d_(new RemeScanner3D())
 {
   ui->setupUi(this);
+  scanning_window_ = new ScanningWindow(scanner3d_),
   scans_viewer_ = new ScansViewer(ui->scansViewer);
   sensor_viewer_ = new SensorViewer(ui->sensorViewer);
   sensor_depth_viewer_ = new SensorViewer(ui->sensorDepthViewer);
@@ -78,30 +77,4 @@ void MainWindow::on_computingDevicesComboBox_currentIndexChanged(int index)
 void MainWindow::on_scanButton_clicked()
 {
   scanning_window_->show();
-  if (!is_scanning_) {
-    is_scanning_ = true;
-    Scanning3D* scanning = new Scanning3D(scanner3d_);
-    connect(scanning, SIGNAL(grabCameraFrame(FrameData*)), this, SLOT(captureCameraFrame(FrameData*)));
-    connect(scanning, SIGNAL(grabDepthFrame(FrameData*)), this, SLOT(captureDepthFrame(FrameData*)));
-    connect(scanning, SIGNAL(grabVolumeFrame(FrameData*)), this, SLOT(captureVolumeFrame(FrameData*)));
-    scanning->start();
-  }
-}
-
-void MainWindow::captureCameraFrame(FrameData* frame)
-{
-  sensor_viewer_->ShowFrame(frame);
-  delete frame;
-}
-
-void MainWindow::captureDepthFrame(FrameData* frame)
-{
-  sensor_depth_viewer_->ShowFrame(frame);
-  delete frame;
-}
-
-void MainWindow::captureVolumeFrame(FrameData* frame)
-{
-  sensor_volume_viewer_->ShowFrame(frame);
-  delete frame;
 }

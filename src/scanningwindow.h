@@ -2,6 +2,7 @@
 #define SCANNINGWINDOW_H
 
 #include "sensor_viewer.h"
+#include "scanning_3d.h"
 
 #include <QDialog>
 
@@ -14,16 +15,21 @@ class ScanningWindow : public QDialog
   Q_OBJECT
 
 public:
-  explicit ScanningWindow(QWidget *parent = 0);
+  ScanningWindow(Scanner3D* scanner, QWidget *parent = 0);
   ~ScanningWindow();
 
 private slots:
   void on_startScanButton_clicked();
   void on_stopScanButton_clicked();
 
+  void captureCameraFrame(FrameData* frame);
+  void captureDepthFrame(FrameData* frame);
+  void captureVolumeFrame(FrameData* frame);
+
 private:
   Ui::ScanningWindow *ui;
   SensorViewer *camera_viewer_, *depth_viewer_, *volume_viewer_;
+  Scanning3D *scanning_;
 };
 
 #endif // SCANNINGWINDOW_H
