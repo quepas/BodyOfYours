@@ -83,5 +83,15 @@ bool RemeScanner3D::GrabFrame(FrameData* out_frame, reme_sensor_image_t frame_ty
 
 bool RemeScanner3D::GrabVolumeFrame(FrameData* out_frame)
 {
-  return GrabFrame(out_frame, REME_IMAGE_VOLUME);
+  if (REME_SUCCESS(reme_sensor_grab(context_, sensor_))) {
+    if (REME_SUCCESS(reme_sensor_track_position(context_, sensor_))) {
+      reme_sensor_update_volume(context_, sensor_);
+      reme_sensor_prepare_image(context_, sensor_, REME_IMAGE_VOLUME);
+      reme_sensor_get_image(context_, sensor_, REME_IMAGE_VOLUME, image_);
+      reme_image_get_bytes(context_, image_, &(out_frame->data), &(out_frame->length));
+      reme_image_get_info(context_, image_, &(out_frame->width), &(out_frame->height));
+      return true;
+    }
+  }
+  return false;
 }
