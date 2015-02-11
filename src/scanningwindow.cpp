@@ -13,6 +13,9 @@ ScanningWindow::ScanningWindow(QWidget *parent) :
 
 ScanningWindow::~ScanningWindow()
 {
+  delete volume_viewer_;
+  delete depth_viewer_;
+  delete camera_viewer_;
   delete ui;
 }
 
