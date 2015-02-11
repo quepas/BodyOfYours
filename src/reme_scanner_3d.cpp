@@ -7,10 +7,8 @@ RemeScanner3D::RemeScanner3D()
   reme_context_create(&context_);
   reme_sensor_create(context_, "openni;kinect", true, &sensor_);
   reme_sensor_open(context_, sensor_);
-  reme_viewer_create_image(context_, "Image viewer", &img_viewer_);
   reme_image_create(context_, &image_aux_);
   reme_image_create(context_, &image_depth_);
-  reme_viewer_add_image(context_, img_viewer_, image_aux_);
 }
 
 RemeScanner3D::~RemeScanner3D()

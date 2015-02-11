@@ -18,6 +18,5 @@ public:
 private:
   reme_context_t context_;
   reme_sensor_t sensor_;
-  reme_viewer_t img_viewer_;
   reme_image_t image_aux_, image_depth_;
 };
