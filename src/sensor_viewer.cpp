@@ -8,12 +8,12 @@
 
 SensorViewer::SensorViewer(QVTKWidget* qvtk_widget)
   : qvtk_widget_(qvtk_widget),
-    viewer_(vtkImageViewer::New())
+    viewer_(vtkImageViewer2::New()),
+    is_initialized(false)
 {
   vtkRenderWindow* render_window = viewer_->GetRenderWindow();
-  qvtk_widget_->SetRenderWindow(render_window);
-  viewer_->SetupInteractor(qvtk_widget_->GetInteractor());
-  qvtk_widget_->show();
+  // disable mouse events
+  qvtk_widget_->setEnabled(false);
 }
 
 SensorViewer::~SensorViewer()
@@ -24,7 +24,6 @@ SensorViewer::~SensorViewer()
 
 void SensorViewer::ShowFrame(FrameData* frame)
 {
-  vtkSmartPointer<vtkImageViewer2> imageViewer = vtkSmartPointer<vtkImageViewer2>::New();
   vtkSmartPointer<vtkImageImport> imageImport =vtkSmartPointer<vtkImageImport>::New();
   imageImport->SetWholeExtent(0, frame->width-1, 0, frame->height-1, 0, 0);
   imageImport->SetDataExtentToWholeExtent();
@@ -38,10 +37,11 @@ void SensorViewer::ShowFrame(FrameData* frame)
   imageYFlip->SetInputConnection(imageImport->GetOutputPort());
   imageYFlip->Update();
 
-  imageViewer->SetInputConnection(imageYFlip->GetOutputPort());
-  qvtk_widget_->SetRenderWindow(imageViewer->GetRenderWindow());
-  // disable mouse events
-  qvtk_widget_->setEnabled(false);
-  imageViewer->SetupInteractor(qvtk_widget_->GetInteractor());
-  imageViewer->Render();
+  viewer_->SetInputConnection(imageYFlip->GetOutputPort());
+  if (!is_initialized) {
+    qvtk_widget_->SetRenderWindow(viewer_->GetRenderWindow());
+    viewer_->SetupInteractor(qvtk_widget_->GetInteractor());
+    is_initialized = true;
+  }
+  viewer_->Render();
 }

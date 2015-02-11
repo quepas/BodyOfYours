@@ -2,7 +2,7 @@
 
 #include "scanner_3d.h"
 
-#include <vtkImageViewer.h>
+#include <vtkImageViewer2.h>
 #include <QVTKWidget.h>
 
 class SensorViewer
@@ -14,7 +14,8 @@ public:
   void ShowFrame(FrameData* frame);
 
 private:
-  vtkImageViewer* viewer_;
+  vtkImageViewer2* viewer_;
   QVTKWidget* qvtk_widget_;
+  bool is_initialized;
 
 };
