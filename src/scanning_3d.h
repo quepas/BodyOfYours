@@ -16,6 +16,7 @@ protected:
 signals:
   void grabCameraFrame(FrameData* frame);
   void grabDepthFrame(FrameData* frame);
+  void grabVolumeFrame(FrameData* frame);
 
 private:
   Scanner3D* scanner_;

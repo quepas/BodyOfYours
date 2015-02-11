@@ -16,6 +16,9 @@ void Scanning3D::run()
     FrameData* depth_frame = new FrameData();
     scanner_->GrabDepthFrame(depth_frame);
     emit grabDepthFrame(depth_frame);
+    FrameData* volume_frame = new FrameData();
+    scanner_->GrabVolumeFrame(volume_frame);
+    emit grabVolumeFrame(volume_frame);
     QThread::msleep(100);
   }
 }
