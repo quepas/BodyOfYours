@@ -57,22 +57,20 @@ bool RemeScanner3D::InitComputingDevice(int device_id)
 
 bool RemeScanner3D::GrabCameraFrame(FrameData* out_frame)
 {
-  bool is_grab_ok = REME_SUCCESS(reme_sensor_grab(context_, sensor_));
-  if (is_grab_ok) {
-    reme_sensor_prepare_image(context_, sensor_, REME_IMAGE_AUX);
-    reme_sensor_get_image(context_, sensor_, REME_IMAGE_AUX, image_aux_);
-    reme_image_get_bytes(context_, image_aux_, &(out_frame->data), &(out_frame->length));
-    reme_image_get_info(context_, image_aux_, &(out_frame->width), &(out_frame->height));
-  }
-  return is_grab_ok;
+  return GrabFrame(out_frame, REME_IMAGE_AUX);
 }
 
 bool RemeScanner3D::GrabDepthFrame(FrameData* out_frame)
 {
+  return GrabFrame(out_frame, REME_IMAGE_DEPTH);
+}
+
+bool RemeScanner3D::GrabFrame(FrameData* out_frame, reme_sensor_image_t frame_type)
+{
   bool is_grab_ok = REME_SUCCESS(reme_sensor_grab(context_, sensor_));
   if (is_grab_ok) {
-    reme_sensor_prepare_image(context_, sensor_, REME_IMAGE_DEPTH);
-    reme_sensor_get_image(context_, sensor_, REME_IMAGE_DEPTH, image_depth_);
+    reme_sensor_prepare_image(context_, sensor_, frame_type);
+    reme_sensor_get_image(context_, sensor_, frame_type, image_depth_);
     reme_image_get_bytes(context_, image_depth_, &(out_frame->data), &(out_frame->length));
     reme_image_get_info(context_, image_depth_, &(out_frame->width), &(out_frame->height));
   }
