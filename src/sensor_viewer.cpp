@@ -11,7 +11,6 @@ SensorViewer::SensorViewer(QVTKWidget* qvtk_widget)
     viewer_(vtkImageViewer2::New()),
     is_initialized(false)
 {
-  vtkRenderWindow* render_window = viewer_->GetRenderWindow();
   // disable mouse events
   qvtk_widget_->setEnabled(false);
 }
@@ -38,6 +37,7 @@ void SensorViewer::ShowFrame(FrameData* frame)
   imageYFlip->Update();
 
   viewer_->SetInputConnection(imageYFlip->GetOutputPort());
+  // fix for bug in vtk lib with non-optional connection needed when initializing image viewer
   if (!is_initialized) {
     qvtk_widget_->SetRenderWindow(viewer_->GetRenderWindow());
     viewer_->SetupInteractor(qvtk_widget_->GetInteractor());
