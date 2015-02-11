@@ -20,6 +20,7 @@ private:
   reme_context_t context_;
   reme_sensor_t sensor_;
   reme_image_t image_;
+  reme_volume_t volume_;
 
   bool GrabFrame(FrameData* out_frame, reme_sensor_image_t frame_type);
 };

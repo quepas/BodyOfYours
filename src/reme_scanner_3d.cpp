@@ -7,11 +7,16 @@ RemeScanner3D::RemeScanner3D()
   reme_context_create(&context_);
   reme_sensor_create(context_, "openni;kinect", true, &sensor_);
   reme_sensor_open(context_, sensor_);
+  reme_sensor_set_prescan_position(context_, sensor_, REME_SENSOR_POSITION_INFRONT);
   reme_image_create(context_, &image_);
+  reme_volume_create(context_, &volume_);
 }
 
 RemeScanner3D::~RemeScanner3D()
 {
+  reme_image_destroy(context_, &image_);
+  reme_volume_destroy(context_, &volume_);
+  reme_sensor_destroy(context_, &sensor_);
   reme_context_destroy(&context_);
 }
 
