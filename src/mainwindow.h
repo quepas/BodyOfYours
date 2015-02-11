@@ -29,11 +29,12 @@ private slots:
 
   void captureCameraFrame(FrameData* frame);
   void captureDepthFrame(FrameData* frame);
+  void captureVolumeFrame(FrameData* frame);
 
 private:
   Ui::MainWindow *ui;
   ScansViewer* scans_viewer_;
-  SensorViewer* sensor_viewer_, *sensor_depth_viewer_;
+  SensorViewer* sensor_viewer_, *sensor_depth_viewer_, *sensor_volume_viewer_;
   ScansTree* scans_tree_;
   Scanner3D* scanner3d_;
 
