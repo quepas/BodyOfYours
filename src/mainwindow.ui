@@ -80,6 +80,16 @@
      </rect>
     </property>
    </widget>
+   <widget class="QVTKWidget" name="sensorDepthViewer">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>340</y>
+      <width>381</width>
+      <height>271</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
