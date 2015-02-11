@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>780</width>
-    <height>658</height>
+    <width>1180</width>
+    <height>659</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,13 +90,23 @@
      </rect>
     </property>
    </widget>
+   <widget class="QVTKWidget" name="sensorVolumeViewer">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>340</y>
+      <width>391</width>
+      <height>271</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>780</width>
+     <width>1180</width>
      <height>21</height>
     </rect>
    </property>
