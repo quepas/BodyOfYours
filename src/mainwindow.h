@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include "scans_viewer.h"
-#include "sensor_viewer.h"
 #include "scans_tree.h"
 #include "scanner_3d.h"
 #include "scanningwindow.h"
@@ -32,7 +31,6 @@ private:
   Ui::MainWindow *ui;
   ScanningWindow *scanning_window_;
   ScansViewer* scans_viewer_;
-  SensorViewer* sensor_viewer_, *sensor_depth_viewer_, *sensor_volume_viewer_;
   ScansTree* scans_tree_;
   Scanner3D* scanner3d_;
 };

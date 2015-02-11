@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1180</width>
-    <height>659</height>
+    <width>813</width>
+    <height>422</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,8 +29,8 @@
      <rect>
       <x>400</x>
       <y>10</y>
-      <width>371</width>
-      <height>321</height>
+      <width>401</width>
+      <height>361</height>
      </rect>
     </property>
    </widget>
@@ -70,43 +70,13 @@
      <string>Scan</string>
     </property>
    </widget>
-   <widget class="QVTKWidget" name="sensorViewer">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>340</y>
-      <width>371</width>
-      <height>271</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QVTKWidget" name="sensorDepthViewer">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>340</y>
-      <width>381</width>
-      <height>271</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QVTKWidget" name="sensorVolumeViewer">
-    <property name="geometry">
-     <rect>
-      <x>780</x>
-      <y>340</y>
-      <width>391</width>
-      <height>271</height>
-     </rect>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1180</width>
+     <width>813</width>
      <height>21</height>
     </rect>
    </property>
