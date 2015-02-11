@@ -15,6 +15,7 @@ public:
   bool GrabCameraFrame(FrameData* out_frame) override;
   bool GrabDepthFrame(FrameData* out_frame) override;
   bool GrabVolumeFrame(FrameData* out_frame) override;
+  void RestartReconstruction() override;
 
 private:
   reme_context_t context_;

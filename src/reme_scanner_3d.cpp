@@ -95,3 +95,8 @@ bool RemeScanner3D::GrabVolumeFrame(FrameData* out_frame)
   }
   return false;
 }
+
+void RemeScanner3D::RestartReconstruction()
+{
+  reme_volume_reset(context_, volume_);
+}

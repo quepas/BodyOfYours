@@ -19,5 +19,6 @@ public:
   virtual bool GrabCameraFrame(FrameData* out_frame) = 0;
   virtual bool GrabDepthFrame(FrameData* out_frame) = 0;
   virtual bool GrabVolumeFrame(FrameData* out_frame) = 0;
+  virtual void RestartReconstruction() = 0;
 private:
 };
