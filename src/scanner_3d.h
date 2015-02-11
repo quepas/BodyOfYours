@@ -17,6 +17,6 @@ public:
   virtual QStringList GetComputingDevices() = 0;
   virtual bool InitComputingDevice(int device_id) = 0;
   virtual bool GrabCameraFrame(FrameData* out_frame) = 0;
-  virtual void GrabDepth() = 0;
+  virtual bool GrabDepthFrame(FrameData* out_frame) = 0;
 private:
 };

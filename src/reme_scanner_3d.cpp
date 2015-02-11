@@ -64,12 +64,18 @@ bool RemeScanner3D::GrabCameraFrame(FrameData* out_frame)
     reme_sensor_get_image(context_, sensor_, REME_IMAGE_AUX, image_aux_);
     reme_image_get_bytes(context_, image_aux_, &(out_frame->data), &(out_frame->length));
     reme_image_get_info(context_, image_aux_, &(out_frame->width), &(out_frame->height));
-    //reme_viewer_update(context_, img_viewer_);
   }
   return is_grab_ok;
 }
 
-void RemeScanner3D::GrabDepth()
+bool RemeScanner3D::GrabDepthFrame(FrameData* out_frame)
 {
-
+  bool is_grab_ok = REME_SUCCESS(reme_sensor_grab(context_, sensor_));
+  if (is_grab_ok) {
+    reme_sensor_prepare_image(context_, sensor_, REME_IMAGE_DEPTH);
+    reme_sensor_get_image(context_, sensor_, REME_IMAGE_DEPTH, image_depth_);
+    reme_image_get_bytes(context_, image_depth_, &(out_frame->data), &(out_frame->length));
+    reme_image_get_info(context_, image_depth_, &(out_frame->width), &(out_frame->height));
+  }
+  return is_grab_ok;
 }
