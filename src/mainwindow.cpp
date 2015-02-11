@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
   ui->setupUi(this);
   scans_viewer_ = new ScansViewer(ui->scansViewer);
   sensor_viewer_ = new SensorViewer(ui->sensorViewer);
+  sensor_depth_viewer_ = new SensorViewer(ui->sensorDepthViewer);
   scans_tree_ = new ScansTree(ui->scansTree, Resources::SCANS_DATA_PATH);
   ui->computingDevicesComboBox->addItems(scanner3d_->GetComputingDevices());
   // set defualt icons
@@ -77,13 +78,20 @@ void MainWindow::on_scanButton_clicked()
   if (!is_scanning_) {
     is_scanning_ = true;
     Scanning3D* scanning = new Scanning3D(scanner3d_);
-    connect(scanning, SIGNAL(grabFrame(FrameData*)), this, SLOT(getFrame(FrameData*)));
+    connect(scanning, SIGNAL(grabCameraFrame(FrameData*)), this, SLOT(captureCameraFrame(FrameData*)));
+    connect(scanning, SIGNAL(grabDepthFrame(FrameData*)), this, SLOT(captureDepthFrame(FrameData*)));
     scanning->start();
   }
 }
 
-void MainWindow::getFrame(FrameData* frame)
+void MainWindow::captureCameraFrame(FrameData* frame)
 {
   sensor_viewer_->ShowFrame(frame);
+  delete frame;
+}
+
+void MainWindow::captureDepthFrame(FrameData* frame)
+{
+  sensor_depth_viewer_->ShowFrame(frame);
   delete frame;
 }

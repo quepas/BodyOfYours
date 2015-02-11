@@ -27,12 +27,13 @@ private slots:
   void on_computingDevicesComboBox_currentIndexChanged(int index);
   void on_scanButton_clicked();
 
-  void getFrame(FrameData* frame);
+  void captureCameraFrame(FrameData* frame);
+  void captureDepthFrame(FrameData* frame);
 
 private:
   Ui::MainWindow *ui;
   ScansViewer* scans_viewer_;
-  SensorViewer* sensor_viewer_;
+  SensorViewer* sensor_viewer_, *sensor_depth_viewer_;
   ScansTree* scans_tree_;
   Scanner3D* scanner3d_;
 
