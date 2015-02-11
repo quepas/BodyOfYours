@@ -1,25 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author/>
- <comment/>
- <exportmacro/>
  <class>ScanningWindow</class>
- <widget name="ScanningWindow" class="QDialog">
+ <widget class="QDialog" name="ScanningWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>724</width>
+    <height>417</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget name="buttonBox" class="QDialogButtonBox">
+  <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>20</y>
+     <x>630</x>
+     <y>10</y>
      <width>81</width>
      <height>241</height>
     </rect>
@@ -31,8 +29,70 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
+  <widget class="QVTKWidget" name="scansVolumeViewer">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>400</width>
+     <height>400</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QVTKWidget" name="scansCameraViewer">
+   <property name="geometry">
+    <rect>
+     <x>417</x>
+     <y>10</y>
+     <width>200</width>
+     <height>197</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QVTKWidget" name="scansDepthViewer">
+   <property name="geometry">
+    <rect>
+     <x>417</x>
+     <y>213</y>
+     <width>200</width>
+     <height>197</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="startScanButton">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>300</y>
+     <width>81</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Start</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="stopScanButton">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>330</y>
+     <width>81</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Stop</string>
+   </property>
+  </widget>
  </widget>
- <pixmapfunction/>
+ <customwidgets>
+  <customwidget>
+   <class>QVTKWidget</class>
+   <extends>QWidget</extends>
+   <header>QVTKWidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
