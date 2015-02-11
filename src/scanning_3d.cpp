@@ -12,7 +12,10 @@ void Scanning3D::run()
   while(is_running) {
     FrameData* frame = new FrameData();
     scanner_->GrabCameraFrame(frame);
-    emit grabFrame(frame);
+    emit grabCameraFrame(frame);
+    FrameData* depth_frame = new FrameData();
+    scanner_->GrabDepthFrame(depth_frame);
+    emit grabDepthFrame(depth_frame);
     QThread::msleep(100);
   }
 }

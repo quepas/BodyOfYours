@@ -14,7 +14,8 @@ protected:
   void run();
 
 signals:
-  void grabFrame(FrameData* frame);
+  void grabCameraFrame(FrameData* frame);
+  void grabDepthFrame(FrameData* frame);
 
 private:
   Scanner3D* scanner_;
