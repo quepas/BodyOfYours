@@ -21,7 +21,8 @@ SOURCES += src/main.cpp \
            src/scanning_3d.cpp \
            src/scans_tree.cpp \
            src/scans_viewer.cpp \
-           src/sensor_viewer.cpp
+           src/sensor_viewer.cpp \
+    	   src/scanningwindow.cpp
 
 HEADERS  += src/mainwindow.h \
             src/reme_scanner_3d.h \
@@ -30,9 +31,11 @@ HEADERS  += src/mainwindow.h \
             src/scanning_3d.h \
             src/scans_tree.h \
             src/scans_viewer.h \
-            src/sensor_viewer.h
+            src/sensor_viewer.h \
+   			src/scanningwindow.h
 
-FORMS    += src/mainwindow.ui
+FORMS    += src/mainwindow.ui \
+    		src/scanningwindow.ui
 
 
 INCLUDEPATH += "D:/Programowanie/Biblioteki/Tidy/pcl-1.7/include/pcl-1.7"
