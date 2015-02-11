@@ -13,6 +13,7 @@ ScanningWindow::ScanningWindow(Scanner3D* scanner, QWidget *parent) :
   connect(scanning_, SIGNAL(grabCameraFrame(FrameData*)), this, SLOT(captureCameraFrame(FrameData*)));
   connect(scanning_, SIGNAL(grabDepthFrame(FrameData*)), this, SLOT(captureDepthFrame(FrameData*)));
   connect(scanning_, SIGNAL(grabVolumeFrame(FrameData*)), this, SLOT(captureVolumeFrame(FrameData*)));
+  scanning_->start();
 }
 
 ScanningWindow::~ScanningWindow()
@@ -25,14 +26,12 @@ ScanningWindow::~ScanningWindow()
 
 void ScanningWindow::on_startScanButton_clicked()
 {
-  if (!scanning_->isRunning()) {
-    scanning_->start();
-  }
+  scanning_->ScanVolumeData(true);
 }
 
 void ScanningWindow::on_stopScanButton_clicked()
 {
-
+  scanning_->ScanVolumeData(false);
 }
 
 void ScanningWindow::captureCameraFrame(FrameData* frame)

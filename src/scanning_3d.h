@@ -9,6 +9,7 @@ class Scanning3D : public QThread
   Q_OBJECT
 public:
   Scanning3D(Scanner3D* scanner3d);
+  void ScanVolumeData(bool scan_volume_data);
 
 protected:
   void run();
@@ -20,4 +21,5 @@ signals:
 
 private:
   Scanner3D* scanner_;
+  bool scan_volume_data_;
 };
