@@ -36,3 +36,8 @@ void Scanning3D::RestartReconstruction()
 {
   scanner_->RestartReconstruction();
 }
+
+void Scanning3D::ReconstructAndSave(QString file_name)
+{
+  scanner_->ReconstructSurfaceToFile(file_name);
+}

@@ -11,6 +11,7 @@ public:
   Scanning3D(Scanner3D* scanner3d);
   void ScanVolumeData(bool scan_volume_data);
   void RestartReconstruction();
+  void ReconstructAndSave(QString file_name);
 
 protected:
   void run();
