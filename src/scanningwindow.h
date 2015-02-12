@@ -22,6 +22,7 @@ private slots:
   void on_startScanButton_clicked();
   void on_stopScanButton_clicked();
   void on_restartScanButton_clicked();
+  void on_saveScanButton_clicked();
 
   void captureCameraFrame(FrameData* frame);
   void captureDepthFrame(FrameData* frame);

@@ -56,3 +56,8 @@ void ScanningWindow::on_restartScanButton_clicked()
 {
   scanning_->RestartReconstruction();
 }
+
+void ScanningWindow::on_saveScanButton_clicked()
+{
+  scanning_->ReconstructAndSave("test.ply");
+}
