@@ -16,6 +16,7 @@ public:
   bool GrabDepthFrame(FrameData* out_frame) override;
   bool GrabVolumeFrame(FrameData* out_frame) override;
   void RestartReconstruction() override;
+  void ReconstructSurfaceToFile(QString file_name, int max_faces /* = 20000 */) override;
 
 private:
   reme_context_t context_;

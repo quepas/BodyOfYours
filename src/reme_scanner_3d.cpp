@@ -100,3 +100,28 @@ void RemeScanner3D::RestartReconstruction()
 {
   reme_volume_reset(context_, volume_);
 }
+
+void RemeScanner3D::ReconstructSurfaceToFile(QString file_name, int max_faces /* = 20000 */)
+{
+  reme_surface_t surface;
+  reme_surface_create(context_, &surface);
+
+  reme_options_t options;
+  reme_options_create(context_, &options);
+  reme_surface_bind_generation_options(context_, surface, options);
+  reme_options_set_bool(context_, options, "merge_duplicate_vertices", false);
+
+  reme_surface_generate(context_, surface, volume_);
+  reme_surface_bind_poisson_options(context_, surface, options);
+  reme_options_set_int(context_, options, "depth", 8);
+  reme_surface_poisson(context_, surface);
+
+  reme_surface_bind_decimation_options(context_, surface, options);
+  reme_options_set_int(context_, options, "maximum_faces", max_faces);
+  reme_surface_decimate(context_, surface);
+
+  reme_surface_save_to_file(context_, surface, file_name.toStdString().c_str());
+  //
+  reme_options_destroy(context_, &options);
+  reme_surface_destroy(context_, &surface);
+}

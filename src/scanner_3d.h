@@ -20,5 +20,6 @@ public:
   virtual bool GrabDepthFrame(FrameData* out_frame) = 0;
   virtual bool GrabVolumeFrame(FrameData* out_frame) = 0;
   virtual void RestartReconstruction() = 0;
+  virtual void ReconstructSurfaceToFile(QString file_name, int max_faces = 20000) = 0;
 private:
 };
