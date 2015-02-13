@@ -74,4 +74,5 @@ void MainWindow::on_computingDevicesComboBox_currentIndexChanged(int index)
 void MainWindow::on_scanButton_clicked()
 {
   scanning_window_->show();
+  scanning_window_->StartGrabbingData();
 }
