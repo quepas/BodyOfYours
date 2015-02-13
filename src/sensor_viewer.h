@@ -12,6 +12,7 @@ public:
   ~SensorViewer();
 
   void ShowFrame(FrameData* frame);
+  void Clear();
 
 private:
   vtkImageViewer2* viewer_;

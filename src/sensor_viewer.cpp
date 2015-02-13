@@ -3,6 +3,7 @@
 #include <vtkImageFlip.h>
 #include <vtkImageImport.h>
 #include <vtkImageViewer2.h>
+#include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkSmartPointer.h>
 
@@ -44,4 +45,9 @@ void SensorViewer::ShowFrame(FrameData* frame)
     is_initialized = true;
   }
   viewer_->Render();
+}
+
+void SensorViewer::Clear()
+{
+  viewer_->GetRenderer()->Clear();
 }
