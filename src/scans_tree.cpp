@@ -1,5 +1,7 @@
 #include "scans_tree.h"
 
+#include <QHeaderView>
+
 ScansTree::ScansTree(QTreeView* tree_view, QString tree_root)
   : tree_view_(tree_view),
     model_(new QFileSystemModel()),
@@ -13,6 +15,10 @@ ScansTree::ScansTree(QTreeView* tree_view, QString tree_root)
   tree_view_->setColumnWidth(1, 50);
   tree_view_->setColumnWidth(2, 70);
   tree_view_->setColumnWidth(3, 100);
+  tree_view_->header()->hideSection(1);
+  tree_view_->header()->hideSection(2);
+  tree_view_->header()->hideSection(3);
+
 }
 
 ScansTree::~ScansTree()
