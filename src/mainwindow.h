@@ -3,6 +3,7 @@
 
 #include "scans_viewer.h"
 #include "scans_tree.h"
+#include "scans_data_tree.h"
 #include "scanner_3d.h"
 #include "scanningwindow.h"
 #include "reme_scanner_3d.h"
@@ -32,6 +33,7 @@ private:
   ScanningWindow *scanning_window_;
   ScansViewer* scans_viewer_;
   ScansTree* scans_tree_;
+  ScansDataTree* scans_data_tree_;
   Scanner3D* scanner3d_;
 };
 
