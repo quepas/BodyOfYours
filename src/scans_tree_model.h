@@ -1,10 +1,9 @@
 #pragma once
 
-#include <QFileSystemModel>
+#include <QStandardItemModel>
 
-class ScansTreeModel : public QFileSystemModel
+class ScansTreeModel : public QStandardItemModel
 {
-
 public:
   ScansTreeModel(QObject* parent);
 
