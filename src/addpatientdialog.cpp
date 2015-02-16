@@ -6,6 +6,7 @@ AddPatientDialog::AddPatientDialog(QWidget *parent) :
   ui(new Ui::AddPatientDialog)
 {
   ui->setupUi(this);
+  setWindowTitle("Add patient dialog");
 }
 
 AddPatientDialog::~AddPatientDialog()
