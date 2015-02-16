@@ -33,3 +33,9 @@ void ScansTreeModel::PrepareTree()
 
   // insert metadata
 }
+
+void ScansTreeModel::AddPatient(PatientData data)
+{
+  QStandardItem* root = invisibleRootItem();
+  root->appendRow(new QStandardItem(data.name));
+}
