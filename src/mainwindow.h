@@ -30,6 +30,8 @@ private slots:
   void on_scanButton_clicked();
   void on_addPatientButton_clicked();
 
+  void AddPatientSlot(PatientData data);
+
 private:
   Ui::MainWindow *ui;
   ScanningWindow *scanning_window_;
@@ -38,6 +40,7 @@ private:
   ScansTree* scans_tree_;
   ScansDataTree* scans_data_tree_;
   Scanner3D* scanner3d_;
+
 };
 
 #endif // MAINWINDOW_H

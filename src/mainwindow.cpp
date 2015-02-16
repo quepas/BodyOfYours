@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
   }
   ui->scanButton->setIcon(QIcon(Resources::ICON_WARNING));
   ui->scanButton->setDisabled(true);
+  connect(add_patient_dialog_, SIGNAL(AddPatientSignal(PatientData)), this, SLOT(AddPatientSlot(PatientData)));
 }
 
 MainWindow::~MainWindow()
@@ -82,4 +83,9 @@ void MainWindow::on_scanButton_clicked()
 void MainWindow::on_addPatientButton_clicked()
 {
   add_patient_dialog_->show();
+}
+
+void MainWindow::AddPatientSlot(PatientData data)
+{
+  scans_data_tree_->model()->AddPatient(data);
 }
