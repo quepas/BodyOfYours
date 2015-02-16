@@ -21,7 +21,8 @@ using pcl::io::loadPLYFile;
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
     ui(new Ui::MainWindow),
-    scanner3d_(new RemeScanner3D())
+    scanner3d_(new RemeScanner3D()),
+    add_patient_dialog_(new AddPatientDialog)
 {
   ui->setupUi(this);
   scanning_window_ = new ScanningWindow(scanner3d_),
@@ -80,5 +81,5 @@ void MainWindow::on_scanButton_clicked()
 
 void MainWindow::on_addPatientButton_clicked()
 {
-
+  add_patient_dialog_->show();
 }
