@@ -21,10 +21,19 @@ void AddPatientDialog::on_addPatientButton_clicked()
 
   if (!data.name.isEmpty()) {
     emit AddPatientSignal(data);
+    ClearData();
+    close();
   }
 }
 
 void AddPatientDialog::on_cancelAddPatientButton_clicked()
 {
+  ClearData();
   close();
+}
+
+void AddPatientDialog::ClearData()
+{
+  ui->nameText->clear();
+  ui->additionalText->clear();
 }
