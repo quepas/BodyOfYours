@@ -10,6 +10,8 @@ public:
   ScansDataTree(QTreeView* tree_view);
   ~ScansDataTree();
 
+  ScansTreeModel* model() { return model_; }
+
 private:
   QTreeView* view_;
   ScansTreeModel* model_;
