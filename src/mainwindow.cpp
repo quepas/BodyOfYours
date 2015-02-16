@@ -77,3 +77,8 @@ void MainWindow::on_scanButton_clicked()
   scanning_window_->show();
   scanning_window_->StartGrabbingData();
 }
+
+void MainWindow::on_addPatientButton_clicked()
+{
+
+}

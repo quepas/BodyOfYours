@@ -28,6 +28,8 @@ private slots:
   void on_computingDevicesComboBox_currentIndexChanged(int index);
   void on_scanButton_clicked();
 
+  void on_addPatientButton_clicked();
+
 private:
   Ui::MainWindow *ui;
   ScanningWindow *scanning_window_;
