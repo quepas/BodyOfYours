@@ -1,6 +1,7 @@
 #ifndef ADDPATIENTDIALOG_H
 #define ADDPATIENTDIALOG_H
 
+#include "patient_data.h"
 #include <QDialog>
 
 namespace Ui {
@@ -14,6 +15,13 @@ class AddPatientDialog : public QDialog
 public:
   explicit AddPatientDialog(QWidget *parent = 0);
   ~AddPatientDialog();
+
+private slots:
+  void on_addPatientButton_clicked();
+  void on_cancelAddPatientButton_clicked();
+
+signals:
+  void AddPatientSignal(PatientData data);
 
 private:
   Ui::AddPatientDialog *ui;
