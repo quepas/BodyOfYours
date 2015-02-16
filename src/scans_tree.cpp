@@ -9,6 +9,7 @@ ScansTree::ScansTree(QTreeView* tree_view, QString tree_root)
 {
   QString data_root_path = tree_root;
   model_->setRootPath(data_root_path);
+  model_->setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
   tree_view_->setModel(model_);
   tree_view_->setRootIndex(model_->index(data_root_path));
   tree_view_->setColumnWidth(0, 150);
