@@ -1,12 +1,35 @@
 #include "scans_tree_model.h"
+#include "file_scanner.h"
 
 #include <QString>
 #include <QVariant>
+#include <QStandardItem>
+#include <QDebug>
 
 ScansTreeModel::ScansTreeModel(QObject* parent)
-  : QStandardItemModel()
+  : QStandardItemModel(),
+    help_model_(new QFileSystemModel)
 {
   setHorizontalHeaderItem(0, new QStandardItem(QString("Catalogue")));
   setHorizontalHeaderItem(1, new QStandardItem(QString("Patient")));
   setHorizontalHeaderItem(2, new QStandardItem(QString("Scan")));
+  PrepareTree();
+}
+
+void ScansTreeModel::PrepareTree()
+{
+  // scan for dirs and files
+  FileScanner scanner("./data/");
+  QStringList dirs = scanner.ScanTopDirsName();
+  QStandardItem* root = invisibleRootItem();
+
+  foreach(QString str, dirs) {
+    QStandardItem* item = new QStandardItem(str);
+    root->appendRow(item);
+  }
+  // init metafiles if none exsists
+
+  // build tree
+
+  // insert metadata
 }
