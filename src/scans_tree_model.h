@@ -10,7 +10,8 @@ class ScansTreeModel : public QStandardItemModel
 public:
   ScansTreeModel(QObject* parent);
 
-  void AddPatient(PatientData data);
+  void AddPatientToTree(PatientData data);
+  void AddPatientToDisc(PatientData data);
 private:
   QFileSystemModel* help_model_;
 

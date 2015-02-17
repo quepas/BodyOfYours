@@ -35,11 +35,19 @@ void ScansTreeModel::PrepareTree()
   // insert metadata
 }
 
-void ScansTreeModel::AddPatient(PatientData data)
+void ScansTreeModel::AddPatientToTree(PatientData data)
 {
   QStandardItem* root = invisibleRootItem();
   QStandardItem* item = new QStandardItem(data.name);
   QIcon icon = (data.sex == FEMALE) ? QIcon(Resources::ICON_FEMALE) : QIcon(Resources::ICON_MALE);
   item->setIcon(icon);
   root->appendRow(item);
+}
+
+void ScansTreeModel::AddPatientToDisc(PatientData data)
+{
+  QDir dir(Resources::SCANS_DATA_PATH + "/" + data.name);
+  if (!dir.exists()) {
+    dir.mkpath(".");
+  }
 }
