@@ -1,5 +1,6 @@
 #include "scans_tree_model.h"
 #include "file_scanner.h"
+#include "resources.h"
 
 #include <QString>
 #include <QVariant>
@@ -37,5 +38,8 @@ void ScansTreeModel::PrepareTree()
 void ScansTreeModel::AddPatient(PatientData data)
 {
   QStandardItem* root = invisibleRootItem();
-  root->appendRow(new QStandardItem(data.name));
+  QStandardItem* item = new QStandardItem(data.name);
+  QIcon icon = (data.sex == FEMALE) ? QIcon(Resources::ICON_FEMALE) : QIcon(Resources::ICON_MALE);
+  item->setIcon(icon);
+  root->appendRow(item);
 }
