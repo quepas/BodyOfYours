@@ -85,12 +85,25 @@
      <rect>
       <x>400</x>
       <y>380</y>
-      <width>75</width>
-      <height>23</height>
+      <width>24</width>
+      <height>24</height>
      </rect>
     </property>
     <property name="text">
-     <string>Add patient</string>
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="removePatientButton">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>410</y>
+      <width>24</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
