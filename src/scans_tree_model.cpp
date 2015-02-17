@@ -12,9 +12,7 @@ ScansTreeModel::ScansTreeModel(QObject* parent)
   : QStandardItemModel(),
     help_model_(new QFileSystemModel)
 {
-  setHorizontalHeaderItem(0, new QStandardItem(QString("Catalogue")));
-  setHorizontalHeaderItem(1, new QStandardItem(QString("Patient")));
-  setHorizontalHeaderItem(2, new QStandardItem(QString("Scan")));
+  setHorizontalHeaderItem(0, new QStandardItem(QString("Patient")));
   PrepareTree();
 }
 
@@ -91,4 +89,17 @@ void ScansTreeModel::RemovePatientFromTree(const QModelIndex& index)
 {
   QStandardItem* current = itemFromIndex(index);
   removeRow(current->row());
+}
+
+void ScansTreeModel::RemovePatientFromDisc(QString name)
+{
+  QDir path(Resources::SCANS_DATA_PATH + "/");
+  path.remove(name + ".json");
+  path.rmdir(name);
+}
+
+void ScansTreeModel::RemovePatient(const QModelIndex& index)
+{
+  RemovePatientFromDisc(itemFromIndex(index)->text());
+  RemovePatientFromTree(index);
 }
