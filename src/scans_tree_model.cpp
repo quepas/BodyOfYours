@@ -44,7 +44,7 @@ void ScansTreeModel::AddPatientToTree(PatientData data)
   root->appendRow(item);
 }
 
-void ScansTreeModel::AddPatientToDisc(PatientData data)
+void ScansTreeModel::SavePatientToDisc(PatientData data)
 {
   QDir dir(Resources::SCANS_DATA_PATH + "/" + data.name);
   if (!dir.exists()) {

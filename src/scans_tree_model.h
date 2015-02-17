@@ -12,7 +12,7 @@ public:
 
   void AddPatientToTree(PatientData data);
   void RemovePatientFromTree(const QModelIndex& index);
-  void AddPatientToDisc(PatientData data);
+  void SavePatientToDisc(PatientData data);
   void LoadPatientFromDisc(QString name);
 
   void SavePatientMetadata(PatientData data);

@@ -90,7 +90,7 @@ void MainWindow::on_addPatientButton_clicked()
 void MainWindow::AddPatientSlot(PatientData data)
 {
   scans_data_tree_->model()->AddPatientToTree(data);
-  scans_data_tree_->model()->AddPatientToDisc(data);
+  scans_data_tree_->model()->SavePatientToDisc(data);
   scans_data_tree_->model()->SavePatientMetadata(data);
 }
 
