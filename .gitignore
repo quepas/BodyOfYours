@@ -54,3 +54,4 @@ cmake_install.cmake
 # BodyOfYours files & dirs
 /external/include
 /external/lib
+/data
