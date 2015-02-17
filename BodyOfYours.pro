@@ -16,37 +16,42 @@ TEMPLATE = app
 
 SOURCES += src/addpatientdialog.cpp \
            src/file_scanner.cpp \
+           src/json.cpp \
            src/main.cpp \
            src/mainwindow.cpp \
            src/reme_scanner_3d.cpp \
+           src/reme_sensor_check.cpp \
            src/scanner_3d.cpp \
            src/scanning_3d.cpp \
+           src/scanningwindow.cpp \
            src/scans_data_tree.cpp \
            src/scans_tree.cpp \
            src/scans_tree_model.cpp \
            src/scans_viewer.cpp \
-           src/sensor_viewer.cpp \
-           src/scanningwindow.cpp
+           src/sensor_viewer.cpp
 
 
 HEADERS  += src/addpatientdialog.h \
             src/file_scanner.h \
+            src/json.h \
             src/mainwindow.h \
+            src/patient_data.h \
             src/reme_scanner_3d.h \
+            src/reme_sensor_check.h \
             src/resources.h \
             src/scanner_3d.h \
             src/scanning_3d.h \
+            src/scanningwindow.h \
             src/scans_data_tree.h \
             src/scans_tree.h \
             src/scans_tree_model.h \
             src/scans_viewer.h \
-            src/sensor_viewer.h \
-            src/scanningwindow.h
+            src/sensor_viewer.h
 
 
-FORMS    += src/mainwindow.ui \
-            src/scanningwindow.ui \
-            src/addpatientdialog.ui
+FORMS    += src/addpatientdialog.ui \
+            src/mainwindow.ui \
+            src/scanningwindow.ui
 
 
 INCLUDEPATH += "D:/Programowanie/Biblioteki/Tidy/pcl-1.7/include/pcl-1.7"
