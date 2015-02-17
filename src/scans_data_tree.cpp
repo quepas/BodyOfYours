@@ -1,4 +1,5 @@
 #include "scans_data_tree.h"
+#include "resources.h"
 
 #include <QAction>
 
@@ -31,13 +32,18 @@ void ScansDataTree::CustomContextMenuSlot(const QPoint& point)
 void ScansDataTree::InitPatientContextMenu()
 {
   patient_context_menu_ = new QMenu(view_);
-  patient_context_menu_->addAction("Patient dummy action");
+  QAction* remove_patient = new QAction(QIcon(Resources::ICON_REMOVE), "Remove patient", nullptr);
+  QAction* modify_patient = new QAction(QIcon(Resources::ICON_REMOVE), "Modify patient", nullptr);
+  patient_context_menu_->addAction(remove_patient);
+  patient_context_menu_->addAction(modify_patient);
+  connect(remove_patient, SIGNAL(triggered()), this, SLOT(RemoveSelectedSlot()));
 }
 
 void ScansDataTree::InitScanContextMenu()
 {
   scan_context_menu_ = new QMenu(view_);
-  scan_context_menu_->addAction("Scan dummy action");
+  QAction* remove_scan = new QAction(QIcon(Resources::ICON_REMOVE), "Remove scan", nullptr);
+  scan_context_menu_->addAction(remove_scan);
 }
 
 bool ScansDataTree::RemoveSelected()
@@ -47,4 +53,9 @@ bool ScansDataTree::RemoveSelected()
     model_->RemovePatient(index);
   }
   return false;
+}
+
+void ScansDataTree::RemoveSelectedSlot()
+{
+  RemoveSelected();
 }

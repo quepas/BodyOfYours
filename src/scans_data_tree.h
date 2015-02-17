@@ -18,6 +18,7 @@ public:
 
 private slots:
   void CustomContextMenuSlot(const QPoint& point);
+  void RemoveSelectedSlot();
 
 private:
   QTreeView* view_;
