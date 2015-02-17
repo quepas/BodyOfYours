@@ -1,5 +1,7 @@
 #include "scans_data_tree.h"
 
+#include <QAction>
+
 ScansDataTree::ScansDataTree(QTreeView* tree_view)
   : view_(tree_view),
     model_(new ScansTreeModel(nullptr))
@@ -19,8 +21,10 @@ ScansDataTree::~ScansDataTree()
 void ScansDataTree::CustomContextMenuSlot(const QPoint& point)
 {
   QModelIndex index = view_->indexAt(point);
-  if (index.isValid()) {
+  if (index.isValid() && index.parent() == model_->invisibleRootItem()->index()) {
     patient_context_menu_->exec(view_->mapToGlobal(point));
+  } else {
+    scan_context_menu_->exec(view_->mapToGlobal(point));
   }
 }
 
