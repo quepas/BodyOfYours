@@ -12,7 +12,11 @@ public:
 
   void AddPatientToTree(PatientData data);
   void AddPatientToDisc(PatientData data);
+  void LoadPatientFromDisc(QString name);
+
   void SavePatientMetadata(PatientData data);
+  PatientData LoadPatientMetadata(QString metadata_file);
+
 private:
   QFileSystemModel* help_model_;
 

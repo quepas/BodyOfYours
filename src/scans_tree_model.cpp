@@ -23,11 +23,9 @@ void ScansTreeModel::PrepareTree()
   // scan for dirs and files
   FileScanner scanner("./data/");
   QStringList dirs = scanner.ScanTopDirsName();
-  QStandardItem* root = invisibleRootItem();
 
   foreach(QString str, dirs) {
-    QStandardItem* item = new QStandardItem(str);
-    root->appendRow(item);
+    LoadPatientFromDisc(str);
   }
   // init metafiles if none exsists
 
@@ -64,4 +62,26 @@ void ScansTreeModel::SavePatientMetadata(PatientData data)
   metadata_file.open(QIODevice::WriteOnly);
   metadata_file.write(QtJson::serialize(patient));
   metadata_file.close();
+}
+
+void ScansTreeModel::LoadPatientFromDisc(QString name)
+{
+  QDir dir(Resources::SCANS_DATA_PATH + "/" + name);
+  if (dir.exists()) {
+    PatientData data = LoadPatientMetadata(Resources::SCANS_DATA_PATH + "/" + name + ".json");
+    AddPatientToTree(data);
+  }
+}
+
+PatientData ScansTreeModel::LoadPatientMetadata(QString metadata_path)
+{
+  QFile metadata_file(metadata_path);
+  metadata_file.open(QFile::ReadOnly | QFile::Text);
+  QTextStream in_stream(&metadata_file);
+  QtJson::JsonObject json = QtJson::parse(in_stream.readAll()).toMap();
+  PatientData result;
+  result.name = json["name"].toString();
+  result.additional = json["additional"].toString();
+  result.sex = (json["sex"].toString() == "Female") ? FEMALE : MALE;
+  return result;
 }
