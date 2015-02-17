@@ -40,6 +40,7 @@ void ScansTreeModel::AddPatientToTree(PatientData data)
   QStandardItem* item = new QStandardItem(data.name);
   QIcon icon = (data.sex == FEMALE) ? QIcon(Resources::ICON_FEMALE) : QIcon(Resources::ICON_MALE);
   item->setIcon(icon);
+  item->setEditable(false);
   root->appendRow(item);
 }
 
