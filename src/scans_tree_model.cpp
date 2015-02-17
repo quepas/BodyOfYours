@@ -25,21 +25,21 @@ void ScansTreeModel::PrepareTree()
   foreach(QString str, dirs) {
     LoadPatientFromDisc(str);
   }
-  // init metafiles if none exsists
-
-  // build tree
-
-  // insert metadata
 }
 
-void ScansTreeModel::AddPatientToTree(PatientData data)
+void ScansTreeModel::AddPatientToTree(PatientData data, QStringList patient_scans /*= QStringList()*/)
 {
   QStandardItem* root = invisibleRootItem();
-  QStandardItem* item = new QStandardItem(data.name);
+  QStandardItem* patient_item = new QStandardItem(data.name);
   QIcon icon = (data.sex == FEMALE) ? QIcon(Resources::ICON_FEMALE) : QIcon(Resources::ICON_MALE);
-  item->setIcon(icon);
-  item->setEditable(false);
-  root->appendRow(item);
+  patient_item->setIcon(icon);
+  patient_item->setEditable(false);
+  foreach(QString scan_name, patient_scans) {
+    QStandardItem* scan_item = new QStandardItem(scan_name);
+    scan_item->setEditable(false);
+    patient_item->appendRow(scan_item);
+  }
+  root->appendRow(patient_item);
 }
 
 void ScansTreeModel::SavePatientToDisc(PatientData data)
@@ -65,10 +65,12 @@ void ScansTreeModel::SavePatientMetadata(PatientData data)
 
 void ScansTreeModel::LoadPatientFromDisc(QString name)
 {
-  QDir dir(Resources::SCANS_DATA_PATH + "/" + name);
+  QString patient_path = Resources::SCANS_DATA_PATH + "/" + name;
+  QDir dir(patient_path);
   if (dir.exists()) {
-    PatientData data = LoadPatientMetadata(Resources::SCANS_DATA_PATH + "/" + name + ".json");
-    AddPatientToTree(data);
+    PatientData data = LoadPatientMetadata(patient_path + ".json");
+    QStringList scans = LoadPatientScansFromDisc(patient_path);
+    AddPatientToTree(data, scans);
   }
 }
 
@@ -102,4 +104,10 @@ void ScansTreeModel::RemovePatient(const QModelIndex& index)
 {
   RemovePatientFromDisc(itemFromIndex(index)->text());
   RemovePatientFromTree(index);
+}
+
+QStringList ScansTreeModel::LoadPatientScansFromDisc(QString patient_dir_path)
+{
+  FileScanner scanner(patient_dir_path);
+  return scanner.ScanFiles("*.ply");
 }
