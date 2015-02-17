@@ -10,6 +10,7 @@ public:
   ~FileScanner();
 
   QStringList ScanTopDirsName();
+  QStringList ScanFiles(QString extension = "");
 
 private:
   QString current_dir_;

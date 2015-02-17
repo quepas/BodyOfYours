@@ -23,3 +23,14 @@ QStringList FileScanner::ScanTopDirsName()
   }
   return result;
 }
+
+QStringList FileScanner::ScanFiles(QString extension /*= ""*/)
+{
+  QStringList result;
+  QDirIterator it(current_dir_, QStringList() << extension, QDir::Files);
+  while (it.hasNext()) {
+    it.next();
+    result << it.fileName();
+  }
+  return result;
+}
