@@ -31,11 +31,13 @@ void ScansTreeModel::AddPatientToTree(PatientData data, QStringList patient_scan
 {
   QStandardItem* root = invisibleRootItem();
   QStandardItem* patient_item = new QStandardItem(data.name);
-  QIcon icon = (data.sex == FEMALE) ? QIcon(Resources::ICON_FEMALE) : QIcon(Resources::ICON_MALE);
-  patient_item->setIcon(icon);
+  QIcon sex_icon = (data.sex == FEMALE) ? QIcon(Resources::ICON_FEMALE) : QIcon(Resources::ICON_MALE);
+  QIcon scan_icon = QIcon(Resources::ICON_SCAN);
+  patient_item->setIcon(sex_icon);
   patient_item->setEditable(false);
   foreach(QString scan_name, patient_scans) {
     QStandardItem* scan_item = new QStandardItem(scan_name);
+    scan_item->setIcon(scan_icon);
     scan_item->setEditable(false);
     patient_item->appendRow(scan_item);
   }

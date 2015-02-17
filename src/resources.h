@@ -12,6 +12,7 @@ namespace Resources {
   static const QString ICON_MALE = "gui/icons/male.ico";
   static const QString ICON_ADD = "gui/icons/add.ico";
   static const QString ICON_REMOVE = "gui/icons/remove.ico";
+  static const QString ICON_SCAN = "gui/icons/scan.ico";
 
   static const QString SCANS_DATA_PATH = QDir::currentPath() + "/data";
 }
