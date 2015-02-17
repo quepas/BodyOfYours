@@ -12,6 +12,7 @@ public:
 
   void AddPatientToTree(PatientData data);
   void AddPatientToDisc(PatientData data);
+  void SavePatientMetadata(PatientData data);
 private:
   QFileSystemModel* help_model_;
 

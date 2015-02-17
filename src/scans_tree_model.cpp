@@ -1,6 +1,7 @@
 #include "scans_tree_model.h"
 #include "file_scanner.h"
 #include "resources.h"
+#include "json.h"
 
 #include <QString>
 #include <QVariant>
@@ -50,4 +51,17 @@ void ScansTreeModel::AddPatientToDisc(PatientData data)
   if (!dir.exists()) {
     dir.mkpath(".");
   }
+}
+
+void ScansTreeModel::SavePatientMetadata(PatientData data)
+{
+  QtJson::JsonObject patient;
+  patient["name"] = data.name;
+  patient["sex"] = (data.sex == FEMALE) ? "Female" : "Male";
+  patient["additional"] = data.additional;
+
+  QFile metadata_file(Resources::SCANS_DATA_PATH + "/" + data.name + ".json");
+  metadata_file.open(QIODevice::WriteOnly);
+  metadata_file.write(QtJson::serialize(patient));
+  metadata_file.close();
 }
