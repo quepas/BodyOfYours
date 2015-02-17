@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>200</width>
-    <height>181</height>
+    <height>230</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,7 +40,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>40</y>
+     <y>90</y>
      <width>71</width>
      <height>16</height>
     </rect>
@@ -53,7 +53,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>60</y>
+     <y>110</y>
      <width>181</width>
      <height>81</height>
     </rect>
@@ -63,7 +63,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>150</y>
+     <y>200</y>
      <width>81</width>
      <height>23</height>
     </rect>
@@ -76,7 +76,7 @@
    <property name="geometry">
     <rect>
      <x>104</x>
-     <y>150</y>
+     <y>200</y>
      <width>81</width>
      <height>23</height>
     </rect>
@@ -84,6 +84,39 @@
    <property name="text">
     <string>Cancel</string>
    </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>47</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sex</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="sexyComboBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>Female</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Male</string>
+    </property>
+   </item>
   </widget>
  </widget>
  <resources/>
