@@ -86,3 +86,9 @@ PatientData ScansTreeModel::LoadPatientMetadata(QString metadata_path)
   result.sex = (json["sex"].toString() == "Female") ? FEMALE : MALE;
   return result;
 }
+
+void ScansTreeModel::RemovePatientFromTree(const QModelIndex& index)
+{
+  QStandardItem* current = itemFromIndex(index);
+  removeRow(current->row());
+}

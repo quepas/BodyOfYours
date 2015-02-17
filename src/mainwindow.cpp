@@ -96,5 +96,5 @@ void MainWindow::AddPatientSlot(PatientData data)
 
 void MainWindow::on_removePatientButton_clicked()
 {
-
+  scans_data_tree_->RemoveSelected();
 }

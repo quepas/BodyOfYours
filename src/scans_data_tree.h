@@ -14,6 +14,7 @@ public:
   ~ScansDataTree();
 
   ScansTreeModel* model() { return model_; }
+  bool RemoveSelected();
 
 private slots:
   void CustomContextMenuSlot(const QPoint& point);

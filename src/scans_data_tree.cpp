@@ -1,6 +1,5 @@
 #include "scans_data_tree.h"
 
-
 ScansDataTree::ScansDataTree(QTreeView* tree_view)
   : view_(tree_view),
     model_(new ScansTreeModel(nullptr))
@@ -35,4 +34,13 @@ void ScansDataTree::InitScanContextMenu()
 {
   scan_context_menu_ = new QMenu(view_);
   scan_context_menu_->addAction("Scan dummy action");
+}
+
+bool ScansDataTree::RemoveSelected()
+{
+  QModelIndex index = view_->currentIndex();
+  if (index.isValid()) {
+    model_->RemovePatientFromTree(index);
+  }
+  return false;
 }
