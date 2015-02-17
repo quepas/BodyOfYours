@@ -19,6 +19,8 @@ void AddPatientDialog::on_addPatientButton_clicked()
   PatientData data;
   data.name = ui->nameText->text();
   data.additional = ui->additionalText->toPlainText();
+  bool is_female = ui->sexyComboBox->currentText() == "Female";
+  data.sex = is_female ? FEMALE : MALE;
 
   if (!data.name.isEmpty()) {
     emit AddPatientSignal(data);
@@ -37,4 +39,5 @@ void AddPatientDialog::ClearData()
 {
   ui->nameText->clear();
   ui->additionalText->clear();
+  ui->sexyComboBox->setCurrentIndex(0);
 }
