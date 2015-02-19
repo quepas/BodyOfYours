@@ -33,9 +33,11 @@ void ScansDataTree::InitPatientContextMenu()
 {
   patient_context_menu_ = new QMenu(view_);
   QAction* remove_patient = new QAction(QIcon(Resources::ICON_REMOVE), "Remove patient", nullptr);
-  QAction* modify_patient = new QAction(QIcon(Resources::ICON_REMOVE), "Modify patient", nullptr);
+  QAction* modify_patient = new QAction(QIcon(Resources::ICON_MODIFY), "Modify patient", nullptr);
+  QAction* scan_patient = new QAction(QIcon(Resources::ICON_CREATE), "Make new scan", nullptr);
   patient_context_menu_->addAction(remove_patient);
   patient_context_menu_->addAction(modify_patient);
+  patient_context_menu_->addAction(scan_patient);
   connect(remove_patient, SIGNAL(triggered()), this, SLOT(RemoveSelectedSlot()));
 }
 
