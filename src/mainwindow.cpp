@@ -67,11 +67,13 @@ void MainWindow::on_computingDevicesComboBox_currentIndexChanged(int index)
       ui->computingDevicesComboBox->setItemIcon(index, QIcon(Resources::ICON_OK));
       ui->scanButton->setIcon(QIcon(Resources::ICON_OK));
       ui->scanButton->setDisabled(false);
+      scans_data_tree_->SetScanActionEnable(true);
     } else {
       ui->computingDevicesComboBox->setItemIcon(index, QIcon(Resources::ICON_ERROR));
       ui->computingDevicesComboBox->setItemData(index, "", Qt::UserRole-1);
       ui->scanButton->setIcon(QIcon(Resources::ICON_WARNING));
       ui->scanButton->setDisabled(true);
+      scans_data_tree_->SetScanActionEnable(false);
     }
   }
 }
