@@ -3,9 +3,10 @@
 
 #include <QAction>
 
-ScansDataTree::ScansDataTree(QTreeView* tree_view)
+ScansDataTree::ScansDataTree(QTreeView* tree_view, ScanningWindow* scanning_window)
   : view_(tree_view),
-    model_(new ScansTreeModel(nullptr))
+    model_(new ScansTreeModel(nullptr)),
+    scanning_window_(scanning_window)
 {
   view_->setModel(model_);
   view_->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -40,6 +41,7 @@ void ScansDataTree::InitPatientContextMenu()
   patient_context_menu_->addAction(modify_patient);
   patient_context_menu_->addAction(scan_patient_);
   connect(remove_patient, SIGNAL(triggered()), this, SLOT(RemoveSelectedSlot()));
+  connect(scan_patient_, SIGNAL(triggered()), this, SLOT(ScanPatient()));
 }
 
 void ScansDataTree::InitScanContextMenu()
@@ -66,4 +68,10 @@ void ScansDataTree::RemoveSelectedSlot()
 void ScansDataTree::SetScanActionEnable(bool enabled)
 {
   scan_patient_->setEnabled(enabled);
+}
+
+void ScansDataTree::ScanPatient()
+{
+  scanning_window_->show();
+  scanning_window_->StartGrabbingData();
 }
