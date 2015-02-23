@@ -1,0 +1,53 @@
+driver: "asus_xtion_pro_live[openni]"
+device_id: 0
+depth_stream {
+  type: STREAM_DEPTH
+  enabled: true
+  source: ""
+  image_size {
+    width: 640
+    height: 480
+  }
+  units: UNIT_1MM
+  mirror_enabled: false
+  fps: 30
+  intrinsics {
+    width: 640
+    height: 480
+    fx: 571.260009765625
+    fy: 571.260009765625
+    cx: 320
+    cy: 240
+    k1: 0
+    k2: 0
+    k3: 0
+    p1: 0
+    p2: 0
+  }
+}
+aux_stream {
+  type: STREAM_COLOR
+  enabled: false
+  source: ""
+  image_size {
+    width: 640
+    height: 480
+  }
+  units: UNIT_UNKNOWN
+  mirror_enabled: false
+  fps: 30
+  intrinsics {
+    width: 640
+    height: 480
+    fx: 531.1500244140625
+    fy: 531.1500244140625
+    cx: 320
+    cy: 240
+    k1: 0
+    k2: 0
+    k3: 0
+    p1: 0
+    p2: 0
+  }
+}
+enable_align_viewpoints: true
