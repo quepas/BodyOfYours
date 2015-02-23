@@ -14,6 +14,7 @@ class AddPatientDialog : public QDialog
 
 public:
   explicit AddPatientDialog(QWidget *parent = 0);
+  AddPatientDialog(PatientData patient_data, QWidget *parent = 0);
   ~AddPatientDialog();
 
   void ClearData();
