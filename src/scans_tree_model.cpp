@@ -42,6 +42,7 @@ void ScansTreeModel::AddPatientToTree(PatientData data, QStringList patient_scan
     patient_item->appendRow(scan_item);
   }
   root->appendRow(patient_item);
+  patient_data_.push_back(data);
 }
 
 void ScansTreeModel::SavePatientToDisc(PatientData data)

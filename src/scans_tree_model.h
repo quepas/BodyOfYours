@@ -4,6 +4,7 @@
 
 #include <QStandardItemModel>
 #include <QFileSystemModel>
+#include <QVector>
 
 class ScansTreeModel : public QStandardItemModel
 {
@@ -23,8 +24,11 @@ public:
   void SavePatientMetadata(PatientData data);
   PatientData LoadPatientMetadata(QString metadata_file);
 
+  QVector<PatientData> patient_data() const { return patient_data_; }
+
 private:
   QFileSystemModel* help_model_;
+  QVector<PatientData> patient_data_;
 
   void PrepareTree();
 };

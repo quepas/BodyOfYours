@@ -1,5 +1,6 @@
 #include "scans_data_tree.h"
 #include "resources.h"
+#include "addpatientdialog.h"
 
 #include <QAction>
 
@@ -42,6 +43,7 @@ void ScansDataTree::InitPatientContextMenu()
   patient_context_menu_->addAction(scan_patient_);
   connect(remove_patient, SIGNAL(triggered()), this, SLOT(RemoveSelectedSlot()));
   connect(scan_patient_, SIGNAL(triggered()), this, SLOT(ScanPatient()));
+  connect(modify_patient, SIGNAL(triggered()), this, SLOT(ModifyPatient()));
 }
 
 void ScansDataTree::InitScanContextMenu()
@@ -74,4 +76,19 @@ void ScansDataTree::ScanPatient()
 {
   scanning_window_->show();
   scanning_window_->StartGrabbingData();
+}
+
+void ScansDataTree::ModifyPatient()
+{
+  QModelIndex index = view_->currentIndex();
+  if (index.isValid()) {
+    QString text = model_->itemFromIndex(index)->text();
+    foreach(PatientData data, model_->patient_data()) {
+      if (text == data.name) {
+        AddPatientDialog* dialog = new AddPatientDialog(data);
+        dialog->show();
+        return;
+      }
+    }
+  }
 }

@@ -22,6 +22,7 @@ private slots:
   void CustomContextMenuSlot(const QPoint& point);
   void RemoveSelectedSlot();
   void ScanPatient();
+  void ModifyPatient();
 
 private:
   QTreeView* view_;
