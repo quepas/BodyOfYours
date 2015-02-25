@@ -25,9 +25,11 @@ private slots:
 
 signals:
   void AddPatientSignal(PatientData data);
+  void ModifyPatientSignal(PatientData data);
 
 private:
   Ui::AddPatientDialog *ui;
+  bool only_edit_;
 };
 
 #endif // ADDPATIENTDIALOG_H

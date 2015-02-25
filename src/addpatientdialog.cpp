@@ -3,7 +3,8 @@
 
 AddPatientDialog::AddPatientDialog(QWidget *parent) :
   QDialog(parent),
-  ui(new Ui::AddPatientDialog)
+  ui(new Ui::AddPatientDialog),
+  only_edit_(false)
 {
   ui->setupUi(this);
   setWindowTitle("Add patient dialog");
@@ -11,7 +12,8 @@ AddPatientDialog::AddPatientDialog(QWidget *parent) :
 
 AddPatientDialog::AddPatientDialog(PatientData patient_data, QWidget *parent /*= 0*/)
   : QDialog(parent),
-    ui(new Ui::AddPatientDialog)
+    ui(new Ui::AddPatientDialog),
+    only_edit_(true)
 {
   ui->setupUi(this);
   setWindowTitle("Add patient dialog");
@@ -34,7 +36,11 @@ void AddPatientDialog::on_addPatientButton_clicked()
   data.sex = is_female ? FEMALE : MALE;
 
   if (!data.name.isEmpty()) {
-    emit AddPatientSignal(data);
+    if (!only_edit_) {
+      emit AddPatientSignal(data);
+    } else {
+      emit ModifyPatientSignal(data);
+    }
     ClearData();
     close();
   }
