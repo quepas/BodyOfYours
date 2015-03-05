@@ -18,6 +18,7 @@ AddPatientDialog::AddPatientDialog(PatientData patient_data, QWidget *parent /*=
   ui->setupUi(this);
   setWindowTitle("Add patient dialog");
   ui->nameText->setText(patient_data.name);
+  ui->nameText->setDisabled(true);
   ui->additionalText->setText(patient_data.additional);
   ui->sexyComboBox->setCurrentIndex((patient_data.sex ==  FEMALE) ? 0 : 1);
 }

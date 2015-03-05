@@ -32,6 +32,7 @@ private slots:
   void on_removePatientButton_clicked();
 
   void AddPatientSlot(PatientData data);
+  void ModifyPatientSlot(PatientData data);
 
 private:
   Ui::MainWindow *ui;
