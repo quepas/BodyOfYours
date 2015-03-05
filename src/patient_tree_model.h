@@ -6,10 +6,10 @@
 #include <QFileSystemModel>
 #include <QVector>
 
-class ScansTreeModel : public QStandardItemModel
+class PatientTreeModel : public QStandardItemModel
 {
 public:
-  ScansTreeModel(QObject* parent);
+  PatientTreeModel(QObject* parent);
 
   void RemovePatient(const QModelIndex& index);
 
@@ -23,6 +23,8 @@ public:
 
   void SavePatientMetadata(PatientData data);
   PatientData LoadPatientMetadata(QString metadata_file);
+
+  void ModifyPatientMetadata(PatientData data);
 
   QVector<PatientData> patient_data() const { return patient_data_; }
 

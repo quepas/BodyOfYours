@@ -1,4 +1,4 @@
-#include "scans_tree_model.h"
+#include "patient_tree_model.h"
 #include "file_scanner.h"
 #include "resources.h"
 #include "json.h"
@@ -8,7 +8,7 @@
 #include <QStandardItem>
 #include <QDebug>
 
-ScansTreeModel::ScansTreeModel(QObject* parent)
+PatientTreeModel::PatientTreeModel(QObject* parent)
   : QStandardItemModel(),
     help_model_(new QFileSystemModel)
 {
@@ -16,7 +16,7 @@ ScansTreeModel::ScansTreeModel(QObject* parent)
   PrepareTree();
 }
 
-void ScansTreeModel::PrepareTree()
+void PatientTreeModel::PrepareTree()
 {
   // scan for dirs and files
   FileScanner scanner("./data/");
@@ -27,7 +27,7 @@ void ScansTreeModel::PrepareTree()
   }
 }
 
-void ScansTreeModel::AddPatientToTree(PatientData data, QStringList patient_scans /*= QStringList()*/)
+void PatientTreeModel::AddPatientToTree(PatientData data, QStringList patient_scans /*= QStringList()*/)
 {
   QStandardItem* root = invisibleRootItem();
   QStandardItem* patient_item = new QStandardItem(data.name);
@@ -45,7 +45,7 @@ void ScansTreeModel::AddPatientToTree(PatientData data, QStringList patient_scan
   patient_data_.push_back(data);
 }
 
-void ScansTreeModel::SavePatientToDisc(PatientData data)
+void PatientTreeModel::SavePatientToDisc(PatientData data)
 {
   QDir dir(Resources::SCANS_DATA_PATH + "/" + data.name);
   if (!dir.exists()) {
@@ -53,7 +53,7 @@ void ScansTreeModel::SavePatientToDisc(PatientData data)
   }
 }
 
-void ScansTreeModel::SavePatientMetadata(PatientData data)
+void PatientTreeModel::SavePatientMetadata(PatientData data)
 {
   QtJson::JsonObject patient;
   patient["name"] = data.name;
@@ -66,7 +66,7 @@ void ScansTreeModel::SavePatientMetadata(PatientData data)
   metadata_file.close();
 }
 
-void ScansTreeModel::LoadPatientFromDisc(QString name)
+void PatientTreeModel::LoadPatientFromDisc(QString name)
 {
   QString patient_path = Resources::SCANS_DATA_PATH + "/" + name;
   QDir dir(patient_path);
@@ -77,7 +77,7 @@ void ScansTreeModel::LoadPatientFromDisc(QString name)
   }
 }
 
-PatientData ScansTreeModel::LoadPatientMetadata(QString metadata_path)
+PatientData PatientTreeModel::LoadPatientMetadata(QString metadata_path)
 {
   QFile metadata_file(metadata_path);
   metadata_file.open(QFile::ReadOnly | QFile::Text);
@@ -90,26 +90,26 @@ PatientData ScansTreeModel::LoadPatientMetadata(QString metadata_path)
   return result;
 }
 
-void ScansTreeModel::RemovePatientFromTree(const QModelIndex& index)
+void PatientTreeModel::RemovePatientFromTree(const QModelIndex& index)
 {
   QStandardItem* current = itemFromIndex(index);
   removeRow(current->row());
 }
 
-void ScansTreeModel::RemovePatientFromDisc(QString name)
+void PatientTreeModel::RemovePatientFromDisc(QString name)
 {
   QDir path(Resources::SCANS_DATA_PATH + "/");
   path.remove(name + ".json");
   path.rmdir(name);
 }
 
-void ScansTreeModel::RemovePatient(const QModelIndex& index)
+void PatientTreeModel::RemovePatient(const QModelIndex& index)
 {
   RemovePatientFromDisc(itemFromIndex(index)->text());
   RemovePatientFromTree(index);
 }
 
-QStringList ScansTreeModel::LoadPatientScansFromDisc(QString patient_dir_path)
+QStringList PatientTreeModel::LoadPatientScansFromDisc(QString patient_dir_path)
 {
   FileScanner scanner(patient_dir_path);
   return scanner.ScanFiles("*.ply");

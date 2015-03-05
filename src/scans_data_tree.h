@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scanningwindow.h"
-#include "scans_tree_model.h"
+#include "patient_tree_model.h"
 
 #include <QObject>
 #include <QMenu>
@@ -14,7 +14,7 @@ public:
   ScansDataTree(QTreeView* tree_view, ScanningWindow* scanning_window);
   ~ScansDataTree();
 
-  ScansTreeModel* model() { return model_; }
+  PatientTreeModel* model() { return model_; }
   bool RemoveSelected();
   void SetScanActionEnable(bool enabled);
 
@@ -26,7 +26,7 @@ private slots:
 
 private:
   QTreeView* view_;
-  ScansTreeModel* model_;
+  PatientTreeModel* model_;
   QMenu *patient_context_menu_, *scan_context_menu_;
   QAction* scan_patient_;
   ScanningWindow* scanning_window_;
