@@ -22,6 +22,9 @@ Implementation in tree-based model (PatientTreeModel)
 
 ## Update
 
+1. Find ./data/patients/Patient_ID directory
+2. Open and modify metadata.json
+
 ## Delete
 
 ### Delete by Patient_ID
