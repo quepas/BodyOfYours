@@ -15,7 +15,8 @@ PatientTreeModel::PatientTreeModel(QObject* parent)
     help_model_(new QFileSystemModel)
 {
   setHorizontalHeaderItem(0, new QStandardItem(QString("Patient")));
-  PrepareTree();
+  ReadAll();
+  Build();
 }
 
 void PatientTreeModel::PrepareTree()
@@ -117,7 +118,7 @@ QStringList PatientTreeModel::LoadPatientScansFromDisc(QString patient_dir_path)
   return scanner.ScanFiles("*.ply");
 }
 
-bool PatientTreeModel::Create(Patient& data)
+bool PatientTreeModel::Create(Patient data)
 {
   //Calculate Patient_ID = md5(datetime + patient:name)
   QString raw_id = QDateTime::currentDateTime().toString() + data.name() + data.surname();
@@ -141,5 +142,45 @@ bool PatientTreeModel::Create(Patient& data)
   metadata_file.write(QtJson::serialize(patient));
   metadata_file.close();
 
+  patients_.push_back(data);
   return true;
+}
+
+void PatientTreeModel::ReadAll()
+{
+  FileScanner scanner("./data/patients/");
+  QStringList dirs = scanner.ScanTopDirsName();
+
+  foreach(QString str, dirs) {
+    qDebug() << str;
+    Read(str);
+  }
+}
+
+void PatientTreeModel::Read(const QString& patient_id)
+{
+  QFile metadata_file("./data/patients/" + patient_id + "/metadata.json");
+  metadata_file.open(QFile::ReadOnly | QFile::Text);
+  QTextStream in_stream(&metadata_file);
+  QtJson::JsonObject json = QtJson::parse(in_stream.readAll()).toMap();
+  Patient patient;
+  patient.setId(json["id"].toString());
+  patient.setName(json["name"].toString());
+  patient.setSurname(json["surname"].toString());
+  patient.setAdditionalInfo(json["additional"].toString());
+  patient.setSex((json["sex"].toString() == "Female") ? FEMALE_ : MALE_);
+  patients_.push_back(patient);
+}
+
+void PatientTreeModel::Build()
+{
+  QStandardItem* root = invisibleRootItem();
+  foreach(Patient patient, patients_) {
+    QStandardItem* patient_item = new QStandardItem(patient.name() + " " + patient.surname());
+    QIcon sex_icon = (patient.sex() == FEMALE_) ? QIcon(Resources::ICON_FEMALE) : QIcon(Resources::ICON_MALE);
+    QIcon scan_icon = QIcon(Resources::ICON_SCAN);
+    patient_item->setIcon(sex_icon);
+    patient_item->setEditable(false);
+    root->appendRow(patient_item);
+  }
 }

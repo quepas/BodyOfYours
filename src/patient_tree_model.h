@@ -12,10 +12,13 @@ class PatientTreeModel : public QStandardItemModel
 public:
   PatientTreeModel(QObject* parent);
 
-  bool Create(Patient& data);
-  PatientData Read(const QString& patient_id);
-  bool Update(PatientData data);
-  bool Delete(PatientData data);
+  bool Create(Patient data);
+  void ReadAll();
+  void Read(const QString& patient_id);
+  bool Update(Patient data);
+  bool Delete(Patient data);
+
+  void Build();
 
   void RemovePatient(const QModelIndex& index);
 
@@ -37,6 +40,7 @@ public:
 private:
   QFileSystemModel* help_model_;
   QVector<PatientData> patient_data_;
+  QVector<Patient> patients_;
 
   void PrepareTree();
 };
