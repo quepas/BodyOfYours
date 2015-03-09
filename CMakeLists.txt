@@ -26,8 +26,8 @@ link_directories(${BOOST_LIB} ${PCL_LIB} ${REME_LIB})
 
 find_package(Qt4 4.8.0 REQUIRED QtGui QtCore)
 
-file (GLOB RAW_sources src/*.cpp)
-file (GLOB RAW_headers src/*.h)
+file (GLOB RAW_sources src/*.cpp src/data/*.cpp)
+file (GLOB RAW_headers src/*.h src/data/*.h)
 #file (GLOB RAW_gui gui/*.ui)
 
 add_executable(BodyOfYoursApp ${RAW_sources} ${RAW_headers})
