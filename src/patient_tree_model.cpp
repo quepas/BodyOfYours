@@ -3,6 +3,8 @@
 #include "resources.h"
 #include "json.h"
 
+#include <QCryptographicHash>
+#include <QDateTime>
 #include <QString>
 #include <QVariant>
 #include <QStandardItem>
@@ -113,4 +115,31 @@ QStringList PatientTreeModel::LoadPatientScansFromDisc(QString patient_dir_path)
 {
   FileScanner scanner(patient_dir_path);
   return scanner.ScanFiles("*.ply");
+}
+
+bool PatientTreeModel::Create(Patient& data)
+{
+  //Calculate Patient_ID = md5(datetime + patient:name)
+  QString raw_id = QDateTime::currentDateTime().toString() + data.name() + data.surname();
+  QString patient_id = QString(QCryptographicHash::hash(raw_id.toAscii(), QCryptographicHash::Md5).toHex());
+  data.setId(patient_id);
+  //Create directory ./data/patients/Patient_ID
+  QDir patient_dir("./data/patients/" + patient_id);
+  if (!patient_dir.exists()) {
+    if (!patient_dir.mkpath(".")) return false;
+  }
+  //Create patient's metadata file in ./data/patients/Patient_ID/metadata.json
+  QtJson::JsonObject patient;
+  patient["id"] = data.id();
+  patient["name"] = data.name();
+  patient["surname"] = data.surname();
+  patient["additional"] = data.additional_info();
+  patient["sex"] = (data.sex() == FEMALE_) ? "Female" : "Male";
+
+  QFile metadata_file("./data/patients/" + patient_id + "/metadata.json");
+  if (!metadata_file.open(QIODevice::WriteOnly)) return false;
+  metadata_file.write(QtJson::serialize(patient));
+  metadata_file.close();
+
+  return true;
 }

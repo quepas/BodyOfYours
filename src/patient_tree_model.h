@@ -1,5 +1,6 @@
 #pragma once
 
+#include "data/patient.h"
 #include "patient_data.h"
 
 #include <QStandardItemModel>
@@ -10,6 +11,11 @@ class PatientTreeModel : public QStandardItemModel
 {
 public:
   PatientTreeModel(QObject* parent);
+
+  bool Create(Patient& data);
+  PatientData Read(const QString& patient_id);
+  bool Update(PatientData data);
+  bool Delete(PatientData data);
 
   void RemovePatient(const QModelIndex& index);
 
