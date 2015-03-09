@@ -1,6 +1,7 @@
 #ifndef ADDPATIENTDIALOG_H
 #define ADDPATIENTDIALOG_H
 
+#include "data/patient.h"
 #include "patient_data.h"
 #include <QDialog>
 
@@ -24,6 +25,7 @@ private slots:
   void on_cancelAddPatientButton_clicked();
 
 signals:
+  void CreatePatientSignal(Patient data);
   void AddPatientSignal(PatientData data);
   void ModifyPatientSignal(PatientData data);
 

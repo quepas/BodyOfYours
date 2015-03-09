@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "data/patient.h"
 #include "addpatientdialog.h"
 #include "scans_viewer.h"
 #include "scans_tree.h"
@@ -30,6 +31,8 @@ private slots:
   void on_scanButton_clicked();
   void on_addPatientButton_clicked();
   void on_removePatientButton_clicked();
+
+  void CreatePatientSlot(Patient data);
 
   void AddPatientSlot(PatientData data);
   void ModifyPatientSlot(PatientData data);

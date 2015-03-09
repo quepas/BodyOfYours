@@ -36,9 +36,14 @@ void AddPatientDialog::on_addPatientButton_clicked()
   bool is_female = ui->sexyComboBox->currentText() == "Female";
   data.sex = is_female ? FEMALE : MALE;
 
+  Patient patient;
+  patient.setName(ui->nameText->text());
+  patient.setAdditionalInfo(ui->additionalText->toPlainText());
+  patient.setSex(is_female ? FEMALE_ : MALE_);
+
   if (!data.name.isEmpty()) {
     if (!only_edit_) {
-      emit AddPatientSignal(data);
+      emit CreatePatientSignal(patient);
     } else {
       emit ModifyPatientSignal(data);
     }
