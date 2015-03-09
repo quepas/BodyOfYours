@@ -57,7 +57,8 @@ bool ScansDataTree::RemoveSelected()
 {
   QModelIndex index = view_->currentIndex();
   if (index.isValid()) {
-    model_->RemovePatient(index);
+    QString patient_id = model_->patients()[index.row()].id();
+    model_->Delete(patient_id);
   }
   return false;
 }

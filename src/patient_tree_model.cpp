@@ -143,6 +143,9 @@ bool PatientTreeModel::Create(Patient data)
   metadata_file.close();
 
   patients_.push_back(data);
+  // Rebuild tree model
+  clear();
+  Build();
   return true;
 }
 
@@ -183,4 +186,12 @@ void PatientTreeModel::Build()
     patient_item->setEditable(false);
     root->appendRow(patient_item);
   }
+}
+
+void PatientTreeModel::Delete(const QString& patient_id)
+{
+  qDebug() << "Removing: " << patient_id;
+  QDir path("./data/patients/");
+  path.remove(patient_id + "/metadata.json");
+  path.rmdir(patient_id);
 }

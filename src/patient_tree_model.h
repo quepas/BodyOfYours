@@ -16,7 +16,7 @@ public:
   void ReadAll();
   void Read(const QString& patient_id);
   bool Update(Patient data);
-  bool Delete(Patient data);
+  void Delete(const QString& patient_id);
 
   void Build();
 
@@ -36,6 +36,7 @@ public:
   void ModifyPatientMetadata(PatientData data);
 
   QVector<PatientData> patient_data() const { return patient_data_; }
+  QVector<Patient> patients() const { return patients_; }
 
 private:
   QFileSystemModel* help_model_;
