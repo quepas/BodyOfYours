@@ -1,5 +1,7 @@
 # Patient CRUD
 
+Implementation in tree-based model (PatientTreeModel)
+
 ## Create
 
 1. Calculate Patient_ID = md5(datetime + patient:name)
