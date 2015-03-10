@@ -82,14 +82,5 @@ void ScansDataTree::ScanPatient()
 void ScansDataTree::ModifyPatient()
 {
   QModelIndex index = view_->currentIndex();
-  if (index.isValid()) {
-    QString text = model_->itemFromIndex(index)->text();
-    foreach(PatientData data, model_->patient_data()) {
-      if (text == data.name) {
-        AddPatientDialog* dialog = new AddPatientDialog(data);
-        dialog->show();
-        return;
-      }
-    }
-  }
+  if (index.isValid()) {}
 }

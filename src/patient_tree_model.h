@@ -20,27 +20,8 @@ public:
 
   void Build();
 
-  void RemovePatient(const QModelIndex& index);
-
-  void AddPatientToTree(PatientData data, QStringList patient_scans = QStringList());
-  void RemovePatientFromTree(const QModelIndex& index);
-
-  void SavePatientToDisc(PatientData data);
-  void LoadPatientFromDisc(QString name);
-  QStringList LoadPatientScansFromDisc(QString patient_dir_path);
-  void RemovePatientFromDisc(QString name);
-
-  void SavePatientMetadata(PatientData data);
-  PatientData LoadPatientMetadata(QString metadata_file);
-
-  void ModifyPatientMetadata(PatientData data);
-
-  QVector<PatientData> patient_data() const { return patient_data_; }
   QVector<Patient> patients() const { return patients_; }
 
 private:
-  QVector<PatientData> patient_data_;
   QVector<Patient> patients_;
-
-  void PrepareTree();
 };
