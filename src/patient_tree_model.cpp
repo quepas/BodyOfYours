@@ -190,8 +190,15 @@ void PatientTreeModel::Build()
 
 void PatientTreeModel::Delete(const QString& patient_id)
 {
-  qDebug() << "Removing: " << patient_id;
   QDir path("./data/patients/");
   path.remove(patient_id + "/metadata.json");
   path.rmdir(patient_id);
+  clear();
+  for (unsigned i = 0; i < patients_.size(); ++i) {
+    if (patients_[i].id() == patient_id) {
+      patients_.remove(i);
+      break;
+    }
+  }
+  Build();
 }

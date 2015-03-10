@@ -1,6 +1,9 @@
 #pragma once
 
+#include "scan.h"
+
 #include <QString>
+#include <QVector>
 
 enum Sex_
 {
@@ -19,12 +22,14 @@ public:
   QString surname() { return surname_; }
   QString additional_info() { return additional_info_; }
   Sex_ sex() { return sex_; }
+  QVector<Scan> scans() { return scans_; }
 
   void setId(QString id) { id_ = id; }
   void setName(QString name) { name_ = name; }
   void setSurname(QString surname) { surname_ = surname; }
   void setAdditionalInfo(QString additional_info) { additional_info_ = additional_info; }
   void setSex(Sex_ sex) { sex_ = sex; }
+  void setScans(QVector<Scan> scans) { scans_ = scans; }
 
 private:
   QString id_;
@@ -32,4 +37,5 @@ private:
   QString surname_;
   QString additional_info_;
   Sex_ sex_;
+  QVector<Scan> scans_;
 };
