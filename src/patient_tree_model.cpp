@@ -35,7 +35,7 @@ bool PatientTreeModel::Create(Patient data)
   patient["name"] = data.name();
   patient["surname"] = data.surname();
   patient["additional"] = data.additional_info();
-  patient["sex"] = (data.sex() == FEMALE_) ? "Female" : "Male";
+  patient["sex"] = (data.sex() == FEMALE) ? "Female" : "Male";
 
   QFile metadata_file("./data/patients/" + patient_id + "/metadata.json");
   if (!metadata_file.open(QIODevice::WriteOnly)) return false;
@@ -71,7 +71,7 @@ void PatientTreeModel::Read(const QString& patient_id)
   patient.setName(json["name"].toString());
   patient.setSurname(json["surname"].toString());
   patient.setAdditionalInfo(json["additional"].toString());
-  patient.setSex((json["sex"].toString() == "Female") ? FEMALE_ : MALE_);
+  patient.setSex((json["sex"].toString() == "Female") ? FEMALE : MALE);
   patients_.push_back(patient);
 }
 
@@ -80,7 +80,7 @@ void PatientTreeModel::Build()
   QStandardItem* root = invisibleRootItem();
   foreach(Patient patient, patients_) {
     QStandardItem* patient_item = new QStandardItem(patient.name() + " " + patient.surname());
-    QIcon sex_icon = (patient.sex() == FEMALE_) ? QIcon(Resources::ICON_FEMALE) : QIcon(Resources::ICON_MALE);
+    QIcon sex_icon = (patient.sex() == FEMALE) ? QIcon(Resources::ICON_FEMALE) : QIcon(Resources::ICON_MALE);
     QIcon scan_icon = QIcon(Resources::ICON_SCAN);
     patient_item->setIcon(sex_icon);
     patient_item->setEditable(false);

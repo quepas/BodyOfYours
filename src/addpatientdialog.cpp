@@ -20,7 +20,7 @@ AddPatientDialog::AddPatientDialog(Patient patient, QWidget *parent /*= 0*/)
   ui->nameText->setText(patient.name());
   ui->surnameText->setText(patient.surname());
   ui->additionalText->setText(patient.additional_info());
-  ui->sexyComboBox->setCurrentIndex((patient.sex() ==  FEMALE_) ? 0 : 1);
+  ui->sexyComboBox->setCurrentIndex((patient.sex() ==  FEMALE) ? 0 : 1);
 }
 
 AddPatientDialog::~AddPatientDialog()
@@ -34,7 +34,7 @@ void AddPatientDialog::on_addPatientButton_clicked()
   patient.setName(ui->nameText->text());
   patient.setAdditionalInfo(ui->additionalText->toPlainText());
   bool is_female = ui->sexyComboBox->currentText() == "Female";
-  patient.setSex(is_female ? FEMALE_ : MALE_);
+  patient.setSex(is_female ? FEMALE : MALE);
 
   if (!patient.name().isEmpty()) {
     if (!only_edit_) {
