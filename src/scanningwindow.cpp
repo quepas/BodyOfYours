@@ -1,6 +1,8 @@
 #include "scanningwindow.h"
 #include "ui_scanningwindow.h"
 
+#include <QDateTime>
+
 ScanningWindow::ScanningWindow(Scanner3D* scanner, QWidget *parent) :
   QDialog(parent),
   ui(new Ui::ScanningWindow),
@@ -58,7 +60,14 @@ void ScanningWindow::on_restartScanButton_clicked()
 
 void ScanningWindow::on_saveScanButton_clicked()
 {
-  scanning_->ReconstructAndSave("test.ply");
+  QString date_time = QDateTime::currentDateTime().toString("yyyy_MM_dd#HH_mm_ss");
+  scanning_->ReconstructAndSave(
+    "./data/patients/"
+    + scanned_patient_.id()
+    + "/scans/"
+    + scanned_patient_.name() + "_" + scanned_patient_.surname()
+    + "#" + date_time
+    + ".ply");
 }
 
 void ScanningWindow::on_cancelScanButton_clicked()
