@@ -34,8 +34,6 @@ private slots:
 
   void CreatePatientSlot(Patient data);
 
-  void ModifyPatientSlot(PatientData data);
-
 private:
   Ui::MainWindow *ui;
   ScanningWindow *scanning_window_;

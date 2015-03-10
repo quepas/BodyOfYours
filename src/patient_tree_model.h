@@ -1,7 +1,6 @@
 #pragma once
 
 #include "data/patient.h"
-#include "patient_data.h"
 
 #include <QStandardItemModel>
 #include <QFileSystemModel>

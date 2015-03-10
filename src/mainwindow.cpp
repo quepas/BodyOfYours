@@ -94,10 +94,6 @@ void MainWindow::on_removePatientButton_clicked()
   scans_data_tree_->RemoveSelected();
 }
 
-void MainWindow::ModifyPatientSlot(PatientData data)
-{
-
-}
 
 void MainWindow::CreatePatientSlot(Patient data)
 {
