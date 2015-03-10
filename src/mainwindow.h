@@ -34,7 +34,6 @@ private slots:
 
   void CreatePatientSlot(Patient data);
 
-  void AddPatientSlot(PatientData data);
   void ModifyPatientSlot(PatientData data);
 
 private:

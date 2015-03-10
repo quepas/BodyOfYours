@@ -11,8 +11,7 @@
 #include <QDebug>
 
 PatientTreeModel::PatientTreeModel(QObject* parent)
-  : QStandardItemModel(),
-    help_model_(new QFileSystemModel)
+  : QStandardItemModel()
 {
   setHorizontalHeaderItem(0, new QStandardItem(QString("Patient")));
   ReadAll();
@@ -194,7 +193,7 @@ void PatientTreeModel::Delete(const QString& patient_id)
   path.remove(patient_id + "/metadata.json");
   path.rmdir(patient_id);
   clear();
-  for (unsigned i = 0; i < patients_.size(); ++i) {
+  for (int i = 0; i < patients_.size(); ++i) {
     if (patients_[i].id() == patient_id) {
       patients_.remove(i);
       break;

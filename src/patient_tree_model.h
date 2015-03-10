@@ -39,7 +39,6 @@ public:
   QVector<Patient> patients() const { return patients_; }
 
 private:
-  QFileSystemModel* help_model_;
   QVector<PatientData> patient_data_;
   QVector<Patient> patients_;
 
