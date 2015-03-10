@@ -121,5 +121,11 @@ bool PatientTreeModel::Update(Patient patient)
   metadata_file.write(QtJson::serialize(json));
   metadata_file.close();
 
+  // Rebuild model
+  clear();
+  patients_.clear();
+  ReadAll();
+  Build();
+
   return true;
 }
