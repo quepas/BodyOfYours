@@ -15,10 +15,15 @@ Implementation in tree-based model (PatientTreeModel)
 
 ## Read
 
+### Read by Patient_ID
+
+1. Read metadata file ./data/patients/Patient_ID/metadata.json
+2. Construct Patient instance from JSON data
+
 ### Read all
 
-1. Navigate through all directories in ./data/patients/ dir
-2. Go inside every scanned directory and read metadata.json
+1. Navigate through all directories in ./data/patients/
+2. Every directory name consider as Patient_ID and read from it
 
 ## Update
 
