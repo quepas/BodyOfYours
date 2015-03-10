@@ -3,13 +3,13 @@
 #include "data/patient.h"
 
 #include <QStandardItemModel>
-#include <QFileSystemModel>
+#include <QString>
 #include <QVector>
 
 class PatientTreeModel : public QStandardItemModel
 {
 public:
-  PatientTreeModel(QObject* parent);
+  PatientTreeModel(QString root_path, QObject* parent = nullptr);
 
   bool Create(Patient data);
   void ReadAll();
@@ -22,5 +22,6 @@ public:
   QVector<Patient> patients() const { return patients_; }
 
 private:
+  QString root_path_;
   QVector<Patient> patients_;
 };

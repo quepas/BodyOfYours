@@ -10,8 +10,9 @@
 #include <QStandardItem>
 #include <QDebug>
 
-PatientTreeModel::PatientTreeModel(QObject* parent)
-  : QStandardItemModel()
+PatientTreeModel::PatientTreeModel(QString root_path, QObject* parent /*= nullptr*/)
+  : QStandardItemModel(),
+    root_path_(root_path)
 {
   setHorizontalHeaderItem(0, new QStandardItem(QString("Patient")));
   ReadAll();
@@ -25,7 +26,7 @@ bool PatientTreeModel::Create(Patient data)
   QString patient_id = QString(QCryptographicHash::hash(raw_id.toAscii(), QCryptographicHash::Md5).toHex());
   data.setId(patient_id);
   //Create directory ./data/patients/Patient_ID
-  QDir patient_dir("./data/patients/" + patient_id);
+  QDir patient_dir(root_path_ + patient_id);
   if (!patient_dir.exists()) {
     if (!patient_dir.mkpath(".")) return false;
   }
@@ -37,7 +38,7 @@ bool PatientTreeModel::Create(Patient data)
   patient["additional"] = data.additional_info();
   patient["sex"] = (data.sex() == FEMALE) ? "Female" : "Male";
 
-  QFile metadata_file("./data/patients/" + patient_id + "/metadata.json");
+  QFile metadata_file(root_path_ + patient_id + "/metadata.json");
   if (!metadata_file.open(QIODevice::WriteOnly)) return false;
   metadata_file.write(QtJson::serialize(patient));
   metadata_file.close();
@@ -51,7 +52,7 @@ bool PatientTreeModel::Create(Patient data)
 
 void PatientTreeModel::ReadAll()
 {
-  FileScanner scanner("./data/patients/");
+  FileScanner scanner(root_path_);
   QStringList dirs = scanner.ScanTopDirsName();
 
   foreach(QString str, dirs) {
@@ -62,7 +63,7 @@ void PatientTreeModel::ReadAll()
 
 void PatientTreeModel::Read(const QString& patient_id)
 {
-  QFile metadata_file("./data/patients/" + patient_id + "/metadata.json");
+  QFile metadata_file(root_path_ + patient_id + "/metadata.json");
   metadata_file.open(QFile::ReadOnly | QFile::Text);
   QTextStream in_stream(&metadata_file);
   QtJson::JsonObject json = QtJson::parse(in_stream.readAll()).toMap();
@@ -90,7 +91,7 @@ void PatientTreeModel::Build()
 
 void PatientTreeModel::Delete(const QString& patient_id)
 {
-  QDir path("./data/patients/");
+  QDir path(root_path_);
   path.remove(patient_id + "/metadata.json");
   path.rmdir(patient_id);
   clear();

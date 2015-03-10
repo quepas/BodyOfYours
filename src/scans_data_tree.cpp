@@ -6,7 +6,7 @@
 
 ScansDataTree::ScansDataTree(QTreeView* tree_view, ScanningWindow* scanning_window)
   : view_(tree_view),
-    model_(new PatientTreeModel(nullptr)),
+    model_(new PatientTreeModel("./data/patients/")),
     scanning_window_(scanning_window)
 {
   view_->setModel(model_);
