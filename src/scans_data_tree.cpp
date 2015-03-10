@@ -82,5 +82,15 @@ void ScansDataTree::ScanPatient()
 void ScansDataTree::ModifyPatient()
 {
   QModelIndex index = view_->currentIndex();
-  if (index.isValid()) {}
+  if (index.isValid()) {
+    Patient patient = model_->patients()[index.row()];
+    AddPatientDialog* dialog = new AddPatientDialog(patient);
+    connect(dialog, SIGNAL(UpdatePatientSignal(Patient)), this, SLOT(UpdatePatientSlot(Patient)));
+    dialog->show();
+  }
+}
+
+void ScansDataTree::UpdatePatientSlot(Patient patient)
+{
+  model_->Update(patient);
 }

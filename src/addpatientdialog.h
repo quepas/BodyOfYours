@@ -24,11 +24,13 @@ private slots:
   void on_cancelAddPatientButton_clicked();
 
 signals:
+  void UpdatePatientSignal(Patient data);
   void CreatePatientSignal(Patient data);
 
 private:
   Ui::AddPatientDialog *ui;
-  bool only_edit_;
+  bool only_update_;
+  Patient updated_patient_;
 };
 
 #endif // ADDPATIENTDIALOG_H

@@ -94,7 +94,6 @@ void MainWindow::on_removePatientButton_clicked()
   scans_data_tree_->RemoveSelected();
 }
 
-
 void MainWindow::CreatePatientSlot(Patient data)
 {
   scans_data_tree_->model()->Create(data);

@@ -56,7 +56,6 @@ void PatientTreeModel::ReadAll()
   QStringList dirs = scanner.ScanTopDirsName();
 
   foreach(QString str, dirs) {
-    qDebug() << str;
     Read(str);
   }
 }
@@ -67,6 +66,7 @@ void PatientTreeModel::Read(const QString& patient_id)
   metadata_file.open(QFile::ReadOnly | QFile::Text);
   QTextStream in_stream(&metadata_file);
   QtJson::JsonObject json = QtJson::parse(in_stream.readAll()).toMap();
+  metadata_file.close();
   Patient patient;
   patient.setId(json["id"].toString());
   patient.setName(json["name"].toString());
@@ -102,4 +102,24 @@ void PatientTreeModel::Delete(const QString& patient_id)
     }
   }
   Build();
+}
+
+bool PatientTreeModel::Update(Patient patient)
+{
+  // Prepare JSON
+  QtJson::JsonObject json;
+  json["id"] = patient.id();
+  json["name"] = patient.name();
+  json["surname"] = patient.surname();
+  json["additional"] = patient.additional_info();
+  json["sex"] = (patient.sex() == FEMALE) ? "Female" : "Male";
+
+  // Open metadata.json for write
+  QFile metadata_file(root_path_ + patient.id() + "/metadata.json");
+  if (!metadata_file.open(QIODevice::WriteOnly)) return false;
+  metadata_file.seek(0);
+  metadata_file.write(QtJson::serialize(json));
+  metadata_file.close();
+
+  return true;
 }

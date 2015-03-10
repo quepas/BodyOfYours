@@ -23,6 +23,7 @@ private slots:
   void RemoveSelectedSlot();
   void ScanPatient();
   void ModifyPatient();
+  void UpdatePatientSlot(Patient patient);
 
 private:
   QTreeView* view_;
