@@ -75,8 +75,11 @@ void ScansDataTree::SetScanActionEnable(bool enabled)
 
 void ScansDataTree::ScanPatient()
 {
-  scanning_window_->show();
-  scanning_window_->StartGrabbingData();
+  QModelIndex index = view_->currentIndex();
+  if (index.isValid()) {
+    scanning_window_->Show(model_->patients()[index.row()]);
+    scanning_window_->StartGrabbingData();
+  }
 }
 
 void ScansDataTree::ModifyPatient()

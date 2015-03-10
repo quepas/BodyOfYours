@@ -1,6 +1,7 @@
 #ifndef SCANNINGWINDOW_H
 #define SCANNINGWINDOW_H
 
+#include "data/patient.h"
 #include "sensor_viewer.h"
 #include "scanning_3d.h"
 
@@ -19,6 +20,7 @@ public:
   ~ScanningWindow();
 
   void StartGrabbingData();
+  void Show(Patient scanned_patient);
 
 private slots:
   void on_startScanButton_clicked();
@@ -35,6 +37,7 @@ private:
   Ui::ScanningWindow *ui;
   SensorViewer *camera_viewer_, *depth_viewer_, *volume_viewer_;
   Scanning3D *scanning_;
+  Patient scanned_patient_;
 };
 
 #endif // SCANNINGWINDOW_H

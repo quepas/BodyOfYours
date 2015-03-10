@@ -72,3 +72,10 @@ void ScanningWindow::StartGrabbingData()
   volume_viewer_->Clear();
   scanning_->start();
 }
+
+void ScanningWindow::Show(Patient scanned_patient)
+{
+  scanned_patient_ = scanned_patient;
+  setWindowTitle("Scanning patient: " + scanned_patient.name() + " " + scanned_patient.surname());
+  show();
+}
