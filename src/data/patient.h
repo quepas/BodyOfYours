@@ -16,6 +16,7 @@ class Patient
 {
 public:
   Patient();
+  Patient(QtJson::JsonObject json);
   Patient(QString name, QString surname, QString additional_info);
 
   QString id() { return id_; }
@@ -33,6 +34,7 @@ public:
   void set_scans(QVector<Scan> scans) { scans_ = scans; }
 
   QtJson::JsonObject AsJsonObject();
+  void FromJsonObject(QtJson::JsonObject json);
 
 private:
   QString id_;

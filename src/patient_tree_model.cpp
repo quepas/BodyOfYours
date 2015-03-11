@@ -76,12 +76,7 @@ void PatientTreeModel::Read(const QString& patient_id)
     scans.push_back(scan);
   }
   // Construct Patient instance from JSON data and scans data
-  Patient patient;
-  patient.set_id(json["id"].toString());
-  patient.set_name(json["name"].toString());
-  patient.set_surname(json["surname"].toString());
-  patient.set_additional_info(json["additional"].toString());
-  patient.set_sex((json["sex"].toString() == "Female") ? FEMALE : MALE);
+  Patient patient(json);
   patient.set_scans(scans);
   patients_.push_back(patient);
 }
