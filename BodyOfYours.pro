@@ -52,9 +52,9 @@ HEADERS  += src/data/patient.h \
             src/sensor_viewer.h
 
 
-FORMS    += src/addpatientdialog.ui \
-            src/mainwindow.ui \
-            src/scanningwindow.ui
+FORMS    += src/mainwindow.ui \
+            src/scanningwindow.ui \
+            src/patientinfodialog.ui
 
 
 INCLUDEPATH += "D:/Programowanie/Biblioteki/Tidy/pcl-1.7/include/pcl-1.7"
