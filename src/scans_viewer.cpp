@@ -8,7 +8,8 @@ using pcl::PointXYZ;
 ScansViewer::ScansViewer(QVTKWidget* qvtk_widget)
   : visualizer_("scans_viewer", false),
     qvtk_widget_(qvtk_widget),
-    point_cloud_loaded_(false)
+    point_cloud_loaded_(false),
+    mesh_loaded_(false)
 {
   vtkSmartPointer<vtkRenderWindow> render_window = visualizer_.getRenderWindow();
   qvtk_widget_->SetRenderWindow(render_window);
@@ -32,4 +33,14 @@ bool ScansViewer::ShowPointCloud(PointCloud<PointXYZ>::ConstPtr point_cloud)
     point_cloud_loaded_ = true;
   }
   return true;
+}
+
+void ScansViewer::ShowMesh(pcl::PolygonMesh mesh)
+{
+  if (mesh_loaded_) {
+    visualizer_.updatePolygonMesh(mesh);
+  } else {
+    visualizer_.addPolygonMesh(mesh);
+    mesh_loaded_ = true;
+  }
 }
