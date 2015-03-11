@@ -30,7 +30,8 @@ SOURCES += src/data/patient.cpp \
            src/scans_data_tree.cpp \
            src/scans_tree.cpp \
            src/scans_viewer.cpp \
-           src/sensor_viewer.cpp
+           src/sensor_viewer.cpp \
+           src/scaninfodialog.cpp
 
 
 HEADERS  += src/data/patient.h \
@@ -49,12 +50,14 @@ HEADERS  += src/data/patient.h \
             src/scans_data_tree.h \
             src/scans_tree.h \
             src/scans_viewer.h \
-            src/sensor_viewer.h
+            src/sensor_viewer.h \
+            src/scaninfodialog.h
 
 
 FORMS    += src/mainwindow.ui \
             src/scanningwindow.ui \
-            src/patientinfodialog.ui
+            src/patientinfodialog.ui \
+            src/scaninfodialog.ui
 
 
 INCLUDEPATH += "D:/Programowanie/Biblioteki/Tidy/pcl-1.7/include/pcl-1.7"
