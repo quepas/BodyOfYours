@@ -25,12 +25,12 @@ public:
   Sex sex() { return sex_; }
   QVector<Scan> scans() { return scans_; }
 
-  void setId(QString id) { id_ = id; }
-  void setName(QString name) { name_ = name; }
-  void setSurname(QString surname) { surname_ = surname; }
-  void setAdditionalInfo(QString additional_info) { additional_info_ = additional_info; }
-  void setSex(Sex sex) { sex_ = sex; }
-  void setScans(QVector<Scan> scans) { scans_ = scans; }
+  void set_id(QString id) { id_ = id; }
+  void set_name(QString name) { name_ = name; }
+  void set_surname(QString surname) { surname_ = surname; }
+  void set_additional_info(QString additional_info) { additional_info_ = additional_info; }
+  void set_sex(Sex sex) { sex_ = sex; }
+  void set_scans(QVector<Scan> scans) { scans_ = scans; }
 
   QtJson::JsonObject AsJsonObject();
 

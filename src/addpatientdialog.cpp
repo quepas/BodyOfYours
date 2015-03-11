@@ -32,17 +32,17 @@ AddPatientDialog::~AddPatientDialog()
 void AddPatientDialog::on_addPatientButton_clicked()
 {
   Patient patient;
-  patient.setName(ui->nameText->text());
-  patient.setSurname(ui->surnameText->text());
-  patient.setAdditionalInfo(ui->additionalText->toPlainText());
+  patient.set_name(ui->nameText->text());
+  patient.set_surname(ui->surnameText->text());
+  patient.set_additional_info(ui->additionalText->toPlainText());
   bool is_female = ui->sexyComboBox->currentText() == "Female";
-  patient.setSex(is_female ? FEMALE : MALE);
+  patient.set_sex(is_female ? FEMALE : MALE);
 
   if (!patient.name().isEmpty()) {
     if (!only_update_) {
       emit CreatePatientSignal(patient);
     } else {
-      patient.setId(updated_patient_.id());
+      patient.set_id(updated_patient_.id());
       emit UpdatePatientSignal(patient);
     }
     ClearData();

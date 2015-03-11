@@ -24,7 +24,7 @@ bool PatientTreeModel::Create(Patient data)
   //Calculate Patient_ID = md5(datetime + patient:name)
   QString raw_id = QDateTime::currentDateTime().toString() + data.name() + data.surname();
   QString patient_id = QString(QCryptographicHash::hash(raw_id.toAscii(), QCryptographicHash::Md5).toHex());
-  data.setId(patient_id);
+  data.set_id(patient_id);
   //Create directory ./data/patients/Patient_ID
   QDir patient_dir(root_path_ + patient_id);
   if (!patient_dir.exists()) {
@@ -72,17 +72,17 @@ void PatientTreeModel::Read(const QString& patient_id)
   QVector<Scan> scans;
   foreach(QString filename, scans_list) {
     Scan scan;
-    scan.setFilename(filename);
+    scan.set_filename(filename);
     scans.push_back(scan);
   }
   // Construct Patient instance from JSON data and scans data
   Patient patient;
-  patient.setId(json["id"].toString());
-  patient.setName(json["name"].toString());
-  patient.setSurname(json["surname"].toString());
-  patient.setAdditionalInfo(json["additional"].toString());
-  patient.setSex((json["sex"].toString() == "Female") ? FEMALE : MALE);
-  patient.setScans(scans);
+  patient.set_id(json["id"].toString());
+  patient.set_name(json["name"].toString());
+  patient.set_surname(json["surname"].toString());
+  patient.set_additional_info(json["additional"].toString());
+  patient.set_sex((json["sex"].toString() == "Female") ? FEMALE : MALE);
+  patient.set_scans(scans);
   patients_.push_back(patient);
 }
 
