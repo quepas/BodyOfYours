@@ -45,6 +45,7 @@ void PatientInfoDialog::on_addPatientButton_clicked()
       emit CreatePatientSignal(patient);
     } else {
       patient.set_id(updated_patient_.id());
+      patient.set_scans(updated_patient_.scans());
       emit UpdatePatientSignal(patient);
     }
     ClearData();
