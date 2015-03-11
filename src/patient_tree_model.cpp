@@ -90,7 +90,8 @@ void PatientTreeModel::Build()
 {
   QStandardItem* root = invisibleRootItem();
   foreach(Patient patient, patients_) {
-    QStandardItem* patient_item = new QStandardItem(patient.name() + " " + patient.surname());
+    int scans_num = patient.scans().size();
+    QStandardItem* patient_item = new QStandardItem(patient.name() + " " + patient.surname() + " (" + QString::number(scans_num) + ")");
     QIcon sex_icon = (patient.sex() == FEMALE) ? QIcon(Resources::ICON_FEMALE) : QIcon(Resources::ICON_MALE);
     QIcon scan_icon = QIcon(Resources::ICON_SCAN);
     patient_item->setIcon(sex_icon);
