@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
     ui(new Ui::MainWindow),
     scanner3d_(new RemeScanner3D()),
-    add_patient_dialog_(new AddPatientDialog)
+    add_patient_dialog_(new PatientInfoDialog)
 {
   ui->setupUi(this);
   scanning_window_ = new ScanningWindow(scanner3d_),

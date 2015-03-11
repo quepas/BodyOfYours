@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include "data/patient.h"
-#include "addpatientdialog.h"
+#include "patientinfodialog.h"
 #include "scans_viewer.h"
 #include "scans_tree.h"
 #include "scans_data_tree.h"
@@ -38,7 +38,7 @@ private slots:
 private:
   Ui::MainWindow *ui;
   ScanningWindow *scanning_window_;
-  AddPatientDialog *add_patient_dialog_;
+  PatientInfoDialog *add_patient_dialog_;
   ScansViewer* scans_viewer_;
   ScansTree* scans_tree_;
   ScansDataTree* scans_data_tree_;

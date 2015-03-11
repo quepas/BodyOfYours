@@ -1,18 +1,18 @@
-#include "addpatientdialog.h"
-#include "ui_addpatientdialog.h"
+#include "patientinfodialog.h"
+#include "ui_patientinfodialog.h"
 
-AddPatientDialog::AddPatientDialog(QWidget *parent) :
+PatientInfoDialog::PatientInfoDialog(QWidget *parent) :
   QDialog(parent),
-  ui(new Ui::AddPatientDialog),
+  ui(new Ui::PatientInfoDialog),
   only_update_(false)
 {
   ui->setupUi(this);
   setWindowTitle("Create patient");
 }
 
-AddPatientDialog::AddPatientDialog(Patient patient, QWidget *parent /*= 0*/)
+PatientInfoDialog::PatientInfoDialog(Patient patient, QWidget *parent /*= 0*/)
   : QDialog(parent),
-    ui(new Ui::AddPatientDialog),
+    ui(new Ui::PatientInfoDialog),
     only_update_(true),
     updated_patient_(patient)
 {
@@ -24,12 +24,12 @@ AddPatientDialog::AddPatientDialog(Patient patient, QWidget *parent /*= 0*/)
   ui->sexyComboBox->setCurrentIndex((patient.sex() ==  FEMALE) ? 0 : 1);
 }
 
-AddPatientDialog::~AddPatientDialog()
+PatientInfoDialog::~PatientInfoDialog()
 {
   delete ui;
 }
 
-void AddPatientDialog::on_addPatientButton_clicked()
+void PatientInfoDialog::on_addPatientButton_clicked()
 {
   Patient patient;
   patient.set_name(ui->nameText->text());
@@ -50,13 +50,13 @@ void AddPatientDialog::on_addPatientButton_clicked()
   }
 }
 
-void AddPatientDialog::on_cancelAddPatientButton_clicked()
+void PatientInfoDialog::on_cancelAddPatientButton_clicked()
 {
   ClearData();
   close();
 }
 
-void AddPatientDialog::ClearData()
+void PatientInfoDialog::ClearData()
 {
   ui->nameText->clear();
   ui->surnameText->clear();

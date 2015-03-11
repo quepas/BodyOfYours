@@ -1,21 +1,21 @@
-#ifndef ADDPATIENTDIALOG_H
-#define ADDPATIENTDIALOG_H
+#ifndef PATIENTINFODIALOG_H
+#define PATIENTINFODIALOG_H
 
 #include "data/patient.h"
 #include <QDialog>
 
 namespace Ui {
-  class AddPatientDialog;
+  class PatientInfoDialog;
 }
 
-class AddPatientDialog : public QDialog
+class PatientInfoDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  explicit AddPatientDialog(QWidget *parent = 0);
-  AddPatientDialog(Patient patient, QWidget *parent = 0);
-  ~AddPatientDialog();
+  explicit PatientInfoDialog(QWidget *parent = 0);
+  PatientInfoDialog(Patient patient, QWidget *parent = 0);
+  ~PatientInfoDialog();
 
   void ClearData();
 
@@ -28,7 +28,7 @@ signals:
   void CreatePatientSignal(Patient data);
 
 private:
-  Ui::AddPatientDialog *ui;
+  Ui::PatientInfoDialog *ui;
   bool only_update_;
   Patient updated_patient_;
 };

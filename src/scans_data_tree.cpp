@@ -1,6 +1,6 @@
 #include "scans_data_tree.h"
 #include "resources.h"
-#include "addpatientdialog.h"
+#include "patientinfodialog.h"
 
 #include <QAction>
 #include <QDebug>
@@ -92,7 +92,7 @@ void ScansDataTree::ModifyPatient()
   QModelIndex index = view_->currentIndex();
   if (index.isValid()) {
     Patient patient = model_->patients()[index.row()];
-    AddPatientDialog* dialog = new AddPatientDialog(patient);
+    PatientInfoDialog* dialog = new PatientInfoDialog(patient);
     connect(dialog, SIGNAL(UpdatePatientSignal(Patient)), this, SLOT(UpdatePatientSlot(Patient)));
     dialog->show();
   }
