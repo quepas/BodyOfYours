@@ -6,7 +6,8 @@ Implementation in tree-based model (PatientTreeModel)
 
 1. Calculate Patient_ID = md5(datetime + patient:name)
 2. Create directory ./data/patients/Patient_ID
-3. Create patient's metadata file in ./data/patients/Patient_ID/metadata.json
+3. Create directory for patient's scans ./data/patients/Patient_ID/scans
+4. Create patient's metadata file in ./data/patients/Patient_ID/metadata.json
 
 ### Issues / Questions
 

@@ -30,6 +30,11 @@ bool PatientTreeModel::Create(Patient data)
   if (!patient_dir.exists()) {
     if (!patient_dir.mkpath(".")) return false;
   }
+  // Create directory for patient's scans ./data/patients/Patient_ID/scans
+  QDir scans_dir(root_path_ + patient_id + "/scans");
+  if (!scans_dir.exists()) {
+    if (!scans_dir.mkpath(".")) return false;
+  }
   //Create patient's metadata file in ./data/patients/Patient_ID/metadata.json
   QtJson::JsonObject patient;
   patient["id"] = data.id();
@@ -93,6 +98,7 @@ void PatientTreeModel::Delete(const QString& patient_id)
 {
   QDir path(root_path_);
   path.remove(patient_id + "/metadata.json");
+  path.rmdir(patient_id + "/scans");
   path.rmdir(patient_id);
   clear();
   for (int i = 0; i < patients_.size(); ++i) {
