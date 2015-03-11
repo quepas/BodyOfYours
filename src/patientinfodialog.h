@@ -29,8 +29,7 @@ signals:
 
 private:
   Ui::PatientInfoDialog *ui;
-  bool only_update_;
-  Patient updated_patient_;
+  Patient patient_;
 };
 
 #endif // ADDPATIENTDIALOG_H

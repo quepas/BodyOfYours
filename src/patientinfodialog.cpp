@@ -4,18 +4,18 @@
 PatientInfoDialog::PatientInfoDialog(QWidget *parent) :
   QDialog(parent),
   ui(new Ui::PatientInfoDialog),
-  only_update_(false)
+  patient_()
 {
   ui->setupUi(this);
   setWindowTitle("Create patient");
   ui->addPatientButton->setText("Create");
+  patient_.set_id("none");
 }
 
 PatientInfoDialog::PatientInfoDialog(Patient patient, QWidget *parent /*= 0*/)
   : QDialog(parent),
     ui(new Ui::PatientInfoDialog),
-    only_update_(true),
-    updated_patient_(patient)
+    patient_(patient)
 {
   ui->setupUi(this);
   setWindowTitle("Update patient");
@@ -33,20 +33,17 @@ PatientInfoDialog::~PatientInfoDialog()
 
 void PatientInfoDialog::on_addPatientButton_clicked()
 {
-  Patient patient;
-  patient.set_name(ui->nameText->text());
-  patient.set_surname(ui->surnameText->text());
-  patient.set_additional_info(ui->additionalText->toPlainText());
+  patient_.set_name(ui->nameText->text());
+  patient_.set_surname(ui->surnameText->text());
+  patient_.set_additional_info(ui->additionalText->toPlainText());
   bool is_female = ui->sexyComboBox->currentText() == "Female";
-  patient.set_sex(is_female ? FEMALE : MALE);
+  patient_.set_sex(is_female ? FEMALE : MALE);
 
-  if (!patient.name().isEmpty()) {
-    if (!only_update_) {
-      emit CreatePatientSignal(patient);
+  if (!patient_.name().isEmpty()) {
+    if (patient_.id() == "none") {
+      emit CreatePatientSignal(patient_);
     } else {
-      patient.set_id(updated_patient_.id());
-      patient.set_scans(updated_patient_.scans());
-      emit UpdatePatientSignal(patient);
+      emit UpdatePatientSignal(patient_);
     }
     ClearData();
     close();
