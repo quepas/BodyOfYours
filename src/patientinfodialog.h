@@ -17,7 +17,7 @@ public:
   PatientInfoDialog(Patient patient, QWidget *parent = 0);
   ~PatientInfoDialog();
 
-  void ClearData();
+  void ClearForm();
 
 private slots:
   void on_addPatientButton_clicked();

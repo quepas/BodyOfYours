@@ -19,11 +19,11 @@ PatientInfoDialog::PatientInfoDialog(Patient patient, QWidget *parent /*= 0*/)
 {
   ui->setupUi(this);
   setWindowTitle("Update patient");
-  ui->nameText->setText(patient.name());
-  ui->surnameText->setText(patient.surname());
-  ui->additionalText->setText(patient.additional_info());
-  ui->sexyComboBox->setCurrentIndex((patient.sex() ==  FEMALE) ? 0 : 1);
   ui->addPatientButton->setText("Update");
+  ui->nameText->setText(patient_.name());
+  ui->surnameText->setText(patient_.surname());
+  ui->additionalText->setText(patient_.additional_info());
+  ui->sexyComboBox->setCurrentIndex((patient_.sex() ==  FEMALE) ? 0 : 1);
 }
 
 PatientInfoDialog::~PatientInfoDialog()
@@ -45,18 +45,18 @@ void PatientInfoDialog::on_addPatientButton_clicked()
     } else {
       emit UpdatePatientSignal(patient_);
     }
-    ClearData();
+    ClearForm();
     close();
   }
 }
 
 void PatientInfoDialog::on_cancelAddPatientButton_clicked()
 {
-  ClearData();
+  ClearForm();
   close();
 }
 
-void PatientInfoDialog::ClearData()
+void PatientInfoDialog::ClearForm()
 {
   ui->nameText->clear();
   ui->surnameText->clear();
