@@ -36,16 +36,9 @@ bool PatientTreeModel::Create(Patient data)
     if (!scans_dir.mkpath(".")) return false;
   }
   //Create patient's metadata file in ./data/patients/Patient_ID/metadata.json
-  QtJson::JsonObject patient;
-  patient["id"] = data.id();
-  patient["name"] = data.name();
-  patient["surname"] = data.surname();
-  patient["additional"] = data.additional_info();
-  patient["sex"] = (data.sex() == FEMALE) ? "Female" : "Male";
-
   QFile metadata_file(root_path_ + patient_id + "/metadata.json");
   if (!metadata_file.open(QIODevice::WriteOnly)) return false;
-  metadata_file.write(QtJson::serialize(patient));
+  metadata_file.write(QtJson::serialize(data.AsJsonObject()));
   metadata_file.close();
 
   patients_.push_back(data);
@@ -130,19 +123,11 @@ void PatientTreeModel::Delete(const QString& patient_id)
 
 bool PatientTreeModel::Update(Patient patient)
 {
-  // Prepare JSON
-  QtJson::JsonObject json;
-  json["id"] = patient.id();
-  json["name"] = patient.name();
-  json["surname"] = patient.surname();
-  json["additional"] = patient.additional_info();
-  json["sex"] = (patient.sex() == FEMALE) ? "Female" : "Male";
-
   // Open metadata.json for write
   QFile metadata_file(root_path_ + patient.id() + "/metadata.json");
   if (!metadata_file.open(QIODevice::WriteOnly)) return false;
   metadata_file.seek(0);
-  metadata_file.write(QtJson::serialize(json));
+  metadata_file.write(QtJson::serialize(patient.AsJsonObject()));
   metadata_file.close();
 
   // Rebuild model

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scan.h"
+#include "../json.h"
 
 #include <QString>
 #include <QVector>
@@ -30,6 +31,8 @@ public:
   void setAdditionalInfo(QString additional_info) { additional_info_ = additional_info; }
   void setSex(Sex sex) { sex_ = sex; }
   void setScans(QVector<Scan> scans) { scans_ = scans; }
+
+  QtJson::JsonObject AsJsonObject();
 
 private:
   QString id_;

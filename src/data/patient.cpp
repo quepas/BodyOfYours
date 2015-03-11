@@ -11,3 +11,14 @@ Patient::Patient(QString name, QString surname, QString additional_info)
 {
 
 }
+
+QtJson::JsonObject Patient::AsJsonObject()
+{
+  QtJson::JsonObject json;
+  json["id"] = id_;
+  json["name"] = name_;
+  json["surname"] = surname_;
+  json["additional"] = additional_info_;
+  json["sex"] = (sex_ == FEMALE) ? "Female" : "Male";
+  return json;
+}
