@@ -67,17 +67,29 @@ void PatientTreeModel::ReadAll()
 
 void PatientTreeModel::Read(const QString& patient_id)
 {
+  // Read metadata file ./data/patients/Patient_ID/metadata.json
   QFile metadata_file(root_path_ + patient_id + "/metadata.json");
   metadata_file.open(QFile::ReadOnly | QFile::Text);
   QTextStream in_stream(&metadata_file);
   QtJson::JsonObject json = QtJson::parse(in_stream.readAll()).toMap();
   metadata_file.close();
+  // Check scans in ./data/patients/Patient_ID/scans directory
+  FileScanner scanner(root_path_ + patient_id + "/scans");
+  QStringList scans_list = scanner.ScanFiles("*.ply");
+  QVector<Scan> scans;
+  foreach(QString filename, scans_list) {
+    Scan scan;
+    scan.setFilename(filename);
+    scans.push_back(scan);
+  }
+  // Construct Patient instance from JSON data and scans data
   Patient patient;
   patient.setId(json["id"].toString());
   patient.setName(json["name"].toString());
   patient.setSurname(json["surname"].toString());
   patient.setAdditionalInfo(json["additional"].toString());
   patient.setSex((json["sex"].toString() == "Female") ? FEMALE : MALE);
+  patient.setScans(scans);
   patients_.push_back(patient);
 }
 
@@ -90,6 +102,12 @@ void PatientTreeModel::Build()
     QIcon scan_icon = QIcon(Resources::ICON_SCAN);
     patient_item->setIcon(sex_icon);
     patient_item->setEditable(false);
+    foreach(Scan scan, patient.scans()) {
+      QStandardItem* scan_item = new QStandardItem(scan.filename());
+      scan_item->setIcon(scan_icon);
+      scan_item->setEditable(false);
+      patient_item->appendRow(scan_item);
+    }
     root->appendRow(patient_item);
   }
 }

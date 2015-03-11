@@ -19,7 +19,8 @@ Implementation in tree-based model (PatientTreeModel)
 ### Read by Patient_ID
 
 1. Read metadata file ./data/patients/Patient_ID/metadata.json
-2. Construct Patient instance from JSON data
+2. Check scans in ./data/patients/Patient_ID/scans directory
+3. Construct Patient instance from JSON data and scans data
 
 ### Read all
 
