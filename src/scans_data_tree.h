@@ -25,6 +25,12 @@ private slots:
   void ModifyPatient();
   void UpdatePatientSlot(Patient patient);
 
+  void RemoveScanSlot();
+  void VisualizeScanSlot();
+
+signals:
+  void VisualizeScanSignal(QString scan_full_path);
+
 private:
   QTreeView* view_;
   PatientTreeModel* model_;

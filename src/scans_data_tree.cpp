@@ -3,6 +3,7 @@
 #include "addpatientdialog.h"
 
 #include <QAction>
+#include <QDebug>
 
 ScansDataTree::ScansDataTree(QTreeView* tree_view, ScanningWindow* scanning_window)
   : view_(tree_view),
@@ -50,7 +51,11 @@ void ScansDataTree::InitScanContextMenu()
 {
   scan_context_menu_ = new QMenu(view_);
   QAction* remove_scan = new QAction(QIcon(Resources::ICON_REMOVE), "Remove scan", nullptr);
+  QAction* visualize_scan = new QAction(QIcon(Resources::ICON_REMOVE), "Visualize scan", nullptr);
   scan_context_menu_->addAction(remove_scan);
+  scan_context_menu_->addAction(visualize_scan);
+  connect(remove_scan, SIGNAL(triggered()), this, SLOT(RemoveScanSlot()));
+  connect(visualize_scan, SIGNAL(triggered()), this, SLOT(VisualizeScanSlot()));
 }
 
 bool ScansDataTree::RemoveSelected()
@@ -96,4 +101,20 @@ void ScansDataTree::ModifyPatient()
 void ScansDataTree::UpdatePatientSlot(Patient patient)
 {
   model_->Update(patient);
+}
+
+void ScansDataTree::RemoveScanSlot()
+{
+  qDebug() << "RemoveScanSlot: ";
+}
+
+void ScansDataTree::VisualizeScanSlot()
+{
+  QModelIndex index = view_->currentIndex();
+  if (index.isValid()) {
+    Patient patient = model_->patients()[index.parent().row()];
+    Scan scan = patient.scans()[index.row()];
+    QString scan_full_path = "./data/patients/" + patient.id() + "/scans/" + scan.filename();
+    emit VisualizeScanSignal(scan_full_path);
+  }
 }

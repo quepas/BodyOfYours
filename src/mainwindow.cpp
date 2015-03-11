@@ -11,12 +11,16 @@
 
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/io/ply_io.h>
+#include <pcl/io/vtk_lib_io.h>
+#include <pcl/PolygonMesh.h>
 
 #include <QVTKWidget.h>
 
 using pcl::PointCloud;
 using pcl::PointXYZ;
 using pcl::io::loadPLYFile;
+using pcl::PolygonMesh;
+using pcl::io::loadPolygonFilePLY;
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
@@ -29,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
   scans_viewer_ = new ScansViewer(ui->scansViewer);
   scans_tree_ = new ScansTree(ui->scansTree, Resources::SCANS_DATA_PATH);
   scans_data_tree_ = new ScansDataTree(ui->scansDataTree, scanning_window_);
+  connect(scans_data_tree_, SIGNAL(VisualizeScanSignal(QString)), this, SLOT(VisualizeScanSlot(QString)));
   ui->computingDevicesComboBox->addItems(scanner3d_->GetComputingDevices());
   // set defualt icons
   for (int i = 0; i < ui->computingDevicesComboBox->maxVisibleItems(); ++i) {
@@ -97,4 +102,12 @@ void MainWindow::on_removePatientButton_clicked()
 void MainWindow::CreatePatientSlot(Patient data)
 {
   scans_data_tree_->model()->Create(data);
+}
+
+void MainWindow::VisualizeScanSlot(QString scan_full_path)
+{
+  PointCloud<PointXYZ>::Ptr ply_cloud (new PointCloud<PointXYZ>);
+  PolygonMesh mesh;
+  loadPolygonFilePLY(scan_full_path.toStdString(), mesh);
+  scans_viewer_->ShowMesh(mesh);
 }

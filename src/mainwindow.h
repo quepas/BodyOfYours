@@ -33,6 +33,7 @@ private slots:
   void on_removePatientButton_clicked();
 
   void CreatePatientSlot(Patient data);
+  void VisualizeScanSlot(QString scan_full_path);
 
 private:
   Ui::MainWindow *ui;
