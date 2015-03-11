@@ -8,6 +8,7 @@ PatientInfoDialog::PatientInfoDialog(QWidget *parent) :
 {
   ui->setupUi(this);
   setWindowTitle("Create patient");
+  ui->addPatientButton->setText("Create");
 }
 
 PatientInfoDialog::PatientInfoDialog(Patient patient, QWidget *parent /*= 0*/)
@@ -22,6 +23,7 @@ PatientInfoDialog::PatientInfoDialog(Patient patient, QWidget *parent /*= 0*/)
   ui->surnameText->setText(patient.surname());
   ui->additionalText->setText(patient.additional_info());
   ui->sexyComboBox->setCurrentIndex((patient.sex() ==  FEMALE) ? 0 : 1);
+  ui->addPatientButton->setText("Update");
 }
 
 PatientInfoDialog::~PatientInfoDialog()
