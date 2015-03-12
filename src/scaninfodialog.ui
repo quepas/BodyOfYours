@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>248</width>
-    <height>220</height>
+    <height>246</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,17 +17,20 @@
    <property name="geometry">
     <rect>
      <x>70</x>
-     <y>40</y>
+     <y>70</y>
      <width>171</width>
      <height>111</height>
     </rect>
    </property>
   </widget>
   <widget class="QLineEdit" name="scanNameText">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>70</x>
-     <y>10</y>
+     <y>40</y>
      <width>171</width>
      <height>20</height>
     </rect>
@@ -37,7 +40,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>190</y>
+     <y>220</y>
      <width>110</width>
      <height>23</height>
     </rect>
@@ -50,7 +53,7 @@
    <property name="geometry">
     <rect>
      <x>130</x>
-     <y>190</y>
+     <y>220</y>
      <width>110</width>
      <height>23</height>
     </rect>
@@ -63,7 +66,7 @@
    <property name="geometry">
     <rect>
      <x>70</x>
-     <y>160</y>
+     <y>190</y>
      <width>171</width>
      <height>22</height>
     </rect>
@@ -73,7 +76,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
+     <y>40</y>
      <width>47</width>
      <height>13</height>
     </rect>
@@ -86,7 +89,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>40</y>
+     <y>70</y>
      <width>61</width>
      <height>16</height>
     </rect>
@@ -99,13 +102,39 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>160</y>
+     <y>190</y>
      <width>47</width>
      <height>13</height>
     </rect>
    </property>
    <property name="text">
     <string>Date/time</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>47</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Filename</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="filenameText">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>10</y>
+     <width>171</width>
+     <height>20</height>
+    </rect>
    </property>
   </widget>
  </widget>
