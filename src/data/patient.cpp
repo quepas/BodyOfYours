@@ -30,10 +30,7 @@ JsonObject Patient::AsJsonObject()
   json["sex"] = (sex_ == FEMALE) ? "Female" : "Male";
   JsonArray array;
   foreach(Scan scan, scans_) {
-    JsonObject entry;
-    entry["name"] = scan.name();
-    entry["filename"] = scan.filename();
-    array.append(entry);
+    array.append(scan.AsJsonObject());
   }
   json["scans"] = array;
   return json;
@@ -48,10 +45,6 @@ void Patient::FromJsonObject(JsonObject json)
   sex_ = json["sex"].toString() == "Female" ? FEMALE : MALE;
   JsonArray array = json["scans"].toList();
   foreach(QVariant element, array) {
-    JsonObject elem = element.toMap();
-    Scan scan;
-    scan.set_name(elem["name"].toString());
-    scan.set_name(elem["filename"].toString());
-    scans_.push_back(scan);
+    scans_.push_back(Scan(element.toMap()));
   }
 }
