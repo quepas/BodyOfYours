@@ -134,3 +134,8 @@ bool PatientTreeModel::Update(Patient patient)
 
   return true;
 }
+
+void PatientTreeModel::OnRebuild()
+{
+  //clear()
+}

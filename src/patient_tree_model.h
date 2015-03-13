@@ -21,6 +21,9 @@ public:
 
   QVector<Patient> patients() const { return patients_; }
 
+private slots:
+  void OnRebuild();
+
 private:
   QString root_path_;
   QVector<Patient> patients_;
