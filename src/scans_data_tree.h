@@ -7,13 +7,14 @@
 #include <QMenu>
 #include <QTreeView>
 
-class ScansDataTree : public QObject
+class ScansDataTree : public QTreeView
 {
   Q_OBJECT
 public:
-  ScansDataTree(QTreeView* tree_view, ScanningWindow* scanning_window);
+  ScansDataTree(QWidget* parent = 0);
   ~ScansDataTree();
 
+  void set_scanning_window(ScanningWindow* scanning_window) { scanning_window_ = scanning_window; }
   PatientTreeModel* model() { return model_; }
   bool RemoveSelected();
   void SetScanActionEnable(bool enabled);
@@ -32,7 +33,6 @@ signals:
   void VisualizeScanSignal(QString scan_full_path);
 
 private:
-  QTreeView* view_;
   PatientTreeModel* model_;
   QMenu *patient_context_menu_, *scan_context_menu_;
   QAction* scan_patient_;

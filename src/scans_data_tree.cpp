@@ -5,14 +5,13 @@
 #include <QAction>
 #include <QDebug>
 
-ScansDataTree::ScansDataTree(QTreeView* tree_view, ScanningWindow* scanning_window)
-  : view_(tree_view),
-    model_(new PatientTreeModel("./data/patients/")),
-    scanning_window_(scanning_window)
+ScansDataTree::ScansDataTree(QWidget* parent /*= 0*/)
+  : QTreeView(parent),
+    model_(new PatientTreeModel("./data/patients/"))
 {
-  view_->setModel(model_);
-  view_->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(view_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(CustomContextMenuSlot(const QPoint&)));
+  setModel(model_);
+  setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(CustomContextMenuSlot(const QPoint&)));
   InitPatientContextMenu();
   InitScanContextMenu();
 }
@@ -24,17 +23,17 @@ ScansDataTree::~ScansDataTree()
 
 void ScansDataTree::CustomContextMenuSlot(const QPoint& point)
 {
-  QModelIndex index = view_->indexAt(point);
+  QModelIndex index = indexAt(point);
   if (index.isValid() && index.parent() == model_->invisibleRootItem()->index()) {
-    patient_context_menu_->exec(view_->mapToGlobal(point));
+    patient_context_menu_->exec(mapToGlobal(point));
   } else {
-    scan_context_menu_->exec(view_->mapToGlobal(point));
+    scan_context_menu_->exec(mapToGlobal(point));
   }
 }
 
 void ScansDataTree::InitPatientContextMenu()
 {
-  patient_context_menu_ = new QMenu(view_);
+  patient_context_menu_ = new QMenu(this);
   QAction* remove_patient = new QAction(QIcon(Resources::ICON_REMOVE), "Remove patient", nullptr);
   QAction* modify_patient = new QAction(QIcon(Resources::ICON_MODIFY), "Update patient", nullptr);
   scan_patient_ = new QAction(QIcon(Resources::ICON_CREATE), "Make new scan", nullptr);
@@ -49,7 +48,7 @@ void ScansDataTree::InitPatientContextMenu()
 
 void ScansDataTree::InitScanContextMenu()
 {
-  scan_context_menu_ = new QMenu(view_);
+  scan_context_menu_ = new QMenu(this);
   QAction* remove_scan = new QAction(QIcon(Resources::ICON_REMOVE), "Remove scan", nullptr);
   QAction* visualize_scan = new QAction(QIcon(Resources::ICON_REMOVE), "Visualize scan", nullptr);
   scan_context_menu_->addAction(remove_scan);
@@ -60,7 +59,7 @@ void ScansDataTree::InitScanContextMenu()
 
 bool ScansDataTree::RemoveSelected()
 {
-  QModelIndex index = view_->currentIndex();
+  QModelIndex index = currentIndex();
   if (index.isValid()) {
     QString patient_id = model_->patients()[index.row()].id();
     model_->Delete(patient_id);
@@ -80,7 +79,7 @@ void ScansDataTree::SetScanActionEnable(bool enabled)
 
 void ScansDataTree::ScanPatient()
 {
-  QModelIndex index = view_->currentIndex();
+  QModelIndex index = currentIndex();
   if (index.isValid()) {
     scanning_window_->Show(model_->patients()[index.row()]);
     scanning_window_->StartGrabbingData();
@@ -89,7 +88,7 @@ void ScansDataTree::ScanPatient()
 
 void ScansDataTree::ModifyPatient()
 {
-  QModelIndex index = view_->currentIndex();
+  QModelIndex index = currentIndex();
   if (index.isValid()) {
     Patient patient = model_->patients()[index.row()];
     PatientInfoDialog* dialog = new PatientInfoDialog(patient);
@@ -110,7 +109,7 @@ void ScansDataTree::RemoveScanSlot()
 
 void ScansDataTree::VisualizeScanSlot()
 {
-  QModelIndex index = view_->currentIndex();
+  QModelIndex index = currentIndex();
   if (index.isValid()) {
     Patient patient = model_->patients()[index.parent().row()];
     Scan scan = patient.scans()[index.row()];

@@ -70,7 +70,7 @@
      <string>Scan</string>
     </property>
    </widget>
-   <widget class="QTreeView" name="scansDataTree">
+   <widget class="ScansDataTree" name="scansDataTree">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -133,6 +133,11 @@
    <class>QVTKWidget</class>
    <extends>QWidget</extends>
    <header>QVTKWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ScansDataTree</class>
+   <extends>QTreeView</extends>
+   <header>scans_data_tree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
