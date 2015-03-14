@@ -7,19 +7,19 @@
 #include <vtkRenderWindow.h>
 #include <vtkSmartPointer.h>
 
-SensorViewer::SensorViewer(QVTKWidget* qvtk_widget)
-  : qvtk_widget_(qvtk_widget),
+SensorViewer::SensorViewer(QWidget* parent /*= nullptr*/)
+  : QVTKWidget(parent),
     viewer_(vtkImageViewer2::New()),
     is_initialized(false)
 {
   // disable mouse events
-  qvtk_widget_->setEnabled(false);
+  setEnabled(false);
 }
 
 SensorViewer::~SensorViewer()
 {
   viewer_->Delete();
-  qvtk_widget_->close();
+  close();
 }
 
 void SensorViewer::ShowFrame(FrameData* frame)
@@ -40,8 +40,8 @@ void SensorViewer::ShowFrame(FrameData* frame)
   viewer_->SetInputConnection(imageYFlip->GetOutputPort());
   // fix for bug in vtk lib with non-optional connection needed when initializing image viewer
   if (!is_initialized) {
-    qvtk_widget_->SetRenderWindow(viewer_->GetRenderWindow());
-    viewer_->SetupInteractor(qvtk_widget_->GetInteractor());
+    SetRenderWindow(viewer_->GetRenderWindow());
+    viewer_->SetupInteractor(GetInteractor());
     is_initialized = true;
   }
   viewer_->Render();

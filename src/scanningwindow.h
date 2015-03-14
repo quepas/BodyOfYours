@@ -35,7 +35,6 @@ private slots:
 
 private:
   Ui::ScanningWindow *ui;
-  SensorViewer *camera_viewer_, *depth_viewer_, *volume_viewer_;
   Scanning3D *scanning_;
   Patient scanned_patient_;
 };

@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QVTKWidget" name="scansVolumeViewer">
+  <widget class="SensorViewer" name="scansVolumeViewer">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -23,7 +23,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QVTKWidget" name="scansCameraViewer">
+  <widget class="SensorViewer" name="scansCameraViewer">
    <property name="geometry">
     <rect>
      <x>417</x>
@@ -33,7 +33,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QVTKWidget" name="scansDepthViewer">
+  <widget class="SensorViewer" name="scansDepthViewer">
    <property name="geometry">
     <rect>
      <x>417</x>
@@ -111,9 +111,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QVTKWidget</class>
-   <extends>QWidget</extends>
-   <header>QVTKWidget.h</header>
+   <class>SensorViewer</class>
+   <extends>QVTKWidget</extends>
+   <header>sensor_viewer.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

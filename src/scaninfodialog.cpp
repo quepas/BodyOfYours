@@ -17,6 +17,8 @@ ScanInfoDialog::ScanInfoDialog(Scan scan, QWidget *parent /*= 0*/) :
 {
   ui->setupUi(this);
   setWindowTitle("Update scan");
+  ui->filenameText->setText(scan.filename());
+  ui->scanDatetime->setDateTime(scan.datetime());
 }
 
 ScanInfoDialog::~ScanInfoDialog()

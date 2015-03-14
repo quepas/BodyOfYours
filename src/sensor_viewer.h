@@ -5,10 +5,10 @@
 #include <vtkImageViewer2.h>
 #include <QVTKWidget.h>
 
-class SensorViewer
+class SensorViewer : public QVTKWidget
 {
 public:
-  SensorViewer(QVTKWidget* qvtk_widget);
+  SensorViewer(QWidget* parent = nullptr);
   ~SensorViewer();
 
   void ShowFrame(FrameData* frame);
@@ -16,7 +16,6 @@ public:
 
 private:
   vtkImageViewer2* viewer_;
-  QVTKWidget* qvtk_widget_;
   bool is_initialized;
 
 };
