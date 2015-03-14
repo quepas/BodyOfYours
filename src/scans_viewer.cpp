@@ -5,22 +5,20 @@
 using pcl::PointCloud;
 using pcl::PointXYZ;
 
-ScansViewer::ScansViewer(QVTKWidget* qvtk_widget)
-  : visualizer_("scans_viewer", false),
-    qvtk_widget_(qvtk_widget),
+ScansViewer::ScansViewer(QWidget* parent /*= nullptr*/)
+  : QVTKWidget(parent),
+    visualizer_("scans_viewer", false),
     point_cloud_loaded_(false),
     mesh_loaded_(false)
 {
   vtkSmartPointer<vtkRenderWindow> render_window = visualizer_.getRenderWindow();
-  qvtk_widget_->SetRenderWindow(render_window);
-  visualizer_.setupInteractor(qvtk_widget_->GetInteractor(), qvtk_widget_->GetRenderWindow());
-  qvtk_widget_->show();
+  SetRenderWindow(render_window);
+  visualizer_.setupInteractor(GetInteractor(), GetRenderWindow());
+  show();
 }
 
 ScansViewer::~ScansViewer()
 {
-  visualizer_.close();
-  qvtk_widget_->close();
 }
 
 bool ScansViewer::ShowPointCloud(PointCloud<PointXYZ>::ConstPtr point_cloud)

@@ -5,16 +5,15 @@
 #include <pcl/PolygonMesh.h>
 #include <QVTKWidget.h>
 
-class ScansViewer
+class ScansViewer : public QVTKWidget
 {
 public:
-  ScansViewer(QVTKWidget* qvtk_widget);
+  ScansViewer(QWidget* parent = nullptr);
   ~ScansViewer();
 
   bool ShowPointCloud(pcl::PointCloud<pcl::PointXYZ>::ConstPtr point_cloud);
   void ShowMesh(pcl::PolygonMesh mesh);
 private:
   pcl::visualization::PCLVisualizer visualizer_;
-  QVTKWidget* qvtk_widget_;
   bool point_cloud_loaded_, mesh_loaded_;
 };

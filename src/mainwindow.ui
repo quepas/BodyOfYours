@@ -24,7 +24,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QVTKWidget" name="scansViewer">
+   <widget class="ScansViewer" name="scansViewer">
     <property name="geometry">
      <rect>
       <x>400</x>
@@ -130,14 +130,14 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QVTKWidget</class>
-   <extends>QWidget</extends>
-   <header>QVTKWidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>ScansDataTree</class>
    <extends>QTreeView</extends>
    <header>scans_data_tree.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ScansViewer</class>
+   <extends>QVTKWidget</extends>
+   <header>scans_viewer.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

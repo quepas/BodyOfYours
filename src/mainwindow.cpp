@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "scans_viewer.h"
 #include "scans_tree.h"
 #include "resources.h"
 #include "scanning_3d.h"
@@ -13,8 +12,6 @@
 #include <pcl/io/ply_io.h>
 #include <pcl/io/vtk_lib_io.h>
 #include <pcl/PolygonMesh.h>
-
-#include <QVTKWidget.h>
 
 using pcl::PointCloud;
 using pcl::PointXYZ;
@@ -30,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
   ui->setupUi(this);
   scanning_window_ = new ScanningWindow(scanner3d_),
-  scans_viewer_ = new ScansViewer(ui->scansViewer);
   scans_tree_ = new ScansTree(ui->scansTree, Resources::SCANS_DATA_PATH);
   scans_data_tree_=ui->scansDataTree;
   scans_data_tree_->set_scanning_window(scanning_window_);
@@ -60,7 +56,7 @@ void MainWindow::on_scansTree_doubleClicked(const QModelIndex &index)
   ply_files_only.setPatternSyntax(QRegExp::Wildcard);
   if (ply_files_only.exactMatch(file_path)) {
     loadPLYFile(file_path.toStdString(), *ply_cloud);
-    scans_viewer_->ShowPointCloud(ply_cloud);
+    ui->scansViewer->ShowPointCloud(ply_cloud);
   }
 }
 
@@ -110,5 +106,5 @@ void MainWindow::VisualizeScanSlot(QString scan_full_path)
   PointCloud<PointXYZ>::Ptr ply_cloud (new PointCloud<PointXYZ>);
   PolygonMesh mesh;
   loadPolygonFilePLY(scan_full_path.toStdString(), mesh);
-  scans_viewer_->ShowMesh(mesh);
+  ui->scansViewer->ShowMesh(mesh);
 }
