@@ -55,20 +55,9 @@ void ScanningWindow::on_restartScanButton_clicked()
 
 void ScanningWindow::on_saveScanButton_clicked()
 {
-  QDateTime now_time = QDateTime::currentDateTime();
-  QString date_time = now_time.toString("yyyy_MM_dd#HH_mm_ss");
-  QString filename = scanned_patient_.name() + "_" + scanned_patient_.surname() + "#" + date_time + ".ply";
-  Scan scan;
-  scan.set_filename(filename);
-  scan.set_datetime(now_time);
   ScanInfoDialog* scan_info_dialog_ = new ScanInfoDialog(scan);
   scan_info_dialog_->setAttribute(Qt::WA_DeleteOnClose);
   scan_info_dialog_->show();
-  scanning_->ReconstructAndSave(
-    "./data/patients/"
-    + scanned_patient_.id()
-    + "/scans/"
-    + filename);
 }
 
 void ScanningWindow::on_cancelScanButton_clicked()
