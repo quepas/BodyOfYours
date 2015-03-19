@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     add_patient_dialog_(new PatientInfoDialog)
 {
   ui->setupUi(this);
-  scanning_window_ = new ScanningWindow(scanner3d_),
+  scanning_window_ = new ScanningWindow(scanner3d_, this),
   scans_tree_ = new ScansTree(ui->scansTree, Resources::SCANS_DATA_PATH);
   scans_data_tree_=ui->scansDataTree;
   scans_data_tree_->set_scanning_window(scanning_window_);
@@ -107,4 +107,9 @@ void MainWindow::VisualizeScanSlot(QString scan_full_path)
   PolygonMesh mesh;
   loadPolygonFilePLY(scan_full_path.toStdString(), mesh);
   ui->scansViewer->ShowMesh(mesh);
+}
+
+void MainWindow::UpdatePatientSlot(Patient data)
+{
+  scans_data_tree_->model()->Update(data);
 }

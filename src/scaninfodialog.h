@@ -1,7 +1,8 @@
 #ifndef SCANINFODIALOG_H
 #define SCANINFODIALOG_H
 
-#include "data/scan.h"
+#include "scanning_3d.h"
+#include "data/patient.h"
 
 #include <QDialog>
 
@@ -15,12 +16,15 @@ class ScanInfoDialog : public QDialog
 
 public:
   // create purpose
-  ScanInfoDialog(Patient owner, QWidget *parent = 0);
+  ScanInfoDialog(Scanning3D* scanning, Patient owner, QWidget *parent = 0);
   // update purpose
-  ScanInfoDialog(Patient owner, Scan scan, QWidget *parent = 0);
+  ScanInfoDialog(Scanning3D* scanning, Scan scan, QWidget *parent = 0);
   ~ScanInfoDialog();
 
   void ClearForm();
+
+signals:
+  void UpdatePatientSignal(Patient data);
 
 private slots:
   void on_okButton_clicked();
@@ -29,6 +33,8 @@ private slots:
 private:
   Ui::ScanInfoDialog *ui;
   Scan scan_;
+  Patient patient_;
+  Scanning3D* scanning_;
 };
 
 #endif // SCANINFODIALOG_H

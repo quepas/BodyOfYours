@@ -1,10 +1,11 @@
 #pragma once
 
-#include "patient.h"
 #include "../json.h"
 
 #include <QDateTime>
 #include <QString>
+
+class Patient;
 
 class Scan
 {

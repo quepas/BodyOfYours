@@ -55,7 +55,8 @@ void ScanningWindow::on_restartScanButton_clicked()
 
 void ScanningWindow::on_saveScanButton_clicked()
 {
-  ScanInfoDialog* scan_info_dialog_ = new ScanInfoDialog(scan);
+  ScanInfoDialog* scan_info_dialog_ = new ScanInfoDialog(scanning_, scanned_patient_);
+  connect(scan_info_dialog_, SIGNAL(UpdatePatientSignal(Patient)), parent(), SLOT(UpdatePatientSlot(Patient)));
   scan_info_dialog_->setAttribute(Qt::WA_DeleteOnClose);
   scan_info_dialog_->show();
 }
