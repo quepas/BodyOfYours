@@ -22,7 +22,7 @@ public:
   QString filename() { return filename_; }
   QString description() { return description_; }
   QDateTime datetime() { return datetime_; }
-  Patient* owner() { reutrn owner; }
+  Patient* owner() { return owner_; }
 
   QtJson::JsonObject AsJsonObject();
   void FromJsonObject(QtJson::JsonObject json);
