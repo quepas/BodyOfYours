@@ -50,10 +50,13 @@ void ScansDataTree::InitScanContextMenu()
 {
   scan_context_menu_ = new QMenu(this);
   QAction* remove_scan = new QAction(QIcon(Resources::ICON_REMOVE), "Remove scan", nullptr);
+  QAction* modify_scan = new QAction(QIcon(Resources::ICON_MODIFY), "Modify scan info", nullptr);
   QAction* visualize_scan = new QAction(QIcon(Resources::ICON_REMOVE), "Visualize scan", nullptr);
   scan_context_menu_->addAction(remove_scan);
+  scan_context_menu_->addAction(modify_scan);
   scan_context_menu_->addAction(visualize_scan);
   connect(remove_scan, SIGNAL(triggered()), this, SLOT(RemoveScanSlot()));
+  connect(modify_scan, SIGNAL(triggered()), this, SLOT(ModifyScanSlot()));
   connect(visualize_scan, SIGNAL(triggered()), this, SLOT(VisualizeScanSlot()));
 }
 
@@ -104,7 +107,7 @@ void ScansDataTree::UpdatePatientSlot(Patient patient)
 
 void ScansDataTree::RemoveScanSlot()
 {
-  qDebug() << "RemoveScanSlot: ";
+  qDebug() << "RemoveScanSlot";
 }
 
 void ScansDataTree::VisualizeScanSlot()
@@ -116,4 +119,9 @@ void ScansDataTree::VisualizeScanSlot()
     QString scan_full_path = "./data/patients/" + patient.id() + "/scans/" + scan.filename();
     emit VisualizeScanSignal(scan_full_path);
   }
+}
+
+void ScansDataTree::ModifyScanSlot()
+{
+  qDebug() << "ModifyScanSlot";
 }

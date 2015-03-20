@@ -27,6 +27,7 @@ private slots:
   void UpdatePatientSlot(Patient patient);
 
   void RemoveScanSlot();
+  void ModifyScanSlot();
   void VisualizeScanSlot();
 
 signals:
