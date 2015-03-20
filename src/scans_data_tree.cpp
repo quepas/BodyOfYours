@@ -107,7 +107,19 @@ void ScansDataTree::UpdatePatientSlot(Patient patient)
 
 void ScansDataTree::RemoveScanSlot()
 {
-  qDebug() << "RemoveScanSlot";
+  QModelIndex index = currentIndex();
+  if (index.isValid()) {
+    Patient patient = model_->patients()[index.parent().row()];
+    QString filename = patient.scans()[index.row()].filename();
+    QVector<Scan> scans = patient.scans();
+    scans.remove(index.row());
+    patient.set_scans(scans);
+    // remove scan file
+    QDir path("./data/patients/" + patient.id() + "/scans/");
+    path.remove(filename);
+    // update patient data
+    model_->Update(patient);
+  }
 }
 
 void ScansDataTree::VisualizeScanSlot()
@@ -123,5 +135,9 @@ void ScansDataTree::VisualizeScanSlot()
 
 void ScansDataTree::ModifyScanSlot()
 {
-  qDebug() << "ModifyScanSlot";
+  QModelIndex index = currentIndex();
+  if (index.isValid()) {
+    Patient patient = model_->patients()[index.parent().row()];
+    qDebug() << "ModifyScanSlot: " << patient.name() << " " << patient.surname() << "(" << patient.scans()[index.row()].filename() << ")";
+  }
 }
