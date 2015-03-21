@@ -1,4 +1,5 @@
 #include "scans_data_tree.h"
+#include "scaninfodialog.h"
 #include "resources.h"
 #include "patientinfodialog.h"
 
@@ -138,6 +139,9 @@ void ScansDataTree::ModifyScanSlot()
   QModelIndex index = currentIndex();
   if (index.isValid()) {
     Patient patient = model_->patients()[index.parent().row()];
-    qDebug() << "ModifyScanSlot: " << patient.name() << " " << patient.surname() << "(" << patient.scans()[index.row()].filename() << ")";
+    Scan scan = patient.scans()[index.row()];
+    ScanInfoDialog* dialog = new ScanInfoDialog(nullptr, patient, scan);
+    connect(dialog, SIGNAL(UpdatePatientSignal(Patient)), this, SLOT(UpdatePatientSlot(Patient)));
+    dialog->show();
   }
 }

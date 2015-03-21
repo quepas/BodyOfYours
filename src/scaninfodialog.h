@@ -16,9 +16,9 @@ class ScanInfoDialog : public QDialog
 
 public:
   // create purpose
-  ScanInfoDialog(Scanning3D* scanning, Patient owner, QWidget *parent = 0);
+  ScanInfoDialog(Scanning3D* scanning, Patient patient, QWidget *parent = 0);
   // update purpose
-  ScanInfoDialog(Scanning3D* scanning, Scan scan, QWidget *parent = 0);
+  ScanInfoDialog(Scanning3D* scanning, Patient patient, Scan scan, QWidget *parent = 0);
   ~ScanInfoDialog();
 
   void ClearForm();
@@ -35,6 +35,8 @@ private:
   Scan scan_;
   Patient patient_;
   Scanning3D* scanning_;
+  bool update_mode_;
+
 };
 
 #endif // SCANINFODIALOG_H
