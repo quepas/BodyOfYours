@@ -69,15 +69,17 @@ void PatientTreeModel::Read(const QString& patient_id)
   // Check scans in ./data/patients/Patient_ID/scans directory
   FileScanner scanner(root_path_ + patient_id + "/scans");
   QStringList scans_list = scanner.ScanFiles("*.ply");
-  QVector<Scan> scans;
-  foreach(QString filename, scans_list) {
-    Scan scan;
-    scan.set_filename(filename);
-    scans.push_back(scan);
-  }
   // Construct Patient instance from JSON data and scans data
   Patient patient(json);
-  patient.set_scans(scans);
+  QVector<Scan> filtered_scans;
+  auto scans = patient.scans();
+  // Read scan data only if scan file exsists
+  foreach(Scan scan, scans) {
+    if (scans_list.contains(scan.filename())) {
+      filtered_scans.push_back(scan);
+    }
+  }
+  patient.set_scans(filtered_scans);
   patients_.push_back(patient);
 }
 
