@@ -27,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
   ui->setupUi(this);
   scanning_window_ = new ScanningWindow(scanner3d_, this),
-  scans_tree_ = new ScansTree(ui->scansTree, Resources::SCANS_DATA_PATH);
   scans_data_tree_=ui->scansDataTree;
   scans_data_tree_->set_scanning_window(scanning_window_);
   connect(scans_data_tree_, SIGNAL(VisualizeScanSignal(QString)), this, SLOT(VisualizeScanSlot(QString)));
@@ -36,8 +35,6 @@ MainWindow::MainWindow(QWidget *parent)
   for (int i = 0; i < ui->computingDevicesComboBox->maxVisibleItems(); ++i) {
     ui->computingDevicesComboBox->setItemIcon(i, QIcon(Resources::ICON_SYNC));
   }
-  ui->scanButton->setIcon(QIcon(Resources::ICON_WARNING));
-  ui->scanButton->setDisabled(true);
   connect(add_patient_dialog_, SIGNAL(CreatePatientSignal(Patient)), this, SLOT(CreatePatientSlot(Patient)));
   ui->addPatientButton->setIcon(QIcon(Resources::ICON_ADD));
   ui->removePatientButton->setIcon(QIcon(Resources::ICON_REMOVE));
@@ -48,18 +45,6 @@ MainWindow::~MainWindow()
   delete ui;
 }
 
-void MainWindow::on_scansTree_doubleClicked(const QModelIndex &index)
-{
-  PointCloud<PointXYZ>::Ptr ply_cloud (new PointCloud<PointXYZ>);
-  QString file_path = scans_tree_->model()->filePath(index);
-  QRegExp ply_files_only("*.ply");
-  ply_files_only.setPatternSyntax(QRegExp::Wildcard);
-  if (ply_files_only.exactMatch(file_path)) {
-    loadPLYFile(file_path.toStdString(), *ply_cloud);
-    ui->scansViewer->ShowPointCloud(ply_cloud);
-  }
-}
-
 void MainWindow::on_computingDevicesComboBox_currentIndexChanged(int index)
 {
   int device_id = index - 1;
@@ -67,23 +52,13 @@ void MainWindow::on_computingDevicesComboBox_currentIndexChanged(int index)
     ui->computingDevicesComboBox->setItemData(0, "", Qt::UserRole-1);
     if (scanner3d_->InitComputingDevice(device_id)) {
       ui->computingDevicesComboBox->setItemIcon(index, QIcon(Resources::ICON_OK));
-      ui->scanButton->setIcon(QIcon(Resources::ICON_OK));
-      ui->scanButton->setDisabled(false);
       scans_data_tree_->SetScanActionEnable(true);
     } else {
       ui->computingDevicesComboBox->setItemIcon(index, QIcon(Resources::ICON_ERROR));
       ui->computingDevicesComboBox->setItemData(index, "", Qt::UserRole-1);
-      ui->scanButton->setIcon(QIcon(Resources::ICON_WARNING));
-      ui->scanButton->setDisabled(true);
       scans_data_tree_->SetScanActionEnable(false);
     }
   }
-}
-
-void MainWindow::on_scanButton_clicked()
-{
-  scanning_window_->show();
-  scanning_window_->StartGrabbingData();
 }
 
 void MainWindow::on_addPatientButton_clicked()

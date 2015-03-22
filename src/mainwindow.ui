@@ -6,31 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>813</width>
-    <height>659</height>
+    <width>800</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTreeView" name="scansTree">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>381</width>
-      <height>251</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="ScansViewer" name="scansViewer">
     <property name="geometry">
      <rect>
-      <x>400</x>
+      <x>380</x>
       <y>10</y>
-      <width>401</width>
-      <height>361</height>
+      <width>411</width>
+      <height>411</height>
      </rect>
     </property>
    </widget>
@@ -38,7 +28,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>270</y>
+      <y>400</y>
       <width>101</width>
       <height>20</height>
      </rect>
@@ -51,40 +41,27 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>270</y>
-      <width>281</width>
+      <y>400</y>
+      <width>231</width>
       <height>22</height>
      </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="scanButton">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>300</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Scan</string>
     </property>
    </widget>
    <widget class="ScansDataTree" name="scansDataTree">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>330</y>
-      <width>381</width>
-      <height>271</height>
+      <y>10</y>
+      <width>331</width>
+      <height>381</height>
      </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="addPatientButton">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>380</y>
+      <x>350</x>
+      <y>10</y>
       <width>24</width>
       <height>24</height>
      </rect>
@@ -96,8 +73,8 @@
    <widget class="QPushButton" name="removePatientButton">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>410</y>
+      <x>350</x>
+      <y>40</y>
       <width>24</width>
       <height>24</height>
      </rect>
@@ -112,7 +89,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>813</width>
+     <width>800</width>
      <height>21</height>
     </rect>
    </property>
@@ -129,6 +106,11 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>QVTKWidget</class>
+   <extends>QWidget</extends>
+   <header>QVTKWidget.h</header>
+  </customwidget>
   <customwidget>
    <class>ScansDataTree</class>
    <extends>QTreeView</extends>

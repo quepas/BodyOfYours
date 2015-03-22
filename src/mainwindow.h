@@ -25,9 +25,7 @@ public:
   ~MainWindow();
 
 private slots:
-  void on_scansTree_doubleClicked(const QModelIndex& index);
   void on_computingDevicesComboBox_currentIndexChanged(int index);
-  void on_scanButton_clicked();
   void on_addPatientButton_clicked();
   void on_removePatientButton_clicked();
 
