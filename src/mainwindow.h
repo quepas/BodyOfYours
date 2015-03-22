@@ -3,7 +3,6 @@
 
 #include "data/patient.h"
 #include "patientinfodialog.h"
-#include "scans_tree.h"
 #include "scans_data_tree.h"
 #include "scanner_3d.h"
 #include "scanningwindow.h"
@@ -37,7 +36,6 @@ private:
   Ui::MainWindow *ui;
   ScanningWindow *scanning_window_;
   PatientInfoDialog *add_patient_dialog_;
-  ScansTree* scans_tree_;
   ScansDataTree* scans_data_tree_;
   Scanner3D* scanner3d_;
 

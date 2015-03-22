@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "scans_tree.h"
 #include "resources.h"
 #include "scanning_3d.h"
 
