@@ -52,13 +52,16 @@ void ScansDataTree::InitScanContextMenu()
   scan_context_menu_ = new QMenu(this);
   QAction* remove_scan = new QAction(QIcon(Resources::ICON_REMOVE), "Remove scan", nullptr);
   QAction* modify_scan = new QAction(QIcon(Resources::ICON_MODIFY), "Modify scan info", nullptr);
-  QAction* visualize_scan = new QAction(QIcon(Resources::ICON_REMOVE), "Visualize scan", nullptr);
+  QAction* visualize_scan = new QAction(QIcon(Resources::ICON_SCAN), "Visualize scan", nullptr);
+  QAction* smooth_scan = new QAction(QIcon(Resources::ICON_MODIFY), "Smooth scan", nullptr);
   scan_context_menu_->addAction(remove_scan);
   scan_context_menu_->addAction(modify_scan);
   scan_context_menu_->addAction(visualize_scan);
+  scan_context_menu_->addAction(smooth_scan);
   connect(remove_scan, SIGNAL(triggered()), this, SLOT(RemoveScanSlot()));
   connect(modify_scan, SIGNAL(triggered()), this, SLOT(ModifyScanSlot()));
   connect(visualize_scan, SIGNAL(triggered()), this, SLOT(VisualizeScanSlot()));
+  connect(smooth_scan, SIGNAL(triggered()), this, SLOT(SmoothScanSlot()));
 }
 
 bool ScansDataTree::RemoveSelected()

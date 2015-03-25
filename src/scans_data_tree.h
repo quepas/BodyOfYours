@@ -29,6 +29,7 @@ private slots:
   void RemoveScanSlot();
   void ModifyScanSlot();
   void VisualizeScanSlot();
+  void SmoothScanSlot();
 
 signals:
   void VisualizeScanSignal(QString scan_full_path);
