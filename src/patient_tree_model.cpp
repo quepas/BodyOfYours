@@ -101,6 +101,7 @@ void PatientTreeModel::Build()
     }
     root->appendRow(patient_item);
   }
+  setHorizontalHeaderItem(0, new QStandardItem(QString("Patient")));
 }
 
 void PatientTreeModel::Delete(const QString& patient_id)
