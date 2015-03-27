@@ -65,7 +65,7 @@ void ScanInfoDialog::on_okButton_clicked()
     scans = patient_.scans();
     scans.push_back(scan_);
   } else {
-    foreach(Scan scan, scans) {
+    foreach(Scan scan, patient_.scans()) {
       if (scan.filename() != scan_.filename()) {
         scans.push_back(scan);
       }
