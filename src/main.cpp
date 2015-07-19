@@ -1,14 +1,16 @@
 #include "MainWindow.h"
+
 #include <QtWidgets/QApplication>
+
 
 int main(int argc, char *argv[])
 {
 	QApplication app(argc,argv);
-	app.setOrganizationName("Startup");
-	app.setApplicationName("BodyOfYours");
+	app.setOrganizationName("ImFusion");
+	app.setApplicationName("RecFusionSDKTest");
 
-	MainWindow main_window;
-	main_window.show();
+	MainWindow mw;
+	mw.show();
 
 	return app.exec();
 }

@@ -6,8 +6,10 @@
 #include <QtWidgets/QMainWindow>
 
 class QLabel;
+class QMessageBox;
+class QTimer;
 
-/** \brief	Main window of QtReconstruction application
+/** \brief	Main window of MultiViewReconstruction application
 */
 class MainWindow : public QMainWindow
 {
@@ -18,22 +20,38 @@ public:
 	~MainWindow();
 
 public slots:
-	void onStartReconstruction();
-	void onStopReconstruction();
+	void processFrames();
 
-	void processFrame();
+	void calibrate();
+	void performCalibration();
+	void saveCalibration();
+	void loadCalibration();
+
+	void startReconstruction();
+	void stopReconstruction();
 
 private:
-	QLabel* m_imgLabel;
-	QLabel* m_recLabel;
-	RecFusion::Sensor* m_sensor;
-	RecFusion::Reconstruction* m_rec;
-	RecFusion::ColorImage* m_imgColor;
-	RecFusion::ColorImage* m_imgScene;
-	RecFusion::DepthImage* m_imgDepth;
+	QLabel* m_imgLabel[2];
+	QLabel* m_recLabel[2];
+	QMessageBox* m_calibMessageBox;
+	QTimer* m_timer;
+
+	RecFusion::Sensor* m_sensor[2];
+	
+	RecFusion::ColorImage* m_colorImg[2];
+	RecFusion::DepthImage* m_depthImg[2];
+	RecFusion::ColorImage* m_sceneImg[2];
+	RecFusion::ColorImage* m_calibImgColor[2];
+	RecFusion::DepthImage* m_calibImgDepth[2];
+
+	RecFusion::Mat3 m_K[2];
+	RecFusion::Mat4 m_sensorT[2];
+	bool m_calibImgValid[2];
 
 	bool m_reconstruct;
-};
+	bool m_calibrate;
 
+	RecFusion::Reconstruction* m_rec;
+};
 
 #endif
