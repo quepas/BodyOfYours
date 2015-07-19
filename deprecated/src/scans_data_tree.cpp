@@ -148,3 +148,8 @@ void ScansDataTree::ModifyScanSlot()
     dialog->show();
   }
 }
+
+void ScansDataTree::SmoothScanSlot()
+{
+  qDebug() << "Smoothing";
+}
