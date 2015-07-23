@@ -4,6 +4,9 @@
 
 struct SensorData
 {
+  SensorData(const RecFusion::Sensor& sensor);
+  ~SensorData();
+
   RecFusion::ColorImage* color_image;
   RecFusion::DepthImage* depth_image;
   RecFusion::ColorImage* scene_image;
