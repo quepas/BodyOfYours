@@ -45,7 +45,8 @@ m_rec(0)
 	wt->setLayout(l);
 	setCentralWidget(wt);
 
-	resize(1024, 768);
+	resize(1366, 768);
+  showMaximized();
 
 	// Initialize pointers to zero
 	m_colorImg[0] = m_colorImg[1] = 0;
@@ -413,7 +414,6 @@ void MainWindow::stopReconstruction()
 	}
 
 	std::cout << "Reconstructed mesh (" << mesh.vertexCount() << " vertices, " << mesh.triangleCount() << " triangles)" << std::endl;
-
 	// Save mesh to file
 	ok = mesh.save("mesh.ply", Mesh::PLY);
 	if (ok)
@@ -469,7 +469,7 @@ void MainWindow::processFrames()
 
 		// Display captured images in GUI
 		QImage image(m_colorImg[i]->data(), w, h, QImage::Format_RGB888);
-		m_imgLabel[i]->setPixmap(QPixmap::fromImage(image).scaled(w, h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+		m_imgLabel[i]->setPixmap(QPixmap::fromImage(image).scaled(w/2.0, h/2.0, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 	}
 
 	// Update GUI

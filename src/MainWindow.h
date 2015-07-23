@@ -31,22 +31,22 @@ public slots:
 	void stopReconstruction();
 
 private:
-	QLabel* m_imgLabel[2];
-	QLabel* m_recLabel[2];
+	QLabel* m_imgLabel[3];
+	QLabel* m_recLabel[3];
 	QMessageBox* m_calibMessageBox;
 	QTimer* m_timer;
 
-	RecFusion::Sensor* m_sensor[2];
+	RecFusion::Sensor* m_sensor[3];
 	
-	RecFusion::ColorImage* m_colorImg[2];
-	RecFusion::DepthImage* m_depthImg[2];
-	RecFusion::ColorImage* m_sceneImg[2];
-	RecFusion::ColorImage* m_calibImgColor[2];
-	RecFusion::DepthImage* m_calibImgDepth[2];
+	RecFusion::ColorImage* m_colorImg[3];
+	RecFusion::DepthImage* m_depthImg[3];
+	RecFusion::ColorImage* m_sceneImg[3];
+	RecFusion::ColorImage* m_calibImgColor[3];
+	RecFusion::DepthImage* m_calibImgDepth[3];
 
-	RecFusion::Mat3 m_K[2];
-	RecFusion::Mat4 m_sensorT[2];
-	bool m_calibImgValid[2];
+	RecFusion::Mat3 m_K[3];
+	RecFusion::Mat4 m_sensorT[3];
+	bool m_calibImgValid[3];
 
 	bool m_reconstruct;
 	bool m_calibrate;
