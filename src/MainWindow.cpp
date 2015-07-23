@@ -33,13 +33,17 @@ m_rec(0)
 	// Create main window GUI
 	m_imgLabel[0] = new QLabel;
 	m_imgLabel[1] = new QLabel;
+  m_imgLabel[2] = new QLabel;
 	m_recLabel[0] = new QLabel;
 	m_recLabel[1] = new QLabel;
+  m_recLabel[2] = new QLabel;
 	QGridLayout* l = new QGridLayout;
 	l->addWidget(m_imgLabel[0], 0, 0);
 	l->addWidget(m_imgLabel[1], 0, 1);
+  l->addWidget(m_imgLabel[2], 0, 2);
 	l->addWidget(m_recLabel[0], 1, 0);
 	l->addWidget(m_recLabel[1], 1, 1);
+  l->addWidget(m_recLabel[2], 1, 2);
 
 	QWidget* wt = new QWidget;
 	wt->setLayout(l);
@@ -49,13 +53,13 @@ m_rec(0)
   showMaximized();
 
 	// Initialize pointers to zero
-	m_colorImg[0] = m_colorImg[1] = 0;
-	m_depthImg[0] = m_depthImg[1] = 0;
-	m_sceneImg[0] = m_sceneImg[1] = 0;
-	m_calibImgColor[0] = m_calibImgColor[1] = 0;
-	m_calibImgDepth[0] = m_calibImgDepth[1] = 0;
-	m_calibImgValid[0] = m_calibImgValid[1] = false;
-	m_sensor[0] = m_sensor[1] = 0;
+	m_colorImg[0] = m_colorImg[1] = m_colorImg[2] = nullptr;
+	m_depthImg[0] = m_depthImg[1] = m_depthImg[2] = nullptr;
+	m_sceneImg[0] = m_sceneImg[1] = m_sceneImg[2] = nullptr;
+	m_calibImgColor[0] = m_calibImgColor[1] = m_calibImgColor[2] = nullptr;
+	m_calibImgDepth[0] = m_calibImgDepth[1] = m_calibImgDepth[2] = nullptr;
+	m_calibImgValid[0] = m_calibImgValid[1] = m_calibImgValid[2] = false;
+	m_sensor[0] = m_sensor[1] = m_sensor[2] = nullptr;
 
 	// Output RecFusion SDK version
 	std::cout << "Using RecFusionSDK " << RecFusionSDK::majorVersion() << "." << RecFusionSDK::minorVersion() << std::endl;
@@ -68,15 +72,16 @@ m_rec(0)
 	// Instantiate sensor objects
 	m_sensor[0] = new Sensor();
 	m_sensor[1] = new Sensor();
+  m_sensor[2] = new Sensor();
 
-	if (m_sensor[0]->deviceCount() < 2)
+	if (m_sensor[0]->deviceCount() < 3)
 	{
-		QMessageBox::warning(this,"Initialization","This sample requires two sensors to be connected. Exiting.");
+		QMessageBox::warning(this,"Initialization","This application requires three sensors to be connected. Exiting.");
 		QTimer::singleShot(0, this, SLOT(close()));
 	}
 	else
 	{
-		// Open first two sensors
+		// Open three sensors
 
 		ok = m_sensor[0]->open(0);
 		if (!ok)
@@ -123,6 +128,29 @@ m_rec(0)
 
 			m_imgLabel[1]->resize(w, h);
 		}
+
+    ok = m_sensor[2]->open(2);
+    if (!ok)
+    {
+      QMessageBox::warning(this, "Initialization", "Couldn't open third sensor. Exiting.");
+      QTimer::singleShot(0, this, SLOT(close()));
+    }
+    else
+    {
+      // Get sensor properties
+      int w = m_sensor[2]->width();
+      int h = m_sensor[2]->height();
+      m_K[2] = m_sensor[2]->depthIntrinsics();
+
+      // Create color and depth images
+      m_colorImg[2] = new ColorImage(w, h);
+      m_depthImg[2] = new DepthImage(w, h);
+      m_sceneImg[2] = new ColorImage(w, h);
+      m_calibImgColor[2] = new ColorImage(w, h);
+      m_calibImgDepth[2] = new DepthImage(w, h);
+
+      m_imgLabel[2]->resize(w, h);
+    }
 	}
 
 	// Set sensor transformation to identity
@@ -130,8 +158,9 @@ m_rec(0)
 	{
 		for (int c = 0; c < 4; ++c)
 		{
-			m_sensorT[0](r,c) = (r == c) ? 1 : 0;
-			m_sensorT[1](r,c) = (r == c) ? 1 : 0;
+			m_sensorT[0](r, c) = (r == c) ? 1 : 0;
+			m_sensorT[1](r, c) = (r == c) ? 1 : 0;
+      m_sensorT[2](r, c) = (r == c) ? 1 : 0;
 		}
 	}
 	
