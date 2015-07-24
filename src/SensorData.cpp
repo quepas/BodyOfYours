@@ -24,3 +24,13 @@ SensorData::~SensorData()
   delete calib_color_image;
   delete calib_depth_image;
 }
+
+bool SensorData::HasRegularImages()
+{
+  return color_image && depth_image;
+}
+
+bool SensorData::HasCalibrationImages()
+{
+  return calib_color_image && calib_depth_image;
+}

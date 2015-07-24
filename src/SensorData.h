@@ -7,6 +7,9 @@ struct SensorData
   SensorData(const RecFusion::Sensor& sensor);
   ~SensorData();
 
+  bool HasRegularImages();
+  bool HasCalibrationImages();
+
   RecFusion::ColorImage* color_image;
   RecFusion::DepthImage* depth_image;
   RecFusion::ColorImage* scene_image;
