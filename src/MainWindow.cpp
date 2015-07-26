@@ -24,212 +24,133 @@
 
 using namespace RecFusion;
 
-
 MainWindow::MainWindow() :
-m_timer(0),
-m_calibMessageBox(0),
-m_reconstruct(false),
-m_calibrate(false),
-m_rec(0),
-sensor_num_(1)
+  m_timer(0),
+  m_calibMessageBox(0),
+  m_reconstruct(false),
+  m_calibrate(false),
+  m_rec(0),
+  sensor_num_(0)
 {
-    // Create main window GUI
-    m_imgLabel[0] = new QLabel;
-    m_imgLabel[1] = new QLabel;
+  // Create main window GUI
+  m_imgLabel[0] = new QLabel;
+  m_imgLabel[1] = new QLabel;
   m_imgLabel[2] = new QLabel;
-    m_recLabel[0] = new QLabel;
-    m_recLabel[1] = new QLabel;
+  m_recLabel[0] = new QLabel;
+  m_recLabel[1] = new QLabel;
   m_recLabel[2] = new QLabel;
-    QGridLayout* l = new QGridLayout;
-    l->addWidget(m_imgLabel[0], 0, 0);
-    l->addWidget(m_imgLabel[1], 0, 1);
+  QGridLayout* l = new QGridLayout;
+  l->addWidget(m_imgLabel[0], 0, 0);
+  l->addWidget(m_imgLabel[1], 0, 1);
   l->addWidget(m_imgLabel[2], 0, 2);
-    l->addWidget(m_recLabel[0], 1, 0);
-    l->addWidget(m_recLabel[1], 1, 1);
+  l->addWidget(m_recLabel[0], 1, 0);
+  l->addWidget(m_recLabel[1], 1, 1);
   l->addWidget(m_recLabel[2], 1, 2);
 
-    QWidget* wt = new QWidget;
-    wt->setLayout(l);
-    setCentralWidget(wt);
+  QWidget* wt = new QWidget;
+  wt->setLayout(l);
+  setCentralWidget(wt);
 
-    resize(1366, 768);
+  resize(1366, 768);
   showMaximized();
 
-    // Initialize pointers to zero
-    m_colorImg[0] = m_colorImg[1] = m_colorImg[2] = nullptr;
-    m_depthImg[0] = m_depthImg[1] = m_depthImg[2] = nullptr;
-    m_sceneImg[0] = m_sceneImg[1] = m_sceneImg[2] = nullptr;
-    m_calibImgColor[0] = m_calibImgColor[1] = m_calibImgColor[2] = nullptr;
-    m_calibImgDepth[0] = m_calibImgDepth[1] = m_calibImgDepth[2] = nullptr;
-    m_calibImgValid[0] = m_calibImgValid[1] = m_calibImgValid[2] = false;
-    m_sensor[0] = m_sensor[1] = m_sensor[2] = nullptr;
+  // Initialize pointers to zero
+  m_colorImg[0] = m_colorImg[1] = m_colorImg[2] = nullptr;
+  m_depthImg[0] = m_depthImg[1] = m_depthImg[2] = nullptr;
+  m_sceneImg[0] = m_sceneImg[1] = m_sceneImg[2] = nullptr;
+  m_calibImgColor[0] = m_calibImgColor[1] = m_calibImgColor[2] = nullptr;
+  m_calibImgDepth[0] = m_calibImgDepth[1] = m_calibImgDepth[2] = nullptr;
+  m_calibImgValid[0] = m_calibImgValid[1] = m_calibImgValid[2] = false;
+  m_sensor[0] = m_sensor[1] = m_sensor[2] = nullptr;
 
-    // Output RecFusion SDK version
-    std::cout << "Using RecFusionSDK " << RecFusionSDK::majorVersion() << "." << RecFusionSDK::minorVersion() << std::endl;
+  // Output RecFusion SDK version
+  std::cout << "Using RecFusionSDK " << RecFusionSDK::majorVersion() << "." << RecFusionSDK::minorVersion() << std::endl;
 
-    // Load license file
-    bool ok = RecFusionSDK::setLicenseFile("License.dat");
-    if (!ok)
-        std::cout << "Invalid RecFusion license. Export will be disabled." << std::endl;
+  // Load license file
+  bool ok = RecFusionSDK::setLicenseFile("License.dat");
+  if (!ok)
+    std::cout << "Invalid RecFusion license. Export will be disabled." << std::endl;
 
-    // Instantiate sensor objects
-    m_sensor[0] = new Sensor();
-    //m_sensor[1] = new Sensor();
-  //m_sensor[2] = new Sensor();
+  // Instantiate sensor objects
+  m_sensor[0] = new Sensor();
+  m_sensor[1] = new Sensor();
+  m_sensor[2] = new Sensor();
 
-    /*if (m_sensor[0]->deviceCount() < 3)
-    {
-        QMessageBox::warning(this,"Initialization","This application requires three sensors to be connected. Exiting.");
-        QTimer::singleShot(0, this, SLOT(close()));
-    }
-    else
-    {
-        // Open three sensors
+  sensor_num_ = m_sensor[0]->deviceCount();
+  QMessageBox::information(this, "Sensors connected", QString("Number of sensors connected: ") + QString::number(sensor_num_));
 
-        ok = m_sensor[0]->open(0);
-        if (!ok)
-        {
-            QMessageBox::warning(this,"Initialization","Couldn't open first sensor. Exiting.");
-            QTimer::singleShot(0, this, SLOT(close()));
-        }
-        else
-        {
-            // Get sensor properties
-            int w = m_sensor[0]->width();
-            int h = m_sensor[0]->height();
-            m_K[0] = m_sensor[0]->depthIntrinsics();
-
-            // Create color and depth images
-            m_colorImg[0] = new ColorImage(w, h);
-            m_depthImg[0] = new DepthImage(w, h);
-            m_sceneImg[0] = new ColorImage(w, h);
-            m_calibImgColor[0] = new ColorImage(w, h);
-            m_calibImgDepth[0] = new DepthImage(w, h);
-
-            m_imgLabel[0]->resize(w,h);
-        }
-
-        ok = m_sensor[1]->open(1);
-        if (!ok)
-        {
-            QMessageBox::warning(this, "Initialization", "Couldn't open second sensor. Exiting.");
-            QTimer::singleShot(0, this, SLOT(close()));
-        }
-        else
-        {
-            // Get sensor properties
-            int w = m_sensor[1]->width();
-            int h = m_sensor[1]->height();
-            m_K[1] = m_sensor[1]->depthIntrinsics();
-
-            // Create color and depth images
-            m_colorImg[1] = new ColorImage(w, h);
-            m_depthImg[1] = new DepthImage(w, h);
-            m_sceneImg[1] = new ColorImage(w, h);
-            m_calibImgColor[1] = new ColorImage(w, h);
-            m_calibImgDepth[1] = new DepthImage(w, h);
-
-            m_imgLabel[1]->resize(w, h);
-        }
-    /*
-    ok = m_sensor[2]->open(2);
+  for (unsigned i = 0; i < sensor_num_; ++i) {
+    ok = m_sensor[i]->open(i);
     if (!ok)
     {
-      QMessageBox::warning(this, "Initialization", "Couldn't open third sensor. Exiting.");
+      QMessageBox::warning(this, "Initialization", "Couldn't open sensor num. " + QString::number(i) + ". Exiting.");
       QTimer::singleShot(0, this, SLOT(close()));
     }
     else
     {
       // Get sensor properties
-      int w = m_sensor[2]->width();
-      int h = m_sensor[2]->height();
-      m_K[2] = m_sensor[2]->depthIntrinsics();
-
-      // Create color and depth images
-      m_colorImg[2] = new ColorImage(w, h);
-      m_depthImg[2] = new DepthImage(w, h);
-      m_sceneImg[2] = new ColorImage(w, h);
-      m_calibImgColor[2] = new ColorImage(w, h);
-      m_calibImgDepth[2] = new DepthImage(w, h);
-
-      m_imgLabel[2]->resize(w, h);
-    }*/
-    //}
-
-  ok = m_sensor[0]->open(0);
-  if (!ok)
-  {
-    QMessageBox::warning(this, "Initialization", "Couldn't open first sensor. Exiting.");
-    QTimer::singleShot(0, this, SLOT(close()));
-  }
-  else
-  {
-    // Get sensor properties
-    sensor_data_ = new SensorData(*m_sensor[0]);
-    sensors_data_.push_back(sensor_data_);
-    int w = m_sensor[0]->width();
-    int h = m_sensor[0]->height();
-    m_imgLabel[0]->resize(w, h);
+      sensor_data_ = new SensorData(*m_sensor[i]);
+      sensors_data_.push_back(sensor_data_);
+      int w = m_sensor[i]->width();
+      int h = m_sensor[i]->height();
+      m_imgLabel[i]->resize(w, h);
+    }
   }
 
-    // Create message box for calibration dialog
-    m_calibMessageBox = new QMessageBox(this);
-    m_calibMessageBox->setIcon(QMessageBox::Information);
-    m_calibMessageBox->setWindowTitle("Calibration");
-    m_calibMessageBox->setText("Press OK to capture calibration frame");
-    m_calibMessageBox->setDefaultButton(QMessageBox::Ok);
-    connect(m_calibMessageBox,SIGNAL(accepted()),this,SLOT(performCalibration()));
-    connect(m_calibMessageBox, SIGNAL(finished(int)), this, SLOT(performCalibration()));
-    connect(m_calibMessageBox, SIGNAL(rejected()), this, SLOT(performCalibration()));
+  // Create message box for calibration dialog
+  m_calibMessageBox = new QMessageBox(this);
+  m_calibMessageBox->setIcon(QMessageBox::Information);
+  m_calibMessageBox->setWindowTitle("Calibration");
+  m_calibMessageBox->setText("Press OK to capture calibration frame");
+  m_calibMessageBox->setDefaultButton(QMessageBox::Ok);
+  connect(m_calibMessageBox,SIGNAL(accepted()),this,SLOT(performCalibration()));
+  connect(m_calibMessageBox, SIGNAL(finished(int)), this, SLOT(performCalibration()));
+  connect(m_calibMessageBox, SIGNAL(rejected()), this, SLOT(performCalibration()));
 
-    QToolBar* toolbar = new QToolBar(this);
-    addToolBar(toolbar);
+  QToolBar* toolbar = new QToolBar(this);
+  addToolBar(toolbar);
 
-    // Create actions for calibrating and reconstructing
-    QAction* a;
-    a = new QAction("Calibrate",this);
-    a->setShortcut(QKeySequence("F9"));
-    connect(a,SIGNAL(triggered()),this,SLOT(calibrate()));
-    addAction(a);
-    toolbar->addAction(a);
+  // Create actions for calibrating and reconstructing
+  QAction* a;
+  a = new QAction("Calibrate",this);
+  a->setShortcut(QKeySequence("F9"));
+  connect(a,SIGNAL(triggered()),this,SLOT(calibrate()));
+  addAction(a);
+  toolbar->addAction(a);
+  a = new QAction("Save Calibration",this);
+  a->setShortcut(QKeySequence("F10"));
+  connect(a,SIGNAL(triggered()),this,SLOT(saveCalibration()));
+  addAction(a);
+  toolbar->addAction(a);
 
-    a = new QAction("Save Calibration",this);
-    a->setShortcut(QKeySequence("F10"));
-    connect(a,SIGNAL(triggered()),this,SLOT(saveCalibration()));
-    addAction(a);
-    toolbar->addAction(a);
+  a = new QAction("Load calibration",this);
+  a->setShortcut(QKeySequence("F11"));
+  connect(a,SIGNAL(triggered()),this,SLOT(loadCalibration()));
+  addAction(a);
+  toolbar->addAction(a);
+  a = new QAction("Start Reconstruction",this);
+  a->setShortcut(QKeySequence("F5"));
+  connect(a,SIGNAL(triggered()),this,SLOT(startReconstruction()));
+  addAction(a);
+  toolbar->addAction(a);
+  a = new QAction("Stop Reconstruction", this);
+  a->setShortcut(QKeySequence("F6"));
+  connect(a, SIGNAL(triggered()), this, SLOT(stopReconstruction()));
+  addAction(a);
+  toolbar->addAction(a);
 
-    a = new QAction("Load calibration",this);
-    a->setShortcut(QKeySequence("F11"));
-    connect(a,SIGNAL(triggered()),this,SLOT(loadCalibration()));
-    addAction(a);
-    toolbar->addAction(a);
-
-    a = new QAction("Start Reconstruction",this);
-    a->setShortcut(QKeySequence("F5"));
-    connect(a,SIGNAL(triggered()),this,SLOT(startReconstruction()));
-    addAction(a);
-    toolbar->addAction(a);
-
-    a = new QAction("Stop Reconstruction", this);
-    a->setShortcut(QKeySequence("F6"));
-    connect(a, SIGNAL(triggered()), this, SLOT(stopReconstruction()));
-    addAction(a);
-    toolbar->addAction(a);
-
-    m_timer = new QTimer(this);
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(processFrames()));
-    m_timer->start(50);
+  m_timer = new QTimer(this);
+  connect(m_timer,SIGNAL(timeout()),this,SLOT(processFrames()));
+  m_timer->start(50);
 }
-
 
 MainWindow::~MainWindow()
 {
-    // Close and delete sensors
-    m_sensor[0]->close();
-    //m_sensor[1]->close();
-    delete m_sensor[0];
-    //delete m_sensor[1];
+  // Close and delete sensors
+  for (unsigned i = 0; i < sensor_num_; ++i) {
+    m_sensor[i]->close();
+    delete m_sensor[i];
+  }
 
     // Delete all allocated data
     delete m_colorImg[0];
@@ -471,50 +392,52 @@ void MainWindow::stopReconstruction()
 void MainWindow::processFrames()
 {
   for (unsigned i = 0; i < sensors_data_.size(); ++i) {
-    if (!sensor_data_->HasRegularImages())
+    if (!sensors_data_[i]->HasRegularImages())
       return;
   }
 
   // Grab images from sensor
-    bool ok[3];
+  bool ok[3];
   for (unsigned i = 0; i < sensor_num_; ++i) {
-    ok[i] = m_sensor[i]->readImage(*(sensor_data_->depth_image), *(sensor_data_->color_image), 40);
+    ok[i] = m_sensor[i]->readImage(*(sensors_data_[i]->depth_image), *(sensors_data_[i]->color_image), 40);
   }
 
-    // Process images
-    for (int i = 0; i < sensor_num_; ++i)
-    {
-        if (!ok[i])
-            continue;
+  // Process images
+  for (unsigned i = 0; i < sensor_num_; ++i)
+  {
+    if (!ok[i]) continue;
+    sensor_data_ = sensors_data_[i];
 
-        // Get image size
-        int w = sensor_data_->color_image->width();
+    // Get image size
+    int w = sensor_data_->color_image->width();
     int h = sensor_data_->color_image->height();
 
-        if (m_reconstruct && m_rec)
-        {
-            // Add frame to reconstruction
-            bool status;
-            bool ret = m_rec->addFrame(i,
+    if (m_reconstruct && m_rec)
+    {
+      // Add frame to reconstruction
+      bool status;
+      bool ret = m_rec->addFrame(
+        i,
         *sensor_data_->depth_image,
         *sensor_data_->color_image,
         &status,
         sensor_data_->scene_image,
         0,
         &sensor_data_->T);
-            if (ret && status)
-            {
-                // Display rendering of current reconstruction when tracking succeeded
-                QImage image(sensor_data_->scene_image->data(), w, h, QImage::Format_RGB888);
-                m_recLabel[i]->setPixmap(QPixmap::fromImage(image).scaled(w, h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-            }
-        }
-        else if (m_calibrate)
-        {
-            // Save calibration frame
-            memcpy(m_calibImgColor[i]->data(), m_colorImg[i]->data(), w * h * 3);
-            memcpy(m_calibImgDepth[i]->data(), m_depthImg[i]->data(), w * h * 2);
-            m_calibImgValid[i] = true;
+
+      if (ret && status)
+      {
+        // Display rendering of current reconstruction when tracking succeeded
+        QImage image(sensor_data_->scene_image->data(), w, h, QImage::Format_RGB888);
+        m_recLabel[i]->setPixmap(QPixmap::fromImage(image).scaled(w, h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+      }
+    }
+    else if (m_calibrate)
+    {
+      // Save calibration frame
+      memcpy(m_calibImgColor[i]->data(), m_colorImg[i]->data(), w * h * 3);
+      memcpy(m_calibImgDepth[i]->data(), m_depthImg[i]->data(), w * h * 2);
+      m_calibImgValid[i] = true;
     }
 
     // Display captured images in GUI
