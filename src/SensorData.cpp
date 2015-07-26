@@ -1,4 +1,5 @@
 #include "SensorData.h"
+#include "RecFusionUtils.h"
 
 using RecFusion::ColorImage;
 using RecFusion::DepthImage;
@@ -9,6 +10,7 @@ SensorData::SensorData(const Sensor& sensor)
   int w = sensor.width();
   int h = sensor.height();
   K = sensor.depthIntrinsics();
+  T = IdentityMat4();
   color_image = new ColorImage(w, h);
   depth_image = new DepthImage(w, h);
   scene_image = new ColorImage(w, h);
