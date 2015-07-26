@@ -184,207 +184,197 @@ void MainWindow::calibrate()
 
 void MainWindow::performCalibration()
 {
-    // Set sensor transformation to identity
-    for (int r = 0; r < 4; ++r)
-    {
-        for (int c = 0; c < 4; ++c)
-        {
-            m_sensorT[0](r,c) = (r == c) ? 1 : 0;
-            //m_sensorT[1](r,c) = (r == c) ? 1 : 0;
-        }
-    }
+  for (unsigned i = 0; i < sensor_num_; ++i) {
+    sensors_data_[i]->ResetT();
+  }
 
-    // Create calibration object for two sensors
-    Calibration calib;
-    calib.init(1);
+  // Create calibration object for two sensors
+  Calibration calib;
+  calib.init(1);
 
-    // Single-sided calibration
-    calib.setMarker(100, 190);
+  // Single-sided calibration
+  calib.setMarker(100, 190);
 
-    //// Two-sided calibration with a marker board of thickness 12 mm. The calibration coordinate system origin is in the middle of the board.
+  //// Two-sided calibration with a marker board of thickness 12 mm. The calibration coordinate system origin is in the middle of the board.
+  //// Transformation from the first marker coordinate system to the calibration coordinate system.
+  //// The z-Axis is always perpendicular to the marker surface pointing toward the viewer.
+  //// When placing the marker such that the marker id printed on the lower left of the marker
+  //// the x-axis extends from the center of the marker towards the bottom (where the marker id is printed),
+  //// the y-axis extends to the right, the origin of the marker coordinate system is at the center of the marker.
+  //
+  //// Transformation from first marker coordinate system to calibration coordinate system (move 6 mm in z-direction to the center of the board). Matrix is column-major-order.
+  //double T1_[] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -6, 1 };
+  //Mat4 T1(T1_);
+  //calib.setMarker(400, 190, &T1);
 
-    //// Transformation from the first marker coordinate system to the calibration coordinate system.
-    //// The z-Axis is always perpendicular to the marker surface pointing toward the viewer.
-    //// When placing the marker such that the marker id printed on the lower left of the marker
-    //// the x-axis extends from the center of the marker towards the bottom (where the marker id is printed),
-    //// the y-axis extends to the right, the origin of the marker coordinate system is at the center of the marker.
-    //
-    //// Transformation from first marker coordinate system to calibration coordinate system (move 6 mm in z-direction to the center of the board). Matrix is column-major-order.
-    //double T1_[] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -6, 1 };
-    //Mat4 T1(T1_);
-    //calib.setMarker(400, 190, &T1);
+  //// Transformation from second marker coordinate system to calibration coordinate system (rotate 180° around x-axis and move 6 mm in z-direction to the center of the board). Matrix is column-major-order.
+  //double T2_[] = { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, -6, 1 };
+  //Mat4 T2(T2_);
+  //calib.setMarker(500, 190, &T2);
 
-    //// Transformation from second marker coordinate system to calibration coordinate system (rotate 180° around x-axis and move 6 mm in z-direction to the center of the board). Matrix is column-major-order.
-    //double T2_[] = { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, -6, 1 };
-    //Mat4 T2(T2_);
-    //calib.setMarker(500, 190, &T2);
+  bool ok = false;
 
-    bool ok = false;
+  // Try to run calibration until it succeeds but at most 10 times
+  for (int i = 0; i < 10; ++i)
+  {
+    // Reset valid flag for capturing calibration images
+    m_calibImgValid[0] = m_calibImgValid[1] = false;
 
+    // Setting m_calibrate to true, instructs the capture loop to capture calibration images
+    m_calibrate = true;
 
-    // Try to run calibration until it succeeds but at most 10 times
-    for (int i = 0; i < 10; ++i)
-    {
-        // Reset valid flag for capturing calibration images
-        m_calibImgValid[0] = m_calibImgValid[1] = false;
+    // Wait until calibration images for both sensors have been captured
+    while (!m_calibImgValid[0] && !m_calibImgValid[1])
+      QCoreApplication::processEvents();
 
-        // Setting m_calibrate to true, instructs the capture loop to capture calibration images
-        m_calibrate = true;
+    // Stop calibration frame capturing
+    m_calibrate = false;
 
-        // Wait until calibration images for both sensors have been captured
-        while (!m_calibImgValid[0] && !m_calibImgValid[1])
-            QCoreApplication::processEvents();
+    // Pass captured images to calibration
+    calib.setImage(0, *m_calibImgDepth[0], *m_calibImgColor[0], m_K[0], m_K[0]);
+    calib.setImage(1, *m_calibImgDepth[1], *m_calibImgColor[1], m_K[1], m_K[1]);
 
-        // Stop calibration frame capturing
-        m_calibrate = false;
-
-        // Pass captured images to calibration
-        calib.setImage(0, *m_calibImgDepth[0], *m_calibImgColor[0], m_K[0], m_K[0]);
-        calib.setImage(1, *m_calibImgDepth[1], *m_calibImgColor[1], m_K[1], m_K[1]);
-
-        // Run calibration
-        ok = calib.calibrate();
-
-        if (ok)
-            break;
-    }
+    // Run calibration
+    ok = calib.calibrate();
 
     if (ok)
-    {
-        // Retrieve sensor transformation if calibration succeeded
-        calib.getTransformation(0, m_sensorT[0]);
-        calib.getTransformation(1, m_sensorT[1]);
-        QMessageBox::information(this, "Calibration", "Calibration succeeded");
-    }
-    else
-    {
-        QMessageBox::information(this, "Calibration", "Calibration failed");
-    }
+      break;
+  }
+
+  if (ok)
+  {
+    // Retrieve sensor transformation if calibration succeeded
+    calib.getTransformation(0, m_sensorT[0]);
+    calib.getTransformation(1, m_sensorT[1]);
+    QMessageBox::information(this, "Calibration", "Calibration succeeded");
+  }
+  else
+  {
+    QMessageBox::information(this, "Calibration", "Calibration failed");
+  }
 }
 
 
 void MainWindow::saveCalibration()
 {
-    QString filename = QFileDialog::getSaveFileName(this,"Save calibration");
-    if (filename.isEmpty())
-        return;
+  QString filename = QFileDialog::getSaveFileName(this,"Save calibration");
+  if (filename.isEmpty()) return;
 
-    // Save calibrations to file as 4x4 matrices in row-major order
-    std::ofstream out(filename.toStdString());
-    for (int i = 0; i < 2; ++i)
+  // Save calibrations to file as 4x4 matrices in row-major order
+  std::ofstream out(filename.toStdString());
+  for (int i = 0; i < 2; ++i)
+  {
+    for (int r = 0; r < 4; ++r)
     {
-        for (int r = 0; r < 4; ++r)
-        {
-            for (int c = 0; c < 4; ++c)
-                out << m_sensorT[i](r,c) << " ";
-            out << std::endl;
-        }
+      for (int c = 0; c < 4; ++c)
+        out << m_sensorT[i](r,c) << " ";
+      out << std::endl;
     }
-    out.close();
+  }
+  out.close();
 }
 
 
 void MainWindow::loadCalibration()
 {
-    QString filename = QFileDialog::getOpenFileName(this,"Load calibration");
-    if (filename.isEmpty())
-        return;
-    std::ifstream in(filename.toStdString());
-    if (!in.is_open() || !in.good())
-    {
-        QMessageBox::information(this,"Load calibration","Couldn't open calibration file");
-        return;
-    }
+  QString filename = QFileDialog::getOpenFileName(this,"Load calibration");
+  if (filename.isEmpty()) return;
+  std::ifstream in(filename.toStdString());
+  if (!in.is_open() || !in.good())
+  {
+    QMessageBox::information(this,"Load calibration","Couldn't open calibration file");
+    return;
+  }
 
-    // Load calibration from file
-    double tmp[2][16];
-    for (int i = 0; i < 2; ++i)
-    {
-        for (int r = 0; r < 4; ++r)
-            for (int c = 0; c < 4; ++c)
-                in >> tmp[i][c * 4 + r];
-    }
-    if (in.fail())
-    {
-        QMessageBox::information(this,"Load calibration","Error reading calibration file");
-        return;
-    }
-    in.close();
+  // Load calibration from file
+  double tmp[2][16];
+  for (int i = 0; i < 2; ++i)
+  {
+    for (int r = 0; r < 4; ++r)
+      for (int c = 0; c < 4; ++c)
+        in >> tmp[i][c * 4 + r];
+  }
+  if (in.fail())
+  {
+    QMessageBox::information(this,"Load calibration","Error reading calibration file");
+    return;
+  }
+  in.close();
 
-    for (int i = 0; i < 2; ++i)
-        for (int r = 0; r < 4; ++r)
-            for (int c = 0; c < 4; ++c)
-                m_sensorT[i](r, c) = tmp[i][c * 4 + r];
+  for (int i = 0; i < 2; ++i)
+    for (int r = 0; r < 4; ++r)
+      for (int c = 0; c < 4; ++c)
+        m_sensorT[i](r, c) = tmp[i][c * 4 + r];
 }
 
 
 void MainWindow::startReconstruction()
 {
-    m_reconstruct = false;
+  m_reconstruct = false;
 
-    // Delete reconstruction object if there is one
-    delete m_rec;
-    m_rec = 0;
+  // Delete reconstruction object if there is one
+  delete m_rec;
+  m_rec = 0;
 
-    // Set reconstruction parameters for two sensors
-    ReconstructionParams params(sensor_num_);
+  // Set reconstruction parameters for two sensors
+  ReconstructionParams params(sensor_num_);
 
-    // Set per-sensor parameters
+  // Set per-sensor parameters
   for (unsigned i = 0; i < sensor_num_; ++i)
-    {
+  {
     auto data = sensors_data_[i];
     auto depth_image = data->depth_image;
     params.setImageSize(depth_image->width(), depth_image->height(), i);
     params.setIntrinsics(data->K, i);
-    }
+  }
 
-    //params.setVolumePosition(Vec3(0, 200, 1650));
-    //params.setVolumeResolution(Vec3i(204, 512, 204));
-    //params.setVolumeSize(Vec3(800, 2000, 800));
+  //params.setVolumePosition(Vec3(0, 200, 1650));
+  //params.setVolumeResolution(Vec3i(204, 512, 204));
+  //params.setVolumeSize(Vec3(800, 2000, 800));
 
-    // Set volume parameters
-    params.setVolumePosition(Vec3(230, 0, 1000));
-    params.setVolumeResolution(Vec3i(360, 512, 360));
-    params.setVolumeSize(Vec3(1000, 1000, 1000));
+  // Set volume parameters
+  params.setVolumePosition(Vec3(230, 0, 1000));
+  params.setVolumeResolution(Vec3i(360, 512, 360));
+  params.setVolumeSize(Vec3(1000, 1000, 1000));
 
-    // Create reconstruction object
-    m_rec = new Reconstruction(params);
+  // Create reconstruction object
+  m_rec = new Reconstruction(params);
 
-    // Start reconstruction
-    m_reconstruct = true;
+  // Start reconstruction
+  m_reconstruct = true;
 }
 
 
 void MainWindow::stopReconstruction()
 {
-    // Stop reconstruction
-    m_reconstruct = false;
-    if (!m_rec)
-        return;
+  // Stop reconstruction
+  m_reconstruct = false;
+  if (!m_rec)
+    return;
 
-    // Get reconstructed mesh
-    Mesh mesh;
-    bool ok = m_rec->getMesh(&mesh);
+  // Get reconstructed mesh
+  Mesh mesh;
+  bool ok = m_rec->getMesh(&mesh);
 
-    // Delete reconstruction object
-    delete m_rec;
-    m_rec = 0;
-    if (!ok)
-    {
-        std::cout << "Couldn't retrieve mesh" << std::endl;
-        return;
-    }
+  // Delete reconstruction object
+  delete m_rec;
+  m_rec = 0;
+  if (!ok)
+  {
+    std::cout << "Couldn't retrieve mesh" << std::endl;
+    return;
+  }
 
-    std::cout << "Reconstructed mesh (" << mesh.vertexCount() << " vertices, " << mesh.triangleCount() << " triangles)" << std::endl;
-    // Save mesh to file
-    ok = mesh.save("mesh.ply", Mesh::PLY);
-    if (ok)
-        std::cout << "Saved mesh as PLY (" << mesh.vertexCount() << " vertices, " << mesh.triangleCount() << " triangles)" << std::endl;
+  std::cout << "Reconstructed mesh (" << mesh.vertexCount() << " vertices, " << mesh.triangleCount() << " triangles)" << std::endl;
+  // Save mesh to file
+  ok = mesh.save("mesh.ply", Mesh::PLY);
+  if (ok)
+    std::cout << "Saved mesh as PLY (" << mesh.vertexCount() << " vertices, " << mesh.triangleCount() << " triangles)" << std::endl;
 
 #ifndef _DEBUG
-    // Show mesh in viewer
-    MeshViewer viewer;
-    viewer.showMesh(&mesh);
+  // Show mesh in viewer
+  MeshViewer viewer;
+  viewer.showMesh(&mesh);
 #endif
 }
 
