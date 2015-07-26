@@ -36,3 +36,8 @@ bool SensorData::HasCalibrationImages()
 {
   return calib_color_image && calib_depth_image;
 }
+
+void SensorData::ResetT()
+{
+  T = IdentityMat4();
+}
