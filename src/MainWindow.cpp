@@ -174,11 +174,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::calibrate()
 {
-    // Show message box to let user choose correct frame before starting calibration
-    m_calibrate = false;
+  // Show message box to let user choose correct frame before starting calibration
+  m_calibrate = false;
 
-    m_calibMessageBox->setText("Press OK to capture calibration frames.");
-    m_calibMessageBox->show();
+  m_calibMessageBox->setText("Press OK to capture calibration frames.");
+  m_calibMessageBox->show();
 }
 
 
@@ -190,7 +190,7 @@ void MainWindow::performCalibration()
 
   // Create calibration object for two sensors
   Calibration calib;
-  calib.init(1);
+  calib.init(sensor_num_);
 
   // Single-sided calibration
   calib.setMarker(100, 190);
@@ -231,8 +231,10 @@ void MainWindow::performCalibration()
     m_calibrate = false;
 
     // Pass captured images to calibration
-    calib.setImage(0, *m_calibImgDepth[0], *m_calibImgColor[0], m_K[0], m_K[0]);
-    calib.setImage(1, *m_calibImgDepth[1], *m_calibImgColor[1], m_K[1], m_K[1]);
+    for (unsigned i = 0; i < sensor_num_; ++i) {
+      auto data = sensors_data_[i];
+      calib.setImage(i, *(data->calib_depth_image), *(data->calib_color_image), data->K, data->K);
+    }
 
     // Run calibration
     ok = calib.calibrate();
@@ -244,8 +246,10 @@ void MainWindow::performCalibration()
   if (ok)
   {
     // Retrieve sensor transformation if calibration succeeded
-    calib.getTransformation(0, m_sensorT[0]);
-    calib.getTransformation(1, m_sensorT[1]);
+    for (unsigned i = 0; i < sensor_num_; ++i) {
+      auto data = sensors_data_[i];
+      calib.getTransformation(i, data->T);
+    }
     QMessageBox::information(this, "Calibration", "Calibration succeeded");
   }
   else
@@ -425,9 +429,12 @@ void MainWindow::processFrames()
     else if (m_calibrate)
     {
       // Save calibration frame
-      memcpy(m_calibImgColor[i]->data(), m_colorImg[i]->data(), w * h * 3);
-      memcpy(m_calibImgDepth[i]->data(), m_depthImg[i]->data(), w * h * 2);
-      m_calibImgValid[i] = true;
+      for (unsigned i = 0; i < sensor_num_; ++i) {
+        auto data = sensors_data_[i];
+        memcpy(data->calib_color_image->data(), data->color_image->data(), w * h * 3);
+        memcpy(data->calib_depth_image->data(), data->depth_image->data(), w * h * 2);
+        m_calibImgValid[i] = true;
+      }
     }
 
     // Display captured images in GUI
