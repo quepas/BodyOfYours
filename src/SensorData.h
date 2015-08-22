@@ -9,6 +9,7 @@ struct SensorData
 
   bool HasRegularImages();
   bool HasCalibrationImages();
+  bool IsCalibrated();
 
   void ResetT();
 

@@ -41,3 +41,8 @@ void SensorData::ResetT()
 {
   T = IdentityMat4();
 }
+
+bool SensorData::IsCalibrated()
+{
+  return calib_image_valid;
+}

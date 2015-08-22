@@ -30,7 +30,7 @@ MainWindow::MainWindow() :
   m_reconstruct(false),
   m_calibrate(false),
   m_rec(0),
-  sensor_num_(0)
+  num_sensor_(0)
 {
   // Create main window GUI
   m_imgLabel[0] = new QLabel;
@@ -76,10 +76,10 @@ MainWindow::MainWindow() :
   m_sensor[1] = new Sensor();
   m_sensor[2] = new Sensor();
 
-  sensor_num_ = m_sensor[0]->deviceCount();
-  QMessageBox::information(this, "Sensors connected", QString("Number of sensors connected: ") + QString::number(sensor_num_));
+  num_sensor_ = m_sensor[0]->deviceCount();
+  QMessageBox::information(this, "Sensors connected", QString("Number of sensors connected: ") + QString::number(num_sensor_));
 
-  for (unsigned i = 0; i < sensor_num_; ++i) {
+  for (unsigned i = 0; i < num_sensor_; ++i) {
     ok = m_sensor[i]->open(i);
     if (!ok)
     {
@@ -147,7 +147,7 @@ MainWindow::MainWindow() :
 MainWindow::~MainWindow()
 {
   // Close and delete sensors
-  for (unsigned i = 0; i < sensor_num_; ++i) {
+  for (unsigned i = 0; i < num_sensor_; ++i) {
     m_sensor[i]->close();
     delete m_sensor[i];
   }
@@ -184,13 +184,13 @@ void MainWindow::calibrate()
 
 void MainWindow::performCalibration()
 {
-  for (unsigned i = 0; i < sensor_num_; ++i) {
+  for (unsigned i = 0; i < num_sensor_; ++i) {
     sensors_data_[i]->ResetT();
   }
 
   // Create calibration object for two sensors
   Calibration calib;
-  calib.init(sensor_num_);
+  calib.init(num_sensor_);
 
   // Single-sided calibration
   calib.setMarker(100, 190);
@@ -205,7 +205,7 @@ void MainWindow::performCalibration()
   //// Transformation from first marker coordinate system to calibration coordinate system (move 6 mm in z-direction to the center of the board). Matrix is column-major-order.
   //double T1_[] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -6, 1 };
   //Mat4 T1(T1_);
-  //calib.setMarker(400, 190, &T1);
+  //calib.setMarker(400, 190, &T1)
 
   //// Transformation from second marker coordinate system to calibration coordinate system (rotate 180° around x-axis and move 6 mm in z-direction to the center of the board). Matrix is column-major-order.
   //double T2_[] = { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, -6, 1 };
@@ -218,20 +218,28 @@ void MainWindow::performCalibration()
   for (int i = 0; i < 10; ++i)
   {
     // Reset valid flag for capturing calibration images
-    m_calibImgValid[0] = m_calibImgValid[1] = false;
-
+    for (unsigned i = 0; i < num_sensor_; ++i) {
+      auto data = sensors_data_[i];
+      data->calib_image_valid = false;
+    }
     // Setting m_calibrate to true, instructs the capture loop to capture calibration images
     m_calibrate = true;
 
     // Wait until calibration images for both sensors have been captured
-    while (!m_calibImgValid[0] && !m_calibImgValid[1])
+    bool waiting = true;
+    while (waiting) {
+      for (unsigned i = 0; i < num_sensor_; ++i) {
+        auto data = sensors_data_[i];
+        waiting = waiting && !data->IsCalibrated();
+      }
       QCoreApplication::processEvents();
+    }
 
     // Stop calibration frame capturing
     m_calibrate = false;
 
     // Pass captured images to calibration
-    for (unsigned i = 0; i < sensor_num_; ++i) {
+    for (unsigned i = 0; i < num_sensor_; ++i) {
       auto data = sensors_data_[i];
       calib.setImage(i, *(data->calib_depth_image), *(data->calib_color_image), data->K, data->K);
     }
@@ -246,7 +254,7 @@ void MainWindow::performCalibration()
   if (ok)
   {
     // Retrieve sensor transformation if calibration succeeded
-    for (unsigned i = 0; i < sensor_num_; ++i) {
+    for (unsigned i = 0; i < num_sensor_; ++i) {
       auto data = sensors_data_[i];
       calib.getTransformation(i, data->T);
     }
@@ -321,10 +329,10 @@ void MainWindow::startReconstruction()
   m_rec = 0;
 
   // Set reconstruction parameters for two sensors
-  ReconstructionParams params(sensor_num_);
+  ReconstructionParams params(num_sensor_);
 
   // Set per-sensor parameters
-  for (unsigned i = 0; i < sensor_num_; ++i)
+  for (unsigned i = 0; i < num_sensor_; ++i)
   {
     auto data = sensors_data_[i];
     auto depth_image = data->depth_image;
@@ -392,12 +400,12 @@ void MainWindow::processFrames()
 
   // Grab images from sensor
   bool ok[3];
-  for (unsigned i = 0; i < sensor_num_; ++i) {
+  for (unsigned i = 0; i < num_sensor_; ++i) {
     ok[i] = m_sensor[i]->readImage(*(sensors_data_[i]->depth_image), *(sensors_data_[i]->color_image), 40);
   }
 
   // Process images
-  for (unsigned i = 0; i < sensor_num_; ++i)
+  for (unsigned i = 0; i < num_sensor_; ++i)
   {
     if (!ok[i]) continue;
     sensor_data_ = sensors_data_[i];
@@ -429,11 +437,11 @@ void MainWindow::processFrames()
     else if (m_calibrate)
     {
       // Save calibration frame
-      for (unsigned i = 0; i < sensor_num_; ++i) {
+      for (unsigned i = 0; i < num_sensor_; ++i) {
         auto data = sensors_data_[i];
         memcpy(data->calib_color_image->data(), data->color_image->data(), w * h * 3);
         memcpy(data->calib_depth_image->data(), data->depth_image->data(), w * h * 2);
-        m_calibImgValid[i] = true;
+        data->calib_image_valid = true;
       }
     }
 

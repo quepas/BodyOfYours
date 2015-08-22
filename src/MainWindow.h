@@ -58,7 +58,7 @@ private:
 
   SensorData* sensor_data_;
   std::vector<SensorData*> sensors_data_;
-  unsigned sensor_num_;
+  unsigned num_sensor_;
 };
 
 #endif
