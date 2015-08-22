@@ -55,12 +55,6 @@ MainWindow::MainWindow() :
   showMaximized();
 
   // Initialize pointers to zero
-  m_colorImg[0] = m_colorImg[1] = m_colorImg[2] = nullptr;
-  m_depthImg[0] = m_depthImg[1] = m_depthImg[2] = nullptr;
-  m_sceneImg[0] = m_sceneImg[1] = m_sceneImg[2] = nullptr;
-  m_calibImgColor[0] = m_calibImgColor[1] = m_calibImgColor[2] = nullptr;
-  m_calibImgDepth[0] = m_calibImgDepth[1] = m_calibImgDepth[2] = nullptr;
-  m_calibImgValid[0] = m_calibImgValid[1] = m_calibImgValid[2] = false;
   m_sensor[0] = m_sensor[1] = m_sensor[2] = nullptr;
 
   // Output RecFusion SDK version
@@ -152,22 +146,9 @@ MainWindow::~MainWindow()
     delete m_sensor[i];
   }
 
-    // Delete all allocated data
-    delete m_colorImg[0];
-    delete m_colorImg[1];
-    delete m_depthImg[0];
-    delete m_depthImg[1];
-    delete m_sceneImg[0];
-    delete m_sceneImg[1];
-    delete m_calibImgColor[0];
-    delete m_calibImgColor[1];
-    delete m_calibImgDepth[0];
-    delete m_calibImgDepth[1];
-
-    delete m_timer;
-
-    delete m_rec;
-
+  // Delete all allocated data
+  delete m_timer;
+  delete m_rec;
   delete sensor_data_;
 }
 
