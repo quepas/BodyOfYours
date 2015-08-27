@@ -1,5 +1,7 @@
 #include "RecFusionUtils.h"
 
+using std::string;
+using std::to_string;
 using RecFusion::Mat4;
 
 Mat4 IdentityMat4() {
@@ -10,4 +12,19 @@ Mat4 IdentityMat4() {
     }
   }
   return mat;
+}
+
+string Mat4ToString(Mat4 matrix)
+{
+  string str;
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      str += to_string(matrix(i, j));
+      if (i < 4) {
+        str += " ,";
+      }
+    }
+    str += "\n";
+  }
+  return str;
 }

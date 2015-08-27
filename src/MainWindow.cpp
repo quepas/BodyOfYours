@@ -165,13 +165,14 @@ void MainWindow::calibrate()
 
 void MainWindow::performCalibration()
 {
-  for (unsigned i = 0; i < num_sensor_; ++i) {
+  unsigned num_sensor = sensors_data_.size();
+  for (unsigned i = 0; i < num_sensor; ++i) {
     sensors_data_[i]->ResetT();
   }
 
   // Create calibration object for two sensors
   Calibration calib;
-  calib.init(num_sensor_);
+  calib.init(num_sensor);
 
   // Single-sided calibration
   calib.setMarker(100, 190);
@@ -199,7 +200,7 @@ void MainWindow::performCalibration()
   for (int i = 0; i < 10; ++i)
   {
     // Reset valid flag for capturing calibration images
-    for (unsigned i = 0; i < num_sensor_; ++i) {
+    for (unsigned i = 0; i < num_sensor; ++i) {
       auto data = sensors_data_[i];
       data->calib_image_valid = false;
     }
@@ -209,7 +210,7 @@ void MainWindow::performCalibration()
     // Wait until calibration images for both sensors have been captured
     bool waiting = true;
     while (waiting) {
-      for (unsigned i = 0; i < num_sensor_; ++i) {
+      for (unsigned i = 0; i < num_sensor; ++i) {
         auto data = sensors_data_[i];
         waiting = waiting && !data->IsCalibrated();
       }
@@ -220,7 +221,7 @@ void MainWindow::performCalibration()
     m_calibrate = false;
 
     // Pass captured images to calibration
-    for (unsigned i = 0; i < num_sensor_; ++i) {
+    for (unsigned i = 0; i < num_sensor; ++i) {
       auto data = sensors_data_[i];
       calib.setImage(i, *(data->calib_depth_image), *(data->calib_color_image), data->K, data->K);
     }
@@ -238,6 +239,7 @@ void MainWindow::performCalibration()
     for (unsigned i = 0; i < num_sensor_; ++i) {
       auto data = sensors_data_[i];
       calib.getTransformation(i, data->T);
+      std::cout << Mat4ToString(data->T) << std::endl;
     }
     QMessageBox::information(this, "Calibration", "Calibration succeeded");
   }
