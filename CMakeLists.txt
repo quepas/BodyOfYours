@@ -18,12 +18,11 @@ include_directories(${RECFUSION_INC})
 link_directories(${RECFUSION_LIB})
 
 find_package(Qt5Widgets)
-find_package(Qt53DCore)
-find_package(Qt53DRenderer)
+find_package(Qt5Gui)
 
 file (GLOB RAW_sources src/*.cpp)
 file (GLOB RAW_headers src/*.h)
 #file (GLOB RAW_gui gui/*.ui)
 
 add_executable(BodyOfYoursApp ${RAW_sources} ${RAW_headers})
-target_link_libraries(BodyOfYoursApp Qt5::Widgets Qt5::3DCore Qt5::3DRenderer RecFusion)
+target_link_libraries(BodyOfYoursApp Qt5::Widgets Qt5::Gui RecFusion)
