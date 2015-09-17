@@ -85,8 +85,8 @@ MainWindow::MainWindow() :
       // Get sensor properties
       sensor_data_ = new SensorData(*m_sensor[i]);
       sensors_data_.push_back(sensor_data_);
-      int w = m_sensor[i]->width();
-      int h = m_sensor[i]->height();
+      int w = m_sensor[i]->depthWidth();
+      int h = m_sensor[i]->depthHeight();
       m_imgLabel[i]->resize(w, h);
     }
   }
@@ -138,6 +138,12 @@ MainWindow::MainWindow() :
   addAction(a);
   toolbar->addAction(a);
 
+  // Open 3D model
+  a = new QAction("Open 3D Model", this);
+  connect(a, SIGNAL(triggered()), this, SLOT(open3DModel()));
+  addAction(a);
+  toolbar->addAction(a);
+
   m_timer = new QTimer(this);
   connect(m_timer,SIGNAL(timeout()),this,SLOT(processFrames()));
   m_timer->start(50);
@@ -170,7 +176,7 @@ void MainWindow::calibrate()
 
 void MainWindow::performCalibration()
 {
-  unsigned num_sensor = sensors_data_.size();
+  unsigned num_sensor = static_cast<size_t>(sensors_data_.size());
   for (unsigned i = 0; i < num_sensor; ++i) {
     sensors_data_[i]->ResetT();
   }
@@ -180,7 +186,8 @@ void MainWindow::performCalibration()
   calib.init(num_sensor);
 
   // Single-sided calibration
-  calib.setMarker(100, 190);
+  //calib.setMarker(100, 190);
+  calib.setMarker(100, 370);
 
   //// Two-sided calibration with a marker board of thickness 12 mm. The calibration coordinate system origin is in the middle of the board.
   //// Transformation from the first marker coordinate system to the calibration coordinate system.
@@ -324,7 +331,8 @@ void MainWindow::startReconstruction()
   {
     auto data = sensors_data_[i];
     auto depth_image = data->depth_image;
-    params.setImageSize(depth_image->width(), depth_image->height(), i);
+    auto color_image = data->color_image;
+    params.setImageSize(color_image->width(), color_image->height(), depth_image->width(), depth_image->height(), i);
     params.setIntrinsics(data->K, i);
   }
 
@@ -333,9 +341,9 @@ void MainWindow::startReconstruction()
   //params.setVolumeSize(Vec3(800, 2000, 800));
 
   // Set volume parameters
-  params.setVolumePosition(Vec3(230, 0, 1000));
-  params.setVolumeResolution(Vec3i(360, 512, 360));
-  params.setVolumeSize(Vec3(1000, 1000, 1000));
+  params.setVolumePosition(Vec3(0, 0, 1000));
+  params.setVolumeResolution(Vec3i(256, 256, 256));
+  params.setVolumeSize(Vec3(1000, 1000, 1000)); // x3 100
 
   // Create reconstruction object
   m_rec = new Reconstruction(params);
@@ -440,4 +448,12 @@ void MainWindow::processFrames()
 
   // Update GUI
   update();
+}
+
+void MainWindow::open3DModel()
+{
+  QString fn = QFileDialog::getOpenFileName(this, tr("Open 3D Model File..."), 
+                                            QString(), tr("3D Model-Files (*.ply);;All Files (*)"));
+  std::cout << fn.toStdString() << std::endl;
+  RecFusion::Mesh mesh;
 }

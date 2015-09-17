@@ -33,6 +33,8 @@ public slots:
   void startReconstruction();
   void stopReconstruction();
 
+  void open3DModel();
+
 private:
   QLabel* m_imgLabel[3];
   QLabel* m_recLabel[3];
@@ -50,6 +52,8 @@ private:
   SensorData* sensor_data_;
   std::vector<SensorData*> sensors_data_;
   unsigned num_sensor_;
+
+  QWindow* model_view_;
 };
 
 #endif

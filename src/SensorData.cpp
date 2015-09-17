@@ -7,8 +7,8 @@ using RecFusion::Sensor;
 
 SensorData::SensorData(const Sensor& sensor)
 {
-  int w = sensor.width();
-  int h = sensor.height();
+  int w = sensor.depthWidth();
+  int h = sensor.depthHeight();
   K = sensor.depthIntrinsics();
   T = IdentityMat4();
   color_image = new ColorImage(w, h);
