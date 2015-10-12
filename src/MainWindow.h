@@ -6,6 +6,7 @@
 #include <QtWidgets/QMainWindow>
 #include <vector>
 
+#include "Viewer.h"
 #include "SensorData.h"
 
 class QLabel;
@@ -40,6 +41,7 @@ private:
   QLabel* m_recLabel[3];
   QMessageBox* m_calibMessageBox;
   QTimer* m_timer;
+  Viewer* viewer_;
 
   RecFusion::Sensor* m_sensor[3];
   RecFusion::Mat4 m_sensorT[3];

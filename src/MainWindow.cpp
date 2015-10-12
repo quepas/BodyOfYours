@@ -30,7 +30,8 @@ MainWindow::MainWindow() :
   m_reconstruct(false),
   m_calibrate(false),
   m_rec(0),
-  num_sensor_(0)
+  num_sensor_(0),
+  viewer_(new Viewer())
 {
   // Create main window GUI
   m_imgLabel[0] = new QLabel;
@@ -45,7 +46,9 @@ MainWindow::MainWindow() :
   l->addWidget(m_imgLabel[2], 0, 2);
   l->addWidget(m_recLabel[0], 1, 0);
   l->addWidget(m_recLabel[1], 1, 1);
-  l->addWidget(m_recLabel[2], 1, 2);
+  //l->addWidget(m_recLabel[2], 1, 2);
+  l->addWidget(viewer_, 1, 2);
+  viewer_->show();
 
   QWidget* wt = new QWidget;
   wt->setLayout(l);
