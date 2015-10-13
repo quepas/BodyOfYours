@@ -364,8 +364,9 @@ void MainWindow::stopReconstruction()
     return;
 
   // Get reconstructed mesh
-  Mesh mesh;
-  bool ok = m_rec->getMesh(&mesh);
+  Mesh* mesh = new Mesh;
+  bool ok = m_rec->getMesh(mesh);
+  viewer_->addMesh(mesh);
 
   // Delete reconstruction object
   delete m_rec;
@@ -375,17 +376,17 @@ void MainWindow::stopReconstruction()
     std::cout << "Couldn't retrieve mesh" << std::endl;
     return;
   }
-
+  /*
   std::cout << "Reconstructed mesh (" << mesh.vertexCount() << " vertices, " << mesh.triangleCount() << " triangles)" << std::endl;
   // Save mesh to file
   ok = mesh.save("mesh.ply", Mesh::PLY);
   if (ok)
     std::cout << "Saved mesh as PLY (" << mesh.vertexCount() << " vertices, " << mesh.triangleCount() << " triangles)" << std::endl;
-
+    */
 #ifndef _DEBUG
   // Show mesh in viewer
   MeshViewer viewer;
-  viewer.showMesh(&mesh);
+  //viewer.showMesh(&mesh);
 #endif
 }
 
