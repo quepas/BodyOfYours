@@ -37,7 +37,9 @@
 *.suo
 BodyOfYoursApp.dir/
 Debug/
+Release/
 Win32/
+x64/
 ipch/
 
 # Qt files
