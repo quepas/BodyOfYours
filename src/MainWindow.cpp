@@ -1,3 +1,5 @@
+#define DEBUG
+
 #include "MainWindow.h"
 
 #include <QtWidgets/QAction>
@@ -30,8 +32,11 @@ MainWindow::MainWindow() :
   m_reconstruct(false),
   m_calibrate(false),
   m_rec(0),
-  num_sensor_(0),
+  num_sensor_(0)
+#ifndef DEBUG
+  ,
   viewer_(new Viewer())
+#endif
 {
   // Create main window GUI
   m_imgLabel[0] = new QLabel;
@@ -47,8 +52,10 @@ MainWindow::MainWindow() :
   l->addWidget(m_recLabel[0], 1, 0);
   l->addWidget(m_recLabel[1], 1, 1);
   //l->addWidget(m_recLabel[2], 1, 2);
+#ifndef DEBUG
   l->addWidget(viewer_, 1, 2);
   viewer_->show();
+#endif
 
   QWidget* wt = new QWidget;
   wt->setLayout(l);
@@ -73,6 +80,7 @@ MainWindow::MainWindow() :
   m_sensor[1] = new Sensor();
   m_sensor[2] = new Sensor();
 
+#ifndef DEBUG
   num_sensor_ = m_sensor[0]->deviceCount();
   QMessageBox::information(this, "Sensors connected", QString("Number of sensors connected: ") + QString::number(num_sensor_));
 
@@ -93,6 +101,7 @@ MainWindow::MainWindow() :
       m_imgLabel[i]->resize(w, h);
     }
   }
+#endif
 
   // Create message box for calibration dialog
   m_calibMessageBox = new QMessageBox(this);
@@ -335,7 +344,9 @@ void MainWindow::startReconstruction()
     auto data = sensors_data_[i];
     auto depth_image = data->depth_image;
     auto color_image = data->color_image;
+#ifndef DEBUG
     params.setImageSize(color_image->width(), color_image->height(), depth_image->width(), depth_image->height(), i);
+#endif
     params.setIntrinsics(data->K, i);
   }
 
@@ -418,6 +429,7 @@ void MainWindow::processFrames()
     {
       // Add frame to reconstruction
       bool status;
+#ifndef DEBUG
       bool ret = m_rec->addFrame(
         i,
         *sensor_data_->depth_image,
@@ -426,6 +438,9 @@ void MainWindow::processFrames()
         sensor_data_->scene_image,
         0,
         &sensor_data_->T);
+#else
+      bool ret = false;
+#endif
 
       if (ret && status)
       {
@@ -459,5 +474,5 @@ void MainWindow::open3DModel()
   QString fn = QFileDialog::getOpenFileName(this, tr("Open 3D Model File..."), 
                                             QString(), tr("3D Model-Files (*.ply);;All Files (*)"));
   std::cout << fn.toStdString() << std::endl;
-  RecFusion::Mesh mesh;
+  viewer_->addMeshFromFile(QString::fromStdString(fn.toStdString()));
 }
