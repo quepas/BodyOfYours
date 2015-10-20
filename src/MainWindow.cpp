@@ -30,7 +30,8 @@ MainWindow::MainWindow() :
   m_reconstruct(false),
   m_calibrate(false),
   m_rec(0),
-  num_sensor_(0)
+  num_sensor_(0),
+  sensor_data_(nullptr)
 #ifndef _DEBUG
   ,
   viewer_(new Viewer())
