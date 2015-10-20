@@ -1,5 +1,3 @@
-#define DEBUG
-
 #include "MainWindow.h"
 
 #include <QtWidgets/QAction>
@@ -33,7 +31,7 @@ MainWindow::MainWindow() :
   m_calibrate(false),
   m_rec(0),
   num_sensor_(0)
-#ifndef DEBUG
+#ifndef _DEBUG
   ,
   viewer_(new Viewer())
 #endif
@@ -52,7 +50,7 @@ MainWindow::MainWindow() :
   l->addWidget(m_recLabel[0], 1, 0);
   l->addWidget(m_recLabel[1], 1, 1);
   //l->addWidget(m_recLabel[2], 1, 2);
-#ifndef DEBUG
+#ifndef _DEBUG
   l->addWidget(viewer_, 1, 2);
   viewer_->show();
 #endif
@@ -80,7 +78,7 @@ MainWindow::MainWindow() :
   m_sensor[1] = new Sensor();
   m_sensor[2] = new Sensor();
 
-#ifndef DEBUG
+#ifndef _DEBUG
   num_sensor_ = m_sensor[0]->deviceCount();
   QMessageBox::information(this, "Sensors connected", QString("Number of sensors connected: ") + QString::number(num_sensor_));
 
@@ -344,7 +342,7 @@ void MainWindow::startReconstruction()
     auto data = sensors_data_[i];
     auto depth_image = data->depth_image;
     auto color_image = data->color_image;
-#ifndef DEBUG
+#ifndef _DEBUG
     params.setImageSize(color_image->width(), color_image->height(), depth_image->width(), depth_image->height(), i);
 #endif
     params.setIntrinsics(data->K, i);
@@ -429,7 +427,7 @@ void MainWindow::processFrames()
     {
       // Add frame to reconstruction
       bool status;
-#ifndef DEBUG
+#ifndef _DEBUG
       bool ret = m_rec->addFrame(
         i,
         *sensor_data_->depth_image,
