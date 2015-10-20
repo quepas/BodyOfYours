@@ -427,7 +427,7 @@ void MainWindow::processFrames()
     if (m_reconstruct && m_rec)
     {
       // Add frame to reconstruction
-      bool status;
+      bool status = false;
 #ifndef _DEBUG
       bool ret = m_rec->addFrame(
         i,
