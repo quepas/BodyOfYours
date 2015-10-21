@@ -38,6 +38,7 @@
 BodyOfYoursApp.dir/
 Debug/
 Release/
+RelWithDebInfo/
 Win32/
 x64/
 ipch/
