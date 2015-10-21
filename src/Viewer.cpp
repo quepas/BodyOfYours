@@ -1,4 +1,8 @@
 #include "Viewer.h"
+#include <assimp\postprocess.h> 
+#include <assimp\mesh.h>
+#include <assimp\scene.h>
+#include <QDebug>
 
 using namespace std;
 using RecFusion::Mesh;
@@ -6,22 +10,36 @@ using RecFusion::Mesh;
 // Draws a spiral
 void Viewer::draw()
 {
-  if (meshes_.count() > 0) {
-    Mesh* mesh = meshes_[0];
+  if (data_ != nullptr) {
+    camera()->setZClippingCoefficient(150.0f);
     glBegin(GL_TRIANGLES);
-      for (unsigned i = 0; i < mesh->triangleCount(); ++i) {
-        Mesh::Triangle tri = mesh->triangle(i);
-        Mesh::Coordinate vert = mesh->vertex(tri.i1);
-        glColor3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(vert.x, vert.y, vert.z);
-        vert = mesh->vertex(tri.i2);
-        glVertex3f(vert.x, vert.y, vert.z);
-        vert = mesh->vertex(tri.i3);
-        glVertex3f(vert.x, vert.y, vert.z);
+    for (unsigned i = 0; i < data_->num_faces; ++i) {
+      aiFace face = data_->faces[i];
+      if (face.mNumIndices != 3) {
+        std::cout << "Face " << i << " (" << face.mNumIndices << ")" << std::endl;
       }
+      else {
+        auto v1 = data_->verts[face.mIndices[0]];
+        glColor3f(1.0, 0.0, 0.0);
+        auto n1 = data_->normals[face.mIndices[0]];
+        glNormal3f(n1.x, n1.y, n1.z);
+        glVertex3f(v1.x, v1.y, v1.z);
+        auto v2 = data_->verts[face.mIndices[1]];
+        glColor3f(0.0, 1.0, 0.0);
+        auto n2 = data_->normals[face.mIndices[1]];
+        glNormal3f(n2.x, n2.y, n2.z);
+        glVertex3f(v2.x, v2.y, v2.z);
+        auto v3 = data_->verts[face.mIndices[2]];
+        glColor3f(0.0, 0.0, 1.0);
+        auto n3 = data_->normals[face.mIndices[2]];
+        glNormal3f(n3.x, n3.y, n3.z);
+        glVertex3f(v3.x, v3.y, v3.z);
+      }
+    }
     glEnd();
   }
   else {
+    qDebug() << "Draw #3";
     const float nbSteps = 200.0;
     glBegin(GL_QUAD_STRIP);
     for (int i = 0; i < nbSteps; ++i)
@@ -36,7 +54,6 @@ void Viewer::draw()
       const float nor = 0.5f;
       const float up = sqrt(1.0 - nor*nor);
       glColor3f(1.0 - ratio, 0.2f, ratio);
-      glNormal3f(nor*c, up, nor*s);
       glVertex3f(r1*c, alt, r1*s);
       glVertex3f(r2*c, alt + 0.05f, r2*s);
     }
@@ -70,4 +87,43 @@ bool Viewer::removeMesh(RecFusion::Mesh* mesh)
   else {
     return false;
   }
+}
+
+bool Viewer::addMeshFromFile(QString filename)
+{
+  Assimp::Importer model_importer;
+  const aiScene* scene = (model_importer
+    .ReadFile(
+    filename.toStdString(),
+    aiProcessPreset_TargetRealtime_Fast));
+
+  if (!scene) {
+    return false;
+  }
+  else {
+    std::cout << "Import success! Num of meshes: " << scene->mNumMeshes << std::endl;
+    auto mesh = scene->mMeshes[0];
+    data_ = new ViewerData;
+    data_->num_verts = mesh->mNumVertices;
+    data_->num_faces = mesh->mNumFaces;
+    for (int i = 0; i < data_->num_verts; ++i) {
+      data_->verts.push_back(mesh->mVertices[i]);
+      data_->normals.push_back(mesh->mNormals[i]);
+    }
+    for (int i = 0; i < data_->num_faces; ++i) {
+      data_->faces.push_back(mesh->mFaces[i]);
+    }
+    return true;
+  }
+}
+
+Viewer::Viewer()
+  : data_(nullptr)
+{
+
+}
+
+Viewer::~Viewer()
+{
+
 }

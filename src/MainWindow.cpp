@@ -50,10 +50,11 @@ MainWindow::MainWindow() :
   l->addWidget(m_imgLabel[2], 0, 2);
   l->addWidget(m_recLabel[0], 1, 0);
   l->addWidget(m_recLabel[1], 1, 1);
-  //l->addWidget(m_recLabel[2], 1, 2);
 #ifndef _DEBUG
   l->addWidget(viewer_, 1, 2);
   viewer_->show();
+#else
+  l->addWidget(m_recLabel[2], 1, 2);
 #endif
 
   QWidget* wt = new QWidget;
