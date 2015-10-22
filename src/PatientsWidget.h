@@ -12,5 +12,7 @@ public:
 
 public slots:
   void showAddPatientDialog();
+  void removePatient();
+
   void onSavePatient(QString name);
 };

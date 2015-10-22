@@ -21,6 +21,16 @@ void PatientsWidget::showAddPatientDialog()
   dialog->show();
 }
 
+void PatientsWidget::removePatient()
+{
+  if (currentItem() != nullptr) {
+    qDebug() << "PatientsWidget => \n\tcurrent patient: " << currentItem()->text(0);
+    qDebug() << "\tcurrent index row: " << currentIndex().row();
+    qDebug() << "\tcurrent index column: " << currentIndex().column();
+    takeTopLevelItem(currentIndex().row());
+  }
+}
+
 void PatientsWidget::onSavePatient(QString name)
 {
   addTopLevelItem(new PatientItem(name));

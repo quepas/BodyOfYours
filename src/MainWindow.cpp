@@ -119,10 +119,17 @@ MainWindow::MainWindow() :
 
   QToolBar* patient_toolbar = new QToolBar(this);
   addToolBar(patient_toolbar);
+
+  // Add patient
   QAction* add_patient = new QAction("Dodaj pacjenta", this);
   addAction(add_patient);
   connect(add_patient, SIGNAL(triggered()), patient_widget_, SLOT(showAddPatientDialog()));
   patient_toolbar->addAction(add_patient);
+  // Remove patient
+  QAction* remove_patient = new QAction("Usun pacjenta", this);
+  addAction(remove_patient);
+  connect(remove_patient, SIGNAL(triggered()), patient_widget_, SLOT(removePatient()));
+  patient_toolbar->addAction(remove_patient);
 
   QToolBar* toolbar = new QToolBar(this);
   addToolBar(toolbar);
