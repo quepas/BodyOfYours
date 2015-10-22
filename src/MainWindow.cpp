@@ -188,7 +188,7 @@ void MainWindow::calibrate()
 
 void MainWindow::performCalibration()
 {
-  unsigned num_sensor = static_cast<size_t>(sensors_data_.size());
+  unsigned num_sensor = static_cast<int>(sensors_data_.size());
   for (unsigned i = 0; i < num_sensor; ++i) {
     sensors_data_[i]->ResetT();
   }

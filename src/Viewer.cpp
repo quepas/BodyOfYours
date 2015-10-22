@@ -7,30 +7,27 @@
 using namespace std;
 using RecFusion::Mesh;
 
-// Draws a spiral
 void Viewer::draw()
 {
   if (data_ != nullptr) {
     camera()->setZClippingCoefficient(150.0f);
     glBegin(GL_TRIANGLES);
-    for (unsigned i = 0; i < data_->num_faces; ++i) {
+    for (int i = 0; i < data_->num_faces; ++i) {
       aiFace face = data_->faces[i];
       if (face.mNumIndices != 3) {
         std::cout << "Face " << i << " (" << face.mNumIndices << ")" << std::endl;
       }
       else {
         auto v1 = data_->verts[face.mIndices[0]];
-        glColor3f(1.0, 0.0, 0.0);
+        glColor3f(0.7f, 0.4f, 0.1f);
         auto n1 = data_->normals[face.mIndices[0]];
         glNormal3f(n1.x, n1.y, n1.z);
         glVertex3f(v1.x, v1.y, v1.z);
         auto v2 = data_->verts[face.mIndices[1]];
-        glColor3f(0.0, 1.0, 0.0);
         auto n2 = data_->normals[face.mIndices[1]];
         glNormal3f(n2.x, n2.y, n2.z);
         glVertex3f(v2.x, v2.y, v2.z);
         auto v3 = data_->verts[face.mIndices[2]];
-        glColor3f(0.0, 0.0, 1.0);
         auto n3 = data_->normals[face.mIndices[2]];
         glNormal3f(n3.x, n3.y, n3.z);
         glVertex3f(v3.x, v3.y, v3.z);
@@ -39,7 +36,7 @@ void Viewer::draw()
     glEnd();
   }
   else {
-    qDebug() << "Draw #3";
+    // Draws a spiral
     const float nbSteps = 200.0;
     glBegin(GL_QUAD_STRIP);
     for (int i = 0; i < nbSteps; ++i)
@@ -98,10 +95,11 @@ bool Viewer::addMeshFromFile(QString filename)
     aiProcessPreset_TargetRealtime_Fast));
 
   if (!scene) {
+    qDebug() << "Import failed. Unable to load " << filename;
     return false;
   }
   else {
-    std::cout << "Import success! Num of meshes: " << scene->mNumMeshes << std::endl;
+    qDebug() << "Import success! Loaded " << filename;
     auto mesh = scene->mMeshes[0];
     data_ = new ViewerData;
     data_->num_verts = mesh->mNumVertices;
