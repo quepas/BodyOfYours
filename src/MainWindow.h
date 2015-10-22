@@ -8,6 +8,7 @@
 
 #include "Viewer.h"
 #include "SensorData.h"
+#include "PatientsWidget.h"
 
 class QLabel;
 class QMessageBox;
@@ -56,6 +57,7 @@ private:
   unsigned num_sensor_;
 
   QWindow* model_view_;
+  PatientsWidget* patient_widget_;
 };
 
 #endif

@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 
+#include <QDebug>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFileDialog>
@@ -31,7 +32,8 @@ MainWindow::MainWindow() :
   m_calibrate(false),
   m_rec(0),
   num_sensor_(0),
-  sensor_data_(nullptr)
+  sensor_data_(nullptr),
+  patient_widget_(new PatientsWidget)
 #ifndef _DEBUG
   ,
   viewer_(new Viewer())
@@ -44,22 +46,23 @@ MainWindow::MainWindow() :
   m_recLabel[0] = new QLabel;
   m_recLabel[1] = new QLabel;
   m_recLabel[2] = new QLabel;
-  QGridLayout* l = new QGridLayout;
-  l->addWidget(m_imgLabel[0], 0, 0);
-  l->addWidget(m_imgLabel[1], 0, 1);
-  l->addWidget(m_imgLabel[2], 0, 2);
-  l->addWidget(m_recLabel[0], 1, 0);
-  l->addWidget(m_recLabel[1], 1, 1);
+  QGridLayout* main_layout = new QGridLayout;
+  main_layout->addWidget(patient_widget_, 0, 0, 2, 1);
+  main_layout->addWidget(m_imgLabel[0], 0, 1);
+  main_layout->addWidget(m_imgLabel[1], 0, 2);
+  main_layout->addWidget(m_imgLabel[2], 0, 3);
+  main_layout->addWidget(m_recLabel[0], 1, 1);
+  main_layout->addWidget(m_recLabel[1], 1, 2);
 #ifndef _DEBUG
-  l->addWidget(viewer_, 1, 2);
+  main_layout->addWidget(viewer_, 1, 3);
   viewer_->show();
 #else
-  l->addWidget(m_recLabel[2], 1, 2);
+  main_layout->addWidget(m_recLabel[2], 1, 2);
 #endif
 
-  QWidget* wt = new QWidget;
-  wt->setLayout(l);
-  setCentralWidget(wt);
+  QWidget* central_widget = new QWidget;
+  central_widget->setLayout(main_layout);
+  setCentralWidget(central_widget);
 
   resize(1366, 768);
   showMaximized();
@@ -68,12 +71,12 @@ MainWindow::MainWindow() :
   m_sensor[0] = m_sensor[1] = m_sensor[2] = nullptr;
 
   // Output RecFusion SDK version
-  std::cout << "Using RecFusionSDK " << RecFusionSDK::majorVersion() << "." << RecFusionSDK::minorVersion() << std::endl;
+  qDebug() << "Using RecFusionSDK " << RecFusionSDK::majorVersion() << "." << RecFusionSDK::minorVersion();
 
   // Load license file
   bool ok = RecFusionSDK::setLicenseFile("License.dat");
   if (!ok)
-    std::cout << "Invalid RecFusion license. Export will be disabled." << std::endl;
+    qDebug() << "Invalid RecFusion license. Export will be disabled.";
 
   // Instantiate sensor objects
   m_sensor[0] = new Sensor();
@@ -82,7 +85,7 @@ MainWindow::MainWindow() :
 
 #ifndef _DEBUG
   num_sensor_ = m_sensor[0]->deviceCount();
-  QMessageBox::information(this, "Sensors connected", QString("Number of sensors connected: ") + QString::number(num_sensor_));
+  qDebug() << QString("Number of sensors connected: ") + QString::number(num_sensor_);
 
   for (unsigned i = 0; i < num_sensor_; ++i) {
     ok = m_sensor[i]->open(i);
