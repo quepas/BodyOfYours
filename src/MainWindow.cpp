@@ -10,6 +10,7 @@
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolBar>
+#include <QtWidgets/QMenu>
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QElapsedTimer>
@@ -115,6 +116,13 @@ MainWindow::MainWindow() :
   connect(m_calibMessageBox,SIGNAL(accepted()),this,SLOT(performCalibration()));
   connect(m_calibMessageBox, SIGNAL(finished(int)), this, SLOT(performCalibration()));
   connect(m_calibMessageBox, SIGNAL(rejected()), this, SLOT(performCalibration()));
+
+  QToolBar* patient_toolbar = new QToolBar(this);
+  addToolBar(patient_toolbar);
+  QAction* add_patient = new QAction("Dodaj pacjenta", this);
+  addAction(add_patient);
+  connect(add_patient, SIGNAL(triggered()), patient_widget_, SLOT(addPatient()));
+  patient_toolbar->addAction(add_patient);
 
   QToolBar* toolbar = new QToolBar(this);
   addToolBar(toolbar);
