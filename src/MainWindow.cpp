@@ -121,7 +121,7 @@ MainWindow::MainWindow() :
   addToolBar(patient_toolbar);
   QAction* add_patient = new QAction("Dodaj pacjenta", this);
   addAction(add_patient);
-  connect(add_patient, SIGNAL(triggered()), patient_widget_, SLOT(addPatient()));
+  connect(add_patient, SIGNAL(triggered()), patient_widget_, SLOT(showAddPatientDialog()));
   patient_toolbar->addAction(add_patient);
 
   QToolBar* toolbar = new QToolBar(this);

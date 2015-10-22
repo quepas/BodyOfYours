@@ -1,5 +1,6 @@
 #include "PatientsWidget.h"
 #include "PatientItem.h"
+#include "PatientDialog.h"
 
 #include <QDebug>
 
@@ -13,9 +14,14 @@ PatientsWidget::~PatientsWidget()
 
 }
 
-void PatientsWidget::addPatient()
+void PatientsWidget::showAddPatientDialog()
 {
-  qDebug() << "PatientsWidget::addPatient(QString)";
-  // display patient dialog
-  addTopLevelItem(new PatientItem("Pacjent A"));
+  auto dialog = new PatientDialog(this);
+  connect(dialog, SIGNAL(savePatient(QString)), this, SLOT(onSavePatient(QString)));
+  dialog->show();
+}
+
+void PatientsWidget::onSavePatient(QString name)
+{
+  addTopLevelItem(new PatientItem(name));
 }

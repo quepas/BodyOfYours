@@ -11,5 +11,6 @@ public:
   ~PatientsWidget();
 
 public slots:
-  void addPatient();
+  void showAddPatientDialog();
+  void onSavePatient(QString name);
 };
