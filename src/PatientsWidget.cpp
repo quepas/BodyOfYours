@@ -27,7 +27,8 @@ void PatientsWidget::removePatient()
     qDebug() << "PatientsWidget => \n\tcurrent patient: " << currentItem()->text(0);
     qDebug() << "\tcurrent index row: " << currentIndex().row();
     qDebug() << "\tcurrent index column: " << currentIndex().column();
-    takeTopLevelItem(currentIndex().row());
+    auto item = takeTopLevelItem(currentIndex().row());
+    delete item;
   }
 }
 
