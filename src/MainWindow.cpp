@@ -130,6 +130,11 @@ MainWindow::MainWindow() :
   addAction(remove_patient);
   connect(remove_patient, SIGNAL(triggered()), patient_widget_, SLOT(removePatient()));
   patient_toolbar->addAction(remove_patient);
+  // Add examintation
+  QAction* add_examination = new QAction("Dodaj badanie", this);
+  addAction(add_examination);
+  connect(add_examination, SIGNAL(triggered()), patient_widget_, SLOT(showAddExaminationDialog()));
+  patient_toolbar->addAction(add_examination);
 
   QToolBar* toolbar = new QToolBar(this);
   addToolBar(toolbar);
