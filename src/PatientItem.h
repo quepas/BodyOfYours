@@ -12,7 +12,8 @@ public:
   ~PatientItem();
 
   QString name() { return name_; }
-  void insertExaminations(const QList<ExaminationItem*>& examinations);
+  const QList<ExaminationItem*>& examinations() { return examinations_; }
+  void insertExaminations(const QList<ExaminationItem*>& examinations) { examinations_ = examinations; }
 
 private:
   QList<ExaminationItem*> examinations_;
