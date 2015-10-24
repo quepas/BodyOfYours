@@ -9,4 +9,8 @@ class ExaminationItem : public QTreeWidgetItem
 public:
   ExaminationItem(QString name);
   ~ExaminationItem();
+
+  QString name() { return name_; }
+private:
+  QString name_;
 };
