@@ -61,6 +61,21 @@ void PatientsWidget::showIndex()
   }
   qDebug() << "Current item:";
   qDebug() << "\ttext: " << currentItem()->text(0);
-  qDebug() << "\trow: " << currentIndex().row();
-  qDebug() << "\tcolumn: " << currentIndex().column();
+  if (currentItem()->type() == PATIENT_ITEM) {
+    qDebug() << "\tpatient: " << currentIndex().row();
+  }
+  else if (currentItem()->type() == EXAMINATION_ITEM) {
+    qDebug() << "\tpatient: " << indexOfTopLevelItem(currentItem()->parent());
+    qDebug() << "\texamination: " << currentIndex().row();
+  }
+}
+
+void PatientsWidget::buildTree(const QList<PatientItem*>& patients)
+{
+  for (auto& patient : patients) {
+    addTopLevelItem(patient);
+    for (auto& examination : patient->examinations()) {
+      patient->addChild(examination);
+    }
+  }
 }
