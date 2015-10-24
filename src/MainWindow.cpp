@@ -136,6 +136,12 @@ MainWindow::MainWindow() :
   connect(add_examination, SIGNAL(triggered()), patient_widget_, SLOT(showAddExaminationDialog()));
   patient_toolbar->addAction(add_examination);
 
+  // DEBUG: show index
+  QAction* show_index = new QAction("Pokaz indeks", this);
+  addAction(show_index);
+  connect(show_index, SIGNAL(triggered()), patient_widget_, SLOT(showIndex()));
+  patient_toolbar->addAction(show_index);
+
   QToolBar* toolbar = new QToolBar(this);
   addToolBar(toolbar);
 

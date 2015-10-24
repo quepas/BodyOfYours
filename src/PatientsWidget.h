@@ -17,5 +17,7 @@ public slots:
   void showAddExaminationDialog();
   void removePatient();
 
+  void showIndex();
+
   void onSavePatient(QString name);
 };

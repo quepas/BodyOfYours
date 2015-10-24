@@ -26,6 +26,10 @@ void PatientsWidget::showAddPatientDialog()
 void PatientsWidget::showAddExaminationDialog()
 {
   auto current_item = currentItem();
+  if (!current_item) {
+    qDebug() << "No current item selected.";
+    return;
+  }
   if (current_item->type() != PATIENT_ITEM) {
     QMessageBox::information(this, "Nowe badanie", "W celu dodania badania zaznacz pacjenta.");
     return;
@@ -47,4 +51,16 @@ void PatientsWidget::removePatient()
 void PatientsWidget::onSavePatient(QString name)
 {
   addTopLevelItem(new PatientItem(name));
+}
+
+void PatientsWidget::showIndex()
+{
+  if (!currentItem()) {
+    qDebug() << "No current item selected.";
+    return;
+  }
+  qDebug() << "Current item:";
+  qDebug() << "\ttext: " << currentItem()->text(0);
+  qDebug() << "\trow: " << currentIndex().row();
+  qDebug() << "\tcolumn: " << currentIndex().column();
 }
