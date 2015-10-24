@@ -120,6 +120,9 @@ MainWindow::MainWindow() :
   QToolBar* patient_toolbar = new QToolBar(this);
   addToolBar(patient_toolbar);
 
+  // DEBUG: patient's tree with test data
+  patient_widget_->buildTree(PatientsWidget::prepareTestData());
+
   // Add patient
   QAction* add_patient = new QAction("Dodaj pacjenta", this);
   addAction(add_patient);

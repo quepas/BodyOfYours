@@ -79,3 +79,17 @@ void PatientsWidget::buildTree(const QList<PatientItem*>& patients)
     }
   }
 }
+
+QList<PatientItem*> PatientsWidget::prepareTestData()
+{
+  QList<PatientItem*> patients;
+  auto patient_1 = new PatientItem("Pacjent 1");
+  QList<ExaminationItem*> examinations;
+  examinations.push_back(new ExaminationItem("Badanie 1"));
+  examinations.push_back(new ExaminationItem("Badanie 2"));
+  patient_1->insertExaminations(examinations);
+  patients.push_back(patient_1);
+  patients.push_back(new PatientItem("Pacjent 2"));
+  patients.push_back(new PatientItem("Pacjent 3"));
+  return patients;
+}

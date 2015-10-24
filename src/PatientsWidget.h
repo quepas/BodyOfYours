@@ -14,6 +14,8 @@ public:
   ~PatientsWidget();
 
   void buildTree(const QList<PatientItem*>& patients);
+
+  static QList<PatientItem*> prepareTestData();
 public slots:
   void showAddPatientDialog();
   void showAddExaminationDialog();
