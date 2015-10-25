@@ -17,6 +17,8 @@
 #include <QtCore/QTimer>
 #include <QtCore/QMutex>
 
+#include <QtSql/QSqlDatabase>
+
 #include <iomanip>
 #include <iostream>
 #include <fstream>
@@ -40,6 +42,12 @@ MainWindow::MainWindow() :
   viewer_(new Viewer())
 #endif
 {
+  QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+  db.setDatabaseName("db");
+  if (!db.open()) {
+    qDebug() << "Couldn't open database.";
+  }
+
   // Create main window GUI
   m_imgLabel[0] = new QLabel;
   m_imgLabel[1] = new QLabel;

@@ -25,10 +25,11 @@ find_package(Qt5Widgets)
 find_package(Qt5Gui)
 find_package(Qt5OpenGL)
 find_package(Qt5Xml)
+find_package(Qt5Sql)
 
 file (GLOB RAW_sources src/*.cpp)
 file (GLOB RAW_headers src/*.h)
 #file (GLOB RAW_gui gui/*.ui)
 
 add_executable(BodyOfYoursApp ${RAW_sources} ${RAW_headers})
-target_link_libraries(BodyOfYoursApp Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Xml RecFusion QGLViewer2 opengl32 glu32 assimp-vc120-mt)
+target_link_libraries(BodyOfYoursApp Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Xml Qt5::Sql RecFusion QGLViewer2 opengl32 glu32 assimp-vc120-mt)
