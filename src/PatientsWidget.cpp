@@ -5,10 +5,15 @@
 
 #include <QDebug>
 #include <QMessageBox>
+#include <QSqlQuery>
 
 PatientsWidget::PatientsWidget(QWidget* parent /*= 0*/)
 {
-
+  QSqlQuery query("SELECT name FROM patient");
+  while (query.next()) {
+    QString name = query.value(0).toString();
+    addTopLevelItem(new PatientItem(name));
+  }
 }
 
 PatientsWidget::~PatientsWidget()
@@ -40,9 +45,14 @@ void PatientsWidget::showAddExaminationDialog()
 void PatientsWidget::removePatient()
 {
   if (currentItem() != nullptr) {
-    qDebug() << "PatientsWidget => \n\tcurrent patient: " << currentItem()->text(0);
+    QString name = currentItem()->text(0);
+    qDebug() << "PatientsWidget => \n\tcurrent patient: " << name;
     qDebug() << "\tcurrent index row: " << currentIndex().row();
     qDebug() << "\tcurrent index column: " << currentIndex().column();
+    QSqlQuery query;
+    query.prepare("DELETE FROM patient WHERE name = :name");
+    query.bindValue(":name", name);
+    query.exec();
     auto item = takeTopLevelItem(currentIndex().row());
     delete item;
   }
@@ -51,6 +61,12 @@ void PatientsWidget::removePatient()
 void PatientsWidget::onSavePatient(QString name)
 {
   addTopLevelItem(new PatientItem(name));
+  QSqlQuery query;
+  query.prepare("INSERT INTO patient (id, name) "
+    "VALUES (:id, :name)");
+  query.bindValue(":id", 1);
+  query.bindValue(":name", name);
+  query.exec();
 }
 
 void PatientsWidget::showIndex()

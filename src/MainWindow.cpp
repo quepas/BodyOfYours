@@ -18,6 +18,7 @@
 #include <QtCore/QMutex>
 
 #include <QtSql/QSqlDatabase>
+#include <QSqlQuery>
 
 #include <iomanip>
 #include <iostream>
@@ -35,8 +36,7 @@ MainWindow::MainWindow() :
   m_calibrate(false),
   m_rec(0),
   num_sensor_(0),
-  sensor_data_(nullptr),
-  patient_widget_(new PatientsWidget)
+  sensor_data_(nullptr)
 #ifndef _DEBUG
   ,
   viewer_(new Viewer())
@@ -47,7 +47,11 @@ MainWindow::MainWindow() :
   if (!db.open()) {
     qDebug() << "Couldn't open database.";
   }
+  QSqlQuery query;
+  query.exec("create table patient (id int primary key, "
+    "name varchar(100))");
 
+  patient_widget_ = new PatientsWidget;
   // Create main window GUI
   m_imgLabel[0] = new QLabel;
   m_imgLabel[1] = new QLabel;
@@ -129,7 +133,7 @@ MainWindow::MainWindow() :
   addToolBar(patient_toolbar);
 
   // DEBUG: patient's tree with test data
-  patient_widget_->buildTree(PatientsWidget::prepareTestData());
+  //patient_widget_->buildTree(PatientsWidget::prepareTestData());
 
   // Add patient
   QAction* add_patient = new QAction("Dodaj pacjenta", this);
