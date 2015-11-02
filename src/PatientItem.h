@@ -5,6 +5,12 @@
 
 static const int PATIENT_ITEM = QTreeWidgetItem::UserType;
 
+struct PatientData
+{
+  int id;
+  QString name;
+};
+
 class PatientItem : public QTreeWidgetItem
 {
 public:

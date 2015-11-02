@@ -2,17 +2,18 @@
 #include "PatientItem.h"
 #include "ExaminationItem.h"
 #include "PatientDialog.h"
+#include "Database.h"
 
 #include <QDebug>
 #include <QMessageBox>
-#include <QSqlQuery>
 
 PatientsWidget::PatientsWidget(QWidget* parent /*= 0*/)
 {
-  QSqlQuery query("SELECT name FROM patient");
-  while (query.next()) {
-    QString name = query.value(0).toString();
-    addTopLevelItem(new PatientItem(name));
+  auto patients = Database::selectPatient();
+  for (auto& patient : patients) {
+    auto pt = new PatientItem(patient.name);
+    pt->setData(0, ID, patient.id);
+    addTopLevelItem(pt);
   }
 }
 
@@ -49,10 +50,7 @@ void PatientsWidget::removePatient()
     qDebug() << "PatientsWidget => \n\tcurrent patient: " << name;
     qDebug() << "\tcurrent index row: " << currentIndex().row();
     qDebug() << "\tcurrent index column: " << currentIndex().column();
-    QSqlQuery query;
-    query.prepare("DELETE FROM patient WHERE name = :name");
-    query.bindValue(":name", name);
-    query.exec();
+    Database::deletePatient(currentItem()->data(0, ID).toInt());
     auto item = takeTopLevelItem(currentIndex().row());
     delete item;
   }
@@ -60,13 +58,10 @@ void PatientsWidget::removePatient()
 
 void PatientsWidget::onSavePatient(QString name)
 {
-  addTopLevelItem(new PatientItem(name));
-  QSqlQuery query;
-  query.prepare("INSERT INTO patient (id, name) "
-    "VALUES (:id, :name)");
-  query.bindValue(":id", 1);
-  query.bindValue(":name", name);
-  query.exec();
+  PatientData patient;
+  patient.name = name;
+  Database::insertPatient(patient);
+  addTopLevelItem(new PatientItem(patient.name));
 }
 
 void PatientsWidget::showIndex()
@@ -77,6 +72,7 @@ void PatientsWidget::showIndex()
   }
   qDebug() << "Current item:";
   qDebug() << "\ttext: " << currentItem()->text(0);
+  qDebug() << "\tID: " << currentItem()->data(0, ID);
   if (currentItem()->type() == PATIENT_ITEM) {
     qDebug() << "\tpatient: " << currentIndex().row();
   }

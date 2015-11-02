@@ -17,15 +17,13 @@
 #include <QtCore/QTimer>
 #include <QtCore/QMutex>
 
-#include <QtSql/QSqlDatabase>
-#include <QSqlQuery>
-
 #include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
 #include "RecFusionUtils.h"
+#include "Database.h"
 
 using namespace RecFusion;
 
@@ -42,15 +40,8 @@ MainWindow::MainWindow() :
   viewer_(new Viewer())
 #endif
 {
-  QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-  db.setDatabaseName("db");
-  if (!db.open()) {
-    qDebug() << "Couldn't open database.";
-  }
-  QSqlQuery query;
-  query.exec("create table patient (id int primary key, "
-    "name varchar(100))");
-
+  Database db("database.db");
+  db.createScheme();
   patient_widget_ = new PatientsWidget;
   // Create main window GUI
   m_imgLabel[0] = new QLabel;
