@@ -5,6 +5,7 @@
   
 static int ID = QVariant::UserType + 1;
 struct PatientData;
+struct ExaminationData;
 
 class Database
 {
@@ -17,6 +18,10 @@ public:
   static bool insertPatient(PatientData data);
   static bool deletePatient(int id);
   static QList<PatientData> selectPatient();
+
+  static bool insertExamination(ExaminationData data);
+  static bool deleteExamination(int id);
+  static QList<ExaminationData> selectExamination(int patient_id);
 private:
   QSqlDatabase db_;
 };

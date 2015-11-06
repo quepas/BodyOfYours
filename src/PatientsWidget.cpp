@@ -14,6 +14,13 @@ PatientsWidget::PatientsWidget(QWidget* parent /*= 0*/)
     auto pt = new PatientItem(patient.name);
     pt->setData(0, ID, patient.id);
     addTopLevelItem(pt);
+    // add examinations
+    auto exams = Database::selectExamination(patient.id);
+    for (auto& exam : exams) {
+      auto ex = new ExaminationItem(exam.name);
+      ex->setData(0, ID, exam.id);
+      pt->addChild(ex);
+    }
   }
 }
 
