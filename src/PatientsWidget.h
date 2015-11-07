@@ -24,4 +24,5 @@ public slots:
   void showIndex();
 
   void onSavePatient(QString name);
+  void onSaveExamination(ExaminationData data);
 };

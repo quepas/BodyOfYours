@@ -3,6 +3,7 @@
 #include "ExaminationItem.h"
 #include "PatientDialog.h"
 #include "Database.h"
+#include "examinationdialog.h"
 
 #include <QDebug>
 #include <QMessageBox>
@@ -48,6 +49,9 @@ void PatientsWidget::showAddExaminationDialog()
     return;
   }
   current_item->addChild(new ExaminationItem("Badanie"));
+  auto dialog = new ExaminationDialog();
+  connect(dialog, SIGNAL(saveExamination(ExaminationData)), this, SLOT(onSaveExamination(ExaminationData)));
+  dialog->show();
 }
 
 void PatientsWidget::removePatient()
@@ -111,4 +115,10 @@ QList<PatientItem*> PatientsWidget::prepareTestData()
   patients.push_back(new PatientItem("Pacjent 2"));
   patients.push_back(new PatientItem("Pacjent 3"));
   return patients;
+}
+
+void PatientsWidget::onSaveExamination(ExaminationData data)
+{
+  Database::insertExamination(data);
+  currentItem()->addChild(new ExaminationItem(data.name));
 }
