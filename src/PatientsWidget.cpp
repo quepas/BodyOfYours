@@ -122,3 +122,19 @@ void PatientsWidget::onSaveExamination(ExaminationData data)
   Database::insertExamination(data);
   currentItem()->addChild(new ExaminationItem(data.name));
 }
+
+void PatientsWidget::removeExamination()
+{
+  if (!currentItem()) {
+    qDebug() << "No current item selected.";
+    return;
+  }
+  if (currentItem()->type() != EXAMINATION_ITEM) {
+    QMessageBox::information(this, "Usun badanie", "W celu usuniecia badania zaznacz badanie.");
+    return;
+  }
+  auto item = currentItem();
+  int id = item->data(0, ID).toInt();
+  Database::deleteExamination(id);
+  item->parent()->removeChild(item);
+}

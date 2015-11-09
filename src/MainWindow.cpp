@@ -141,6 +141,11 @@ MainWindow::MainWindow() :
   addAction(add_examination);
   connect(add_examination, SIGNAL(triggered()), patient_widget_, SLOT(showAddExaminationDialog()));
   patient_toolbar->addAction(add_examination);
+  // Remove examination
+  QAction* remove_examination = new QAction("Usun badanie", this);
+  addAction(remove_examination);
+  connect(remove_examination, SIGNAL(triggered()), patient_widget_, SLOT(removeExamination()));
+  patient_toolbar->addAction(remove_examination);
 
   // DEBUG: show index
   QAction* show_index = new QAction("Pokaz indeks", this);

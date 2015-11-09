@@ -20,6 +20,7 @@ public slots:
   void showAddPatientDialog();
   void showAddExaminationDialog();
   void removePatient();
+  void removeExamination();
 
   void showIndex();
 
