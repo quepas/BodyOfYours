@@ -58,6 +58,24 @@ QList<PatientData> Database::selectPatient()
   return list;
 }
 
+bool Database::selectPatient(int id, PatientData& out)
+{
+  QSqlQuery query("SELECT id, name FROM patient WHERE id = :id");
+  query.bindValue(":id", id);
+  if (query.next()) {
+    out.id = query.value(0).toInt();
+    out.name = query.value(1).toString();
+    return true;
+  }
+  else {
+    qDebug() << "[ERROR] Invalid patient's ID: " << id;
+  }
+  if (query.next()) {
+    qDebug() << "[WARNING] More than one patient with ID: " << id;
+  }
+  return false;
+}
+
 bool Database::insertExamination(ExaminationData data)
 {
   QSqlQuery query;
