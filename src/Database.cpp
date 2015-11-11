@@ -2,6 +2,7 @@
 #include "PatientItem.h"
 
 #include <QSqlQuery>
+#include <QSqlError>
 #include <QDebug>
 
 Database::Database(QString db_name, QString db_type /*= "QSQLITE"*/)
@@ -36,6 +37,18 @@ bool Database::insertPatient(PatientData data)
   return query.exec();
 }
 
+bool Database::insertPatient(PatientData in, PatientData& out)
+{
+  QSqlQuery query;
+  query.prepare("INSERT INTO patient (name) VALUES (:name)");
+  query.bindValue(":name", in.name);
+  if (!query.exec()) {
+    qDebug() << "[ERROR] Can't insert patient.";
+    return false;
+  }
+  return Database::selectLastPatient(out);
+}
+
 bool Database::deletePatient(int id)
 {
   QSqlQuery query;
@@ -60,15 +73,17 @@ QList<PatientData> Database::selectPatient()
 
 bool Database::selectPatient(int id, PatientData& out)
 {
-  QSqlQuery query("SELECT id, name FROM patient WHERE id = :id");
+  QSqlQuery query;
+  query.prepare("SELECT id, name FROM patient WHERE id = :id");
   query.bindValue(":id", id);
+  query.exec();
   if (query.next()) {
     out.id = query.value(0).toInt();
     out.name = query.value(1).toString();
     return true;
   }
   else {
-    qDebug() << "[ERROR] Invalid patient's ID: " << id;
+    qDebug() << "[WARNING] Invalid patient's ID: " << id;
   }
   if (query.next()) {
     qDebug() << "[WARNING] More than one patient with ID: " << id;
@@ -106,4 +121,14 @@ QList<ExaminationData> Database::selectExamination(int patient_id)
     list.push_back(exam);
   }
   return list;
+}
+
+bool Database::selectLastPatient(PatientData& out)
+{
+  QSqlQuery query("SELECT max(id) FROM patient");
+  if (query.next()) {
+    return Database::selectPatient(query.value(0).toInt(), out);
+  }
+  qDebug() << "[WARNING] No patients.";
+  return false;
 }

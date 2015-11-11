@@ -71,8 +71,11 @@ void PatientsWidget::onSavePatient(QString name)
 {
   PatientData patient;
   patient.name = name;
-  Database::insertPatient(patient);
-  addTopLevelItem(new PatientItem(patient.name));
+  PatientData saved;
+  Database::insertPatient(patient, saved);
+  auto data = new PatientItem(saved.name);
+  data->setData(0, ID, saved.id);
+  addTopLevelItem(data);
 }
 
 void PatientsWidget::showIndex()
