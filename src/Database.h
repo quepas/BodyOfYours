@@ -22,9 +22,11 @@ public:
   static bool selectPatient(int id, PatientData& out);
   static bool selectLastPatient(PatientData& out);
 
-  static bool insertExamination(ExaminationData data);
+  static bool insertExamination(ExaminationData in, ExaminationData& out);
   static bool deleteExamination(int id);
   static QList<ExaminationData> selectExamination(int patient_id);
+  static bool selectExamination(int id, ExaminationData& out);
+  static bool selectLastExamination(ExaminationData& out);
 private:
   QSqlDatabase db_;
 };

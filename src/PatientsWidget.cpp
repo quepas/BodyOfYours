@@ -117,8 +117,9 @@ QList<PatientItem*> PatientsWidget::prepareTestData()
 
 void PatientsWidget::onSaveExamination(ExaminationData data)
 {
-  Database::insertExamination(data);
-  currentItem()->addChild(new ExaminationItem(-1, data.name));
+  ExaminationData saved;
+  Database::insertExamination(data, saved);
+  currentItem()->addChild(new ExaminationItem(saved.id, data.name));
 }
 
 void PatientsWidget::removeExamination()

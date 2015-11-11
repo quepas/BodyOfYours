@@ -91,14 +91,18 @@ bool Database::selectPatient(int id, PatientData& out)
   return false;
 }
 
-bool Database::insertExamination(ExaminationData data)
+bool Database::insertExamination(ExaminationData in, ExaminationData& out)
 {
   QSqlQuery query;
   query.prepare("INSERT INTO examination (name, patient_id) "
     "VALUES (:name, :patient_id)");
-  query.bindValue(":name", data.name);
-  query.bindValue(":patient_id", data.patient_id);
-  return query.exec();
+  query.bindValue(":name", in.name);
+  query.bindValue(":patient_id", in.patient_id);
+  if (!query.exec()) {
+    qDebug() << "[ERROR] Can't insert examination.";
+    return false;
+  }
+  return Database::selectLastExamination(out);
 }
 
 bool Database::deleteExamination(int id)
@@ -123,6 +127,27 @@ QList<ExaminationData> Database::selectExamination(int patient_id)
   return list;
 }
 
+bool Database::selectExamination(int id, ExaminationData& out)
+{
+  QSqlQuery query;
+  query.prepare("SELECT id, name, patient_id FROM examination WHERE id = :id");
+  query.bindValue(":id", id);
+  query.exec();
+  if (query.next()) {
+    out.id = query.value(0).toInt();
+    out.name = query.value(1).toString();
+    out.patient_id = query.value(2).toInt();
+    return true;
+  }
+  else {
+    qDebug() << "[WARNING] Invalid examination's ID: " << id;
+  }
+  if (query.next()) {
+    qDebug() << "[WARNING] More than one examination with ID: " << id;
+  }
+  return false;
+}
+
 bool Database::selectLastPatient(PatientData& out)
 {
   QSqlQuery query("SELECT max(id) FROM patient");
@@ -130,5 +155,15 @@ bool Database::selectLastPatient(PatientData& out)
     return Database::selectPatient(query.value(0).toInt(), out);
   }
   qDebug() << "[WARNING] No patients.";
+  return false;
+}
+
+bool Database::selectLastExamination(ExaminationData& out)
+{
+  QSqlQuery query("SELECT max(id) FROM examination");
+  if (query.next()) {
+    return Database::selectExamination(query.value(0).toInt(), out);
+  }
+  qDebug() << "[WARNING] No examinations.";
   return false;
 }
