@@ -32,5 +32,5 @@ file (GLOB RAW_sources src/*.cpp)
 file (GLOB RAW_headers src/*.h)
 #file (GLOB RAW_gui gui/*.ui)
 
-add_executable(BodyOfYoursApp ${RAW_sources} ${RAW_headers})
+add_executable(BodyOfYoursApp ${RAW_sources} ${RAW_headers} ${VCG_INC}/wrap/ply/plylib.cpp)
 target_link_libraries(BodyOfYoursApp Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Xml Qt5::Sql RecFusion QGLViewer2 opengl32 glu32 assimp-vc120-mt)
