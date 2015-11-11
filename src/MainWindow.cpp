@@ -147,6 +147,13 @@ MainWindow::MainWindow() :
   connect(remove_examination, SIGNAL(triggered()), patient_widget_, SLOT(removeExamination()));
   patient_toolbar->addAction(remove_examination);
 
+  // Show examination scan
+  QAction* show_scan = new QAction("Pokaz skan", this);
+  addAction(show_scan);
+  connect(show_scan, SIGNAL(triggered()), patient_widget_, SLOT(showScan()));
+  connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(onOpen3DModel(QString)));
+  patient_toolbar->addAction(show_scan);
+
   // DEBUG: show index
   QAction* show_index = new QAction("Pokaz indeks", this);
   addAction(show_index);
@@ -515,4 +522,10 @@ void MainWindow::open3DModel()
                                             QString(), tr("3D Model-Files (*.ply);;All Files (*)"));
   std::cout << fn.toStdString() << std::endl;
   viewer_->addMeshFromFile(QString::fromStdString(fn.toStdString()));
+}
+
+void MainWindow::onOpen3DModel(QString filename)
+{
+  qDebug() << "[INFO] Opening 3D model: " << filename;
+  viewer_->addMeshFromFile("data/" + filename);
 }

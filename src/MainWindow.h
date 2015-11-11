@@ -36,6 +36,7 @@ public slots:
   void stopReconstruction();
 
   void open3DModel();
+  void onOpen3DModel(QString filename);
 
 private:
   QLabel* m_imgLabel[3];

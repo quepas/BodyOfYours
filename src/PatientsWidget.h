@@ -23,7 +23,11 @@ public slots:
   void removeExamination();
 
   void showIndex();
+  void showScan();
 
   void onSavePatient(QString name);
   void onSaveExamination(ExaminationData data);
+
+signals:
+  void openScan(QString filename);
 };

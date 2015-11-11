@@ -137,3 +137,20 @@ void PatientsWidget::removeExamination()
   Database::deleteExamination(id);
   item->parent()->removeChild(item);
 }
+
+void PatientsWidget::showScan()
+{
+  if (!currentItem()) {
+    qDebug() << "[WARNING] No item currently selected.";
+    return;
+  }
+  if (currentItem()->type() != EXAMINATION_ITEM) {
+    QMessageBox::information(this, "Pokaz skan", "W celu otwarcia skanu zaznacz badanie.");
+    return;
+  }
+  auto item = currentItem();
+  int id = item->data(0, ID).toInt();
+  ExaminationData out;
+  Database::selectExamination(id, out);
+  emit openScan(out.name);
+}
