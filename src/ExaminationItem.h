@@ -14,7 +14,7 @@ struct ExaminationData
 class ExaminationItem : public QTreeWidgetItem
 {
 public:
-  ExaminationItem(QString name);
+  ExaminationItem(int id, QString name);
   ~ExaminationItem();
 
   QString name() { return name_; }

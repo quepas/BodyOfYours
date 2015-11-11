@@ -14,7 +14,7 @@ struct PatientData
 class PatientItem : public QTreeWidgetItem
 {
 public:
-  PatientItem(QString name);
+  PatientItem(int id, QString name);
   ~PatientItem();
 
   QString name() { return name_; }

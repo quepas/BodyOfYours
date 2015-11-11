@@ -12,15 +12,12 @@ PatientsWidget::PatientsWidget(QWidget* parent /*= 0*/)
 {
   auto patients = Database::selectPatient();
   for (auto& patient : patients) {
-    auto pt = new PatientItem(patient.name);
-    pt->setData(0, ID, patient.id);
+    auto pt = new PatientItem(patient.id, patient.name);
     addTopLevelItem(pt);
     // add examinations
     auto exams = Database::selectExamination(patient.id);
     for (auto& exam : exams) {
-      auto ex = new ExaminationItem(exam.name);
-      ex->setData(0, ID, exam.id);
-      pt->addChild(ex);
+      pt->addChild(new ExaminationItem(exam.id, exam.name));
     }
   }
 }
@@ -48,7 +45,7 @@ void PatientsWidget::showAddExaminationDialog()
     QMessageBox::information(this, "Nowe badanie", "W celu dodania badania zaznacz pacjenta.");
     return;
   }
-  current_item->addChild(new ExaminationItem("Badanie"));
+  current_item->addChild(new ExaminationItem(0, "Badanie"));
   auto dialog = new ExaminationDialog();
   connect(dialog, SIGNAL(saveExamination(ExaminationData)), this, SLOT(onSaveExamination(ExaminationData)));
   dialog->show();
@@ -73,9 +70,7 @@ void PatientsWidget::onSavePatient(QString name)
   patient.name = name;
   PatientData saved;
   Database::insertPatient(patient, saved);
-  auto data = new PatientItem(saved.name);
-  data->setData(0, ID, saved.id);
-  addTopLevelItem(data);
+  addTopLevelItem(new PatientItem(saved.id, saved.name));
 }
 
 void PatientsWidget::showIndex()
@@ -109,21 +104,21 @@ void PatientsWidget::buildTree(const QList<PatientItem*>& patients)
 QList<PatientItem*> PatientsWidget::prepareTestData()
 {
   QList<PatientItem*> patients;
-  auto patient_1 = new PatientItem("Pacjent 1");
+  auto patient_1 = new PatientItem(-1, "Pacjent 1");
   QList<ExaminationItem*> examinations;
-  examinations.push_back(new ExaminationItem("Badanie 1"));
-  examinations.push_back(new ExaminationItem("Badanie 2"));
+  examinations.push_back(new ExaminationItem(-1, "Badanie 1"));
+  examinations.push_back(new ExaminationItem(-1, "Badanie 2"));
   patient_1->insertExaminations(examinations);
   patients.push_back(patient_1);
-  patients.push_back(new PatientItem("Pacjent 2"));
-  patients.push_back(new PatientItem("Pacjent 3"));
+  patients.push_back(new PatientItem(-1, "Pacjent 2"));
+  patients.push_back(new PatientItem(-1, "Pacjent 3"));
   return patients;
 }
 
 void PatientsWidget::onSaveExamination(ExaminationData data)
 {
   Database::insertExamination(data);
-  currentItem()->addChild(new ExaminationItem(data.name));
+  currentItem()->addChild(new ExaminationItem(-1, data.name));
 }
 
 void PatientsWidget::removeExamination()
