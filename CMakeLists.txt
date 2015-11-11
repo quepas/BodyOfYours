@@ -15,10 +15,11 @@ set (QOGLVIEWER_INC "D:/Programowanie/Biblioteki/libQGLViewer-2.6.3")
 set (QOGLVIEWER_LIB "D:/Programowanie/Biblioteki/libQGLViewer-2.6.3/QGLViewer")
 set (ASSIMP_INC "D:/Programowanie/Biblioteki/assimp/include")
 set (ASSIMP_LIB "D:/Programowanie/Biblioteki/assimp/lib")
-set (CMAKE_PREFIX_PATH "D:/Programy/Qt5.5A/5.5/msvc2013_64")
+set (VCG_INC "D:/Programowanie/Biblioteki/vcglib")
+#set (CMAKE_PREFIX_PATH "D:/Programy/Qt5.5A/5.5/msvc2013_64")
 
 # set libraries
-include_directories(${RECFUSION_INC} ${QOGLVIEWER_INC} ${ASSIMP_INC})
+include_directories(${RECFUSION_INC} ${QOGLVIEWER_INC} ${ASSIMP_INC} ${VCG_INC})
 link_directories(${RECFUSION_LIB} ${QOGLVIEWER_LIB} ${ASSIMP_LIB})
 
 find_package(Qt5Widgets)
