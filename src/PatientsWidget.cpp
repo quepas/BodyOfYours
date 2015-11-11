@@ -5,21 +5,31 @@
 #include "Database.h"
 #include "examinationdialog.h"
 
+#include <QTreeWidgetItem>
+
 #include <QDebug>
 #include <QMessageBox>
 
 PatientsWidget::PatientsWidget(QWidget* parent /*= 0*/)
 {
+  setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
+  setHeaderLabels(QStringList(("Pacjent")));
   auto patients = Database::selectPatient();
   for (auto& patient : patients) {
     auto pt = new PatientItem(patient.id, patient.name);
+    pt->setIcon(0, QIcon("icon/broken8.png"));
     addTopLevelItem(pt);
     // add examinations
     auto exams = Database::selectExamination(patient.id);
     for (auto& exam : exams) {
-      pt->addChild(new ExaminationItem(exam.id, exam.name));
+      auto ex = new ExaminationItem(exam.id, exam.name);
+      ex->setIcon(0, QIcon("icon/stethoscope1.png"));
+      pt->addChild(ex);
     }
   }
+
+  // init signal/slots
+  connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
 }
 
 PatientsWidget::~PatientsWidget()
@@ -153,4 +163,9 @@ void PatientsWidget::showScan()
   ExaminationData out;
   Database::selectExamination(id, out);
   emit openScan(out.name);
+}
+
+void PatientsWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
+{
+  qDebug() << "Double clicked: " << item->text(0) << " (" << item->data(0, ID) << ")";
 }

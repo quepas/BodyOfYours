@@ -15,6 +15,9 @@ public:
 
   void buildTree(const QList<PatientItem*>& patients);
 
+  void addPatient();
+  void addExamination();
+
   static QList<PatientItem*> prepareTestData();
 public slots:
   void showAddPatientDialog();
@@ -27,6 +30,8 @@ public slots:
 
   void onSavePatient(QString name);
   void onSaveExamination(ExaminationData data);
+
+  void onItemDoubleClicked(QTreeWidgetItem* item, int column);
 
 signals:
   void openScan(QString filename);
