@@ -27,7 +27,9 @@ public:
   bool addMesh(RecFusion::Mesh* mesh);
   bool addMeshFromFile(QString filename);
   bool removeMesh(RecFusion::Mesh* mesh);
+
 protected :
+  virtual void initializeGL();
   virtual void draw();
   virtual void init();
 private:

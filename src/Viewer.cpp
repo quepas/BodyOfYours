@@ -10,7 +10,6 @@ using RecFusion::Mesh;
 void Viewer::draw()
 {
   if (data_ != nullptr) {
-    camera()->setZClippingCoefficient(150.0f);
     glBegin(GL_TRIANGLES);
     for (int i = 0; i < data_->num_faces; ++i) {
       aiFace face = data_->faces[i];
@@ -124,4 +123,10 @@ Viewer::Viewer()
 Viewer::~Viewer()
 {
 
+}
+
+void Viewer::initializeGL()
+{
+  QGLViewer::initializeGL();
+  this->setSceneRadius(10000.0);
 }
