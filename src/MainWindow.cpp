@@ -24,6 +24,7 @@
 
 #include "RecFusionUtils.h"
 #include "Database.h"
+#include "MeshProcessing.h"
 
 using namespace RecFusion;
 
@@ -521,7 +522,10 @@ void MainWindow::open3DModel()
   QString fn = QFileDialog::getOpenFileName(this, tr("Open 3D Model File..."), 
                                             QString(), tr("3D Model-Files (*.ply);;All Files (*)"));
   std::cout << fn.toStdString() << std::endl;
-  viewer_->addMeshFromFile(QString::fromStdString(fn.toStdString()));
+  //viewer_->addMeshFromFile(QString::fromStdString(fn.toStdString()));
+  auto filename = QString::fromStdString(fn.toStdString());
+  qDebug() << "[INFO] Opening 3D model: " << filename;
+  viewer_->addMeshFromCMesh(filename);
 }
 
 void MainWindow::onOpen3DModel(QString filename)

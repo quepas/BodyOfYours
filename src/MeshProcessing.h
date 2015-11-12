@@ -3,6 +3,7 @@
 #include <QString>
 #include <vcg/complex/complex.h>
 #include <vcg/simplex/face/component_ep.h>
+#include <assimp/color4.h>
 
 class CFace;
 class CVertex;
@@ -12,3 +13,4 @@ class CFace : public vcg::Face<UsedTypes, vcg::face::VertexRef, vcg::face::Norma
 class CMesh : public vcg::tri::TriMesh<std::vector<CVertex>, std::vector<CFace>> {};
 
 void openMesh(QString filename, CMesh& out, bool clean_data = false);
+aiColor4D toOGLColor(vcg::Color4<unsigned char>& color);

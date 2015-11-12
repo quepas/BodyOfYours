@@ -17,6 +17,8 @@ struct ViewerData
   std::vector<aiVector3D> normals;
 };
 
+class CMesh;
+
 class Viewer : public QGLViewer
 {
   Q_OBJECT
@@ -26,6 +28,7 @@ public:
 
   bool addMesh(RecFusion::Mesh* mesh);
   bool addMeshFromFile(QString filename);
+  bool addMeshFromCMesh(QString filename);
   bool removeMesh(RecFusion::Mesh* mesh);
 
 protected :
@@ -35,4 +38,5 @@ protected :
 private:
   QVector<RecFusion::Mesh*> meshes_;
   ViewerData* data_;
+  CMesh* cmesh_;
 };

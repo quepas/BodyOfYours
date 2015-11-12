@@ -22,3 +22,11 @@ void openMesh(QString filename, CMesh& out, bool clean_data /*= false*/)
     qDebug() << "Removed " << dup << " duplicate and " << unref << " unreferenced vertices from mesh " << filename;
   }
 }
+
+aiColor4D toOGLColor(vcg::Color4<unsigned char>& color)
+{
+  return aiColor4D(color.X() / 255.0f,
+                   color.Y() / 255.0f,
+                   color.Z() / 255.0f,
+                   color.W() / 255.0f);
+}
