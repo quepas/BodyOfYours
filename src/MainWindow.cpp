@@ -204,6 +204,12 @@ MainWindow::MainWindow() :
   addAction(a);
   toolbar->addAction(a);
 
+  // Compute diff
+  a = new QAction("Wylicz roznice", this);
+  connect(a, SIGNAL(triggered()), this, SLOT(calculateDiff()));
+  addAction(a);
+  toolbar->addAction(a);
+
   m_timer = new QTimer(this);
   connect(m_timer,SIGNAL(timeout()),this,SLOT(processFrames()));
   m_timer->start(50);
@@ -532,4 +538,18 @@ void MainWindow::onOpen3DModel(QString filename)
 {
   qDebug() << "[INFO] Opening 3D model: " << filename;
   viewer_->addMeshFromFile("data/" + filename);
+}
+
+void MainWindow::calculateDiff()
+{
+  QString n_mesh = "data/KowB.ply";
+  QString n_ref = "data/KowA.ply";
+
+  CMesh ref, mesh;
+  openMesh(n_ref, ref);
+  openMesh(n_mesh, mesh);
+  CMesh out;
+  computeDifference(ref, mesh, out);
+  viewer_->cmesh_ = new CMesh;
+  vcg::tri::Append<CMesh, CMesh>::MeshCopy(*(viewer_->cmesh_), mesh);
 }

@@ -14,3 +14,4 @@ class CMesh : public vcg::tri::TriMesh<std::vector<CVertex>, std::vector<CFace>>
 
 void openMesh(QString filename, CMesh& out, bool clean_data = false);
 aiColor4D toOGLColor(vcg::Color4<unsigned char>& color);
+void computeDifference(CMesh& reference, CMesh& mesh, CMesh& out);

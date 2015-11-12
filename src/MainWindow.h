@@ -36,6 +36,7 @@ public slots:
   void stopReconstruction();
 
   void open3DModel();
+  void calculateDiff();
   void onOpen3DModel(QString filename);
 
 private:
