@@ -14,6 +14,7 @@ void openMesh(QString filename, CMesh& out, bool clean_data /*= false*/)
     if (Importer<CMesh>::ErrorCritical(err))
       qDebug() << "[Critical] Serious error.";
   }
+  UpdateNormal<CMesh>::PerVertexNormalized(out);
   qDebug() << "[Info] Read mesh " << filename;
   if (clean_data){
     int dup = Clean<CMesh>::RemoveDuplicateVertex(out);
