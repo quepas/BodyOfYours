@@ -150,5 +150,4 @@ void computeMirror(CMesh& reference, CMesh& mesh, CMesh& out)
 {
   vcg::Matrix44f tr; tr.SetIdentity();
   vcg::Matrix44f flipM; flipM.SetIdentity(); flipM[0][0] = -1.0f; tr *= flipM;
-  //reference.cm.Tr = tr;
 }
