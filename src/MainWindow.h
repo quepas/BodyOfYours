@@ -37,6 +37,8 @@ public slots:
 
   void open3DModel();
   void calculateDiff();
+  void calculateMirror();
+  void showScene();
   void onOpen3DModel(QString filename);
 
 private:

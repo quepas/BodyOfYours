@@ -39,4 +39,5 @@ protected :
 private:
   QVector<RecFusion::Mesh*> meshes_;
   ViewerData* data_;
+  bool moved_;
 };

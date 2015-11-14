@@ -145,3 +145,10 @@ void computeDifference(CMesh& reference, CMesh& mesh, CMesh& out)
   vcg::tri::UpdateColor<CMesh>::PerVertexQualityRamp(reference, ColorMin, ColorMax);
   vcg::tri::UpdateColor<CMesh>::PerVertexQualityRamp(mesh, ColorMin, ColorMax);
 }
+
+void computeMirror(CMesh& reference, CMesh& mesh, CMesh& out)
+{
+  vcg::Matrix44f tr; tr.SetIdentity();
+  vcg::Matrix44f flipM; flipM.SetIdentity(); flipM[0][0] = -1.0f; tr *= flipM;
+  //reference.cm.Tr = tr;
+}

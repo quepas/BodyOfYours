@@ -37,6 +37,7 @@ void Viewer::draw()
     glEnd();
   }
   else if (cmesh_ != nullptr) {
+    //qDebug() << "CMesh drawing, mesh faces num: " << cmesh_->FN();
     glBegin(GL_TRIANGLES);
     for (int i = 0; i < cmesh_->FN(); ++i) {
       auto face = cmesh_->face[i];
@@ -46,6 +47,11 @@ void Viewer::draw()
       glColor3f(c1.r, c1.g, c1.b);
       glNormal3f(n1.x, n1.y, n1.z);
       glVertex3f(v1.x, v1.y, v1.z);
+      if (!moved_) {
+        qDebug() << "Moving camera";
+        camera()->setPosition(qglviewer::Vec(v1.x, v1.y, v1.z));
+        moved_ = true;
+      }
       auto v2 = aiVector3D(face.V(1)->P().X(), face.V(1)->P().Y(), face.V(1)->P().Z());
       auto n2 = aiVector3D(face.V(1)->N().X(), face.V(1)->N().Y(), face.V(1)->N().Z());
       auto c2 = toOGLColor(face.V(1)->C());
@@ -149,7 +155,7 @@ bool Viewer::addMeshFromCMesh(QString filename)
 }
 
 Viewer::Viewer()
-  : data_(nullptr)
+  : data_(nullptr), moved_(false)
 {
 
 }
@@ -163,4 +169,5 @@ void Viewer::initializeGL()
 {
   QGLViewer::initializeGL();
   this->setSceneRadius(10000.0);
+  this->toggleFPSIsDisplayed();
 }

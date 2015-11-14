@@ -26,6 +26,8 @@
 #include "Database.h"
 #include "MeshProcessing.h"
 
+#include <vcg/complex/algorithms/update/position.h>
+
 using namespace RecFusion;
 
 MainWindow::MainWindow() :
@@ -207,6 +209,18 @@ MainWindow::MainWindow() :
   // Compute diff
   a = new QAction("Wylicz roznice", this);
   connect(a, SIGNAL(triggered()), this, SLOT(calculateDiff()));
+  addAction(a);
+  toolbar->addAction(a);
+
+  // Flip by X axis
+  a = new QAction("Obroc model wzgledem osi X", this);
+  connect(a, SIGNAL(triggered()), this, SLOT(calculateMirror()));
+  addAction(a);
+  toolbar->addAction(a);
+
+  // Show entire scene
+  a = new QAction("Pokaz cala scene", this);
+  connect(a, SIGNAL(triggered()), this, SLOT(showScene()));
   addAction(a);
   toolbar->addAction(a);
 
@@ -531,7 +545,13 @@ void MainWindow::open3DModel()
   //viewer_->addMeshFromFile(QString::fromStdString(fn.toStdString()));
   auto filename = QString::fromStdString(fn.toStdString());
   qDebug() << "[INFO] Opening 3D model: " << filename;
-  viewer_->addMeshFromCMesh(filename);
+  //viewer_->addMeshFromCMesh(filename);
+  CMesh mesh;
+  openMesh(filename, mesh);
+  vcg::Matrix44d tr; tr.SetIdentity();
+  vcg::tri::UpdatePosition<CMesh>::Matrix(mesh, tr, false);
+  viewer_->cmesh_ = new CMesh;
+  vcg::tri::Append<CMesh, CMesh>::MeshCopy(*(viewer_->cmesh_), mesh);
 }
 
 void MainWindow::onOpen3DModel(QString filename)
@@ -542,8 +562,8 @@ void MainWindow::onOpen3DModel(QString filename)
 
 void MainWindow::calculateDiff()
 {
-  QString n_mesh = "data/KowB.ply";
-  QString n_ref = "data/KowA.ply";
+  QString n_ref = "data/A.ply";
+  QString n_mesh = "data/B.ply";
 
   CMesh ref, mesh;
   openMesh(n_ref, ref);
@@ -552,4 +572,16 @@ void MainWindow::calculateDiff()
   computeDifference(ref, mesh, out);
   viewer_->cmesh_ = new CMesh;
   vcg::tri::Append<CMesh, CMesh>::MeshCopy(*(viewer_->cmesh_), mesh);
+}
+
+void MainWindow::calculateMirror()
+{
+  vcg::Matrix44d tr; tr.SetIdentity();
+  vcg::Matrix44d flipM; flipM.SetIdentity(); flipM[0][0] = -1.0f; tr *= flipM;
+  vcg::tri::UpdatePosition<CMesh>::Matrix(*(viewer_->cmesh_), tr, false);
+}
+
+void MainWindow::showScene()
+{
+  viewer_->showEntireScene();
 }
