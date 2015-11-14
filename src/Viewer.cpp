@@ -1,9 +1,7 @@
 #include "Viewer.h"
 #include "MeshProcessing.h"
 
-#include <assimp\postprocess.h> 
-#include <assimp\mesh.h>
-#include <assimp\scene.h>
+#include <assimp\vector3.h>
 #include <QDebug>
 
 using namespace std;
@@ -11,32 +9,7 @@ using RecFusion::Mesh;
 
 void Viewer::draw()
 {
-  if (data_ != nullptr) {
-    glBegin(GL_TRIANGLES);
-    for (int i = 0; i < data_->num_faces; ++i) {
-      aiFace face = data_->faces[i];
-      if (face.mNumIndices != 3) {
-        std::cout << "Face " << i << " (" << face.mNumIndices << ")" << std::endl;
-      }
-      else {
-        auto v1 = data_->verts[face.mIndices[0]];
-        glColor3f(0.7f, 0.4f, 0.1f);
-        auto n1 = data_->normals[face.mIndices[0]];
-        glNormal3f(n1.x, n1.y, n1.z);
-        glVertex3f(v1.x, v1.y, v1.z);
-        auto v2 = data_->verts[face.mIndices[1]];
-        auto n2 = data_->normals[face.mIndices[1]];
-        glNormal3f(n2.x, n2.y, n2.z);
-        glVertex3f(v2.x, v2.y, v2.z);
-        auto v3 = data_->verts[face.mIndices[2]];
-        auto n3 = data_->normals[face.mIndices[2]];
-        glNormal3f(n3.x, n3.y, n3.z);
-        glVertex3f(v3.x, v3.y, v3.z);
-      }
-    }
-    glEnd();
-  }
-  else if (cmesh_ != nullptr) {
+  if (cmesh_ != nullptr) {
     glBegin(GL_TRIANGLES);
     for (int i = 0; i < cmesh_->FN(); ++i) {
       auto face = cmesh_->face[i];
@@ -69,44 +42,8 @@ void Viewer::init()
   restoreStateFromFile();
 }
 
-bool Viewer::addMeshFromFile(QString filename)
-{
-  Assimp::Importer model_importer;
-  const aiScene* scene = (model_importer
-    .ReadFile(
-    filename.toStdString(),
-    aiProcessPreset_TargetRealtime_Fast));
-
-  if (!scene) {
-    qDebug() << "Import failed. Unable to load " << filename;
-    return false;
-  }
-  else {
-    qDebug() << "Import success! Loaded " << filename;
-    auto mesh = scene->mMeshes[0];
-    data_ = new ViewerData;
-    data_->num_verts = mesh->mNumVertices;
-    data_->num_faces = mesh->mNumFaces;
-    for (int i = 0; i < data_->num_verts; ++i) {
-      data_->verts.push_back(mesh->mVertices[i]);
-      data_->normals.push_back(mesh->mNormals[i]);
-    }
-    for (int i = 0; i < data_->num_faces; ++i) {
-      data_->faces.push_back(mesh->mFaces[i]);
-    }
-    return true;
-  }
-}
-
-bool Viewer::addMeshFromCMesh(QString filename)
-{
-  cmesh_  = new CMesh;
-  openMesh(filename, *cmesh_);
-  return true;
-}
-
 Viewer::Viewer()
-  : data_(nullptr)
+  : cmesh_(nullptr)
 {
 
 }

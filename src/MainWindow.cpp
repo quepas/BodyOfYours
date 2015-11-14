@@ -551,7 +551,6 @@ void MainWindow::open3DModel()
 void MainWindow::onOpen3DModel(QString filename)
 {
   qDebug() << "[INFO] Opening 3D model: " << filename;
-  viewer_->addMeshFromFile("data/" + filename);
 }
 
 void MainWindow::calculateDiff()
