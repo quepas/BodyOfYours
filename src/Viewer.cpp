@@ -106,7 +106,7 @@ bool Viewer::addMeshFromCMesh(QString filename)
 }
 
 Viewer::Viewer()
-  : data_(nullptr), moved_(false)
+  : data_(nullptr)
 {
 
 }

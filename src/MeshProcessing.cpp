@@ -8,6 +8,8 @@
 
 using vcg::tri::io::Importer;
 using vcg::tri::Clean;
+using vcg::tri::UpdatePosition;
+using vcg::Matrix44d;
 
 void openMesh(QString filename, CMesh& out, bool clean_data /*= false*/)
 {
@@ -150,4 +152,23 @@ void computeMirror(CMesh& reference, CMesh& mesh, CMesh& out)
 {
   vcg::Matrix44f tr; tr.SetIdentity();
   vcg::Matrix44f flipM; flipM.SetIdentity(); flipM[0][0] = -1.0f; tr *= flipM;
+}
+
+void flipMeshXAxis(CMesh& base, CMesh& out)
+{
+  vcg::Matrix44d tr; tr.SetIdentity();
+  vcg::Matrix44d flipM;
+  flipM.SetIdentity();
+  flipM[0][0] = -1.0f;
+  tr *= flipM;
+  vcg::tri::Append<CMesh, CMesh>::MeshCopy(out, base);
+  vcg::tri::UpdatePosition<CMesh>::Matrix(out, tr, false);
+}
+
+void flipMeshXAxis(CMesh& mesh)
+{
+  Matrix44d transform;
+  transform.SetIdentity();
+  transform[0][0] = -1.0;
+  UpdatePosition<CMesh>::Matrix(mesh, transform, false);
 }

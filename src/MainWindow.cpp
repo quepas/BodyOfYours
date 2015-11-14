@@ -445,7 +445,7 @@ void MainWindow::stopReconstruction()
   // Get reconstructed mesh
   Mesh* mesh = new Mesh;
   bool ok = m_rec->getMesh(mesh);
-  viewer_->addMesh(mesh);
+  // TODO: display reconstructed mesh
 
   // Delete reconstruction object
   delete m_rec;
@@ -542,16 +542,10 @@ void MainWindow::open3DModel()
   QString fn = QFileDialog::getOpenFileName(this, tr("Open 3D Model File..."), 
                                             QString(), tr("3D Model-Files (*.ply);;All Files (*)"));
   std::cout << fn.toStdString() << std::endl;
-  //viewer_->addMeshFromFile(QString::fromStdString(fn.toStdString()));
   auto filename = QString::fromStdString(fn.toStdString());
   qDebug() << "[INFO] Opening 3D model: " << filename;
-  //viewer_->addMeshFromCMesh(filename);
-  CMesh mesh;
-  openMesh(filename, mesh);
-  vcg::Matrix44d tr; tr.SetIdentity();
-  vcg::tri::UpdatePosition<CMesh>::Matrix(mesh, tr, false);
   viewer_->cmesh_ = new CMesh;
-  vcg::tri::Append<CMesh, CMesh>::MeshCopy(*(viewer_->cmesh_), mesh);
+  openMesh(filename, *(viewer_->cmesh_));
 }
 
 void MainWindow::onOpen3DModel(QString filename)
@@ -576,9 +570,7 @@ void MainWindow::calculateDiff()
 
 void MainWindow::calculateMirror()
 {
-  vcg::Matrix44d tr; tr.SetIdentity();
-  vcg::Matrix44d flipM; flipM.SetIdentity(); flipM[0][0] = -1.0f; tr *= flipM;
-  vcg::tri::UpdatePosition<CMesh>::Matrix(*(viewer_->cmesh_), tr, false);
+  flipMeshXAxis(*(viewer_->cmesh_));
 }
 
 void MainWindow::showScene()

@@ -16,3 +16,5 @@ void openMesh(QString filename, CMesh& out, bool clean_data = false);
 aiColor4D toOGLColor(vcg::Color4<unsigned char>& color);
 void computeDifference(CMesh& reference, CMesh& mesh, CMesh& out);
 void computeMirror(CMesh& reference, CMesh& mesh, CMesh& out);
+void flipMeshXAxis(CMesh& mesh);
+void flipMeshXAxis(CMesh& base, CMesh& out);
