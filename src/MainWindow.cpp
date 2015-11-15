@@ -213,7 +213,7 @@ MainWindow::MainWindow() :
   toolbar->addAction(a);
 
   // Flip by X axis
-  a = new QAction("Obroc model wzgledem osi X", this);
+  a = new QAction("Wylicz odbicie lustrzane", this);
   connect(a, SIGNAL(triggered()), this, SLOT(calculateMirror()));
   addAction(a);
   toolbar->addAction(a);
