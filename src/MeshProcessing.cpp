@@ -6,9 +6,10 @@
 #include <vcg/complex/algorithms/update/bounding.h>
 #include "sampling.h"
 
-using vcg::tri::io::Importer;
+using vcg::tri::Append;
 using vcg::tri::Clean;
 using vcg::tri::UpdatePosition;
+using vcg::tri::io::Importer;
 using vcg::Matrix44d;
 
 void openMesh(QString filename, CMesh& out, bool clean_data /*= false*/)
@@ -140,9 +141,6 @@ void computeDifference(CMesh& reference, CMesh& mesh, CMesh& out)
   printf("\nHausdorff distance: %f (%f  wrt bounding box diagonal)\n", (float) mesh_dist_max, (float) mesh_dist_max / bbox.Diag());
   printf("  Computation time  : %d ms\n", (int) (1000.0*elapsed_time / CLOCKS_PER_SEC));
   printf("  # samples/second  : %f\n\n", (float) n_total_sample / ((float) elapsed_time / CLOCKS_PER_SEC));
-  vcg::tri::io::PlyInfo p;
-  p.mask |= vcg::tri::io::Mask::IOM_VERTCOLOR | vcg::tri::io::Mask::IOM_VERTQUALITY /* | vcg::ply::PLYMask::PM_VERTQUALITY*/;
-  //p.mask|=vcg::ply::PLYMask::PM_VERTCOLOR|vcg::ply::PLYMask::PM_VERTQUALITY;
   float ColorMin = 1.0f, ColorMax = 1.0f;
   vcg::tri::UpdateColor<CMesh>::PerVertexQualityRamp(reference, ColorMin, ColorMax);
   vcg::tri::UpdateColor<CMesh>::PerVertexQualityRamp(mesh, ColorMin, ColorMax);
@@ -150,19 +148,13 @@ void computeDifference(CMesh& reference, CMesh& mesh, CMesh& out)
 
 void computeMirror(CMesh& reference, CMesh& mesh, CMesh& out)
 {
-  vcg::Matrix44f tr; tr.SetIdentity();
-  vcg::Matrix44f flipM; flipM.SetIdentity(); flipM[0][0] = -1.0f; tr *= flipM;
+
 }
 
 void flipMeshXAxis(CMesh& base, CMesh& out)
 {
-  vcg::Matrix44d tr; tr.SetIdentity();
-  vcg::Matrix44d flipM;
-  flipM.SetIdentity();
-  flipM[0][0] = -1.0f;
-  tr *= flipM;
-  vcg::tri::Append<CMesh, CMesh>::MeshCopy(out, base);
-  vcg::tri::UpdatePosition<CMesh>::Matrix(out, tr, false);
+  Append<CMesh, CMesh>::MeshCopy(out, base);
+  flipMeshXAxis(out);
 }
 
 void flipMeshXAxis(CMesh& mesh)
