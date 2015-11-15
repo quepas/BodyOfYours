@@ -544,8 +544,9 @@ void MainWindow::open3DModel()
   std::cout << fn.toStdString() << std::endl;
   auto filename = QString::fromStdString(fn.toStdString());
   qDebug() << "[INFO] Opening 3D model: " << filename;
-  viewer_->cmesh_ = new CMesh;
-  openMesh(filename, *(viewer_->cmesh_));
+  CMesh* mesh = new CMesh;
+  openMesh(filename, *(mesh));
+  viewer_->addMesh("open&show", mesh);
 }
 
 void MainWindow::onOpen3DModel(QString filename)
@@ -563,13 +564,15 @@ void MainWindow::calculateDiff()
   openMesh(n_mesh, mesh);
   CMesh out;
   computeDifference(ref, mesh, out);
-  viewer_->cmesh_ = new CMesh;
-  vcg::tri::Append<CMesh, CMesh>::MeshCopy(*(viewer_->cmesh_), mesh);
+  auto* pmesh = new CMesh;
+  vcg::tri::Append<CMesh, CMesh>::MeshCopy(*(pmesh), mesh);
+  viewer_->clearMesh();
+  viewer_->addMesh("diff", pmesh);
 }
 
 void MainWindow::calculateMirror()
 {
-  flipMeshXAxis(*(viewer_->cmesh_));
+  //flipMeshXAxis(*(viewer_->cmesh_));
 }
 
 void MainWindow::showScene()

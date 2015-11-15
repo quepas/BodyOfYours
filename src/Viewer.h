@@ -15,7 +15,9 @@ public:
   Viewer();
   ~Viewer();
 
-  CMesh* cmesh_;
+  void addMesh(QString name, CMesh* mesh);
+  void removeMesh(QString name);
+  void clearMesh();
 
 protected :
   virtual void initializeGL();
@@ -25,4 +27,6 @@ protected :
 private:
   void drawFace(CFace& face);
   void drawVertexFromFace(CFace& face, int vertex_num);
+
+  QMap<QString, CMesh*> mesh_map_;
 };
