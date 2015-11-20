@@ -50,33 +50,19 @@ exam_form_(new ExaminationForm)
   Database db("database.db");
   db.createScheme();
   patient_widget_ = new PatientsWidget;
-  // Create main window GUI
-  m_imgLabel[0] = new QLabel;
-  m_imgLabel[1] = new QLabel;
-  m_imgLabel[2] = new QLabel;
-  m_recLabel[0] = new QLabel;
-  m_recLabel[1] = new QLabel;
-  m_recLabel[2] = new QLabel;
-  main_layout = new QGridLayout;
-  main_layout->addWidget(patient_widget_, 0, 0, 2, 1);
-  main_layout->addWidget(m_imgLabel[0], 0, 1);
-  main_layout->addWidget(m_imgLabel[1], 0, 2);
-  main_layout->addWidget(m_recLabel[0], 1, 1);
-  main_layout->addWidget(m_recLabel[1], 1, 2);
-  main_layout->addWidget(patient_form_, 0, 3);
-  main_layout->addWidget(exam_form_, 0, 3);
-#ifndef _DEBUG
-  main_layout->addWidget(viewer_, 1, 3);
-  viewer_->show();
-#else
-  main_layout->addWidget(m_recLabel[2], 1, 2);
-#endif
-
   connect(patient_widget_, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(onItemSelected(QTreeWidgetItem*, QTreeWidgetItem*)));
   connect(patient_widget_, SIGNAL(itemActivated(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
 
+  QGridLayout* grid = new QGridLayout;
+  grid->addWidget(patient_widget_, 0, 0, 2, 1);
+  patient_widget_->setMaximumWidth(300);
+#ifndef _DEBUG
+  grid->addWidget(viewer_, 0, 1, 2, 1);
+  viewer_->show();
+#endif
+
   QWidget* central_widget = new QWidget;
-  central_widget->setLayout(main_layout);
+  central_widget->setLayout(grid);
   setCentralWidget(central_widget);
 
   resize(1366, 768);
@@ -249,6 +235,7 @@ MainWindow::~MainWindow()
   delete m_timer;
   delete m_rec;
   delete sensor_data_;
+  delete patient_widget_;
 }
 
 
@@ -604,10 +591,8 @@ void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previ
     patient_form_->setDisabled(true);
   }
   else if (current->type() == EXAMINATION_ITEM) {
-    main_layout->removeWidget(patient_form_);
     patient_form_->hide();
     exam_form_->setName(text);
     exam_form_->show();
   }
-  m_imgLabel[2]->setText(text);
 }
