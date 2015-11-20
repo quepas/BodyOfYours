@@ -5,10 +5,13 @@
 
 #include <QtWidgets/QMainWindow>
 #include <vector>
+#include <QGridLayout>
 
 #include "Viewer.h"
 #include "SensorData.h"
 #include "PatientsWidget.h"
+#include "patientform.h"
+#include "examinationform.h"
 
 class QLabel;
 class QMessageBox;
@@ -40,6 +43,8 @@ public slots:
   void calculateMirror();
   void showScene();
   void onOpen3DModel(QString filename);
+  void onItemClicked(QTreeWidgetItem* item, int column);
+  void onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous);
 
 private:
   QLabel* m_imgLabel[3];
@@ -47,6 +52,9 @@ private:
   QMessageBox* m_calibMessageBox;
   QTimer* m_timer;
   Viewer* viewer_;
+  QGridLayout* main_layout;
+  PatientForm* patient_form_;
+  ExaminationForm* exam_form_;
 
   RecFusion::Sensor* m_sensor[3];
   RecFusion::Mat4 m_sensorT[3];

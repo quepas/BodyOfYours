@@ -25,19 +25,23 @@
 #include "RecFusionUtils.h"
 #include "Database.h"
 #include "MeshProcessing.h"
+#include "patientform.h"
+#include "examinationform.h"
 
 #include <vcg/complex/algorithms/update/position.h>
 
 using namespace RecFusion;
 
 MainWindow::MainWindow() :
-  m_timer(0),
-  m_calibMessageBox(0),
-  m_reconstruct(false),
-  m_calibrate(false),
-  m_rec(0),
-  num_sensor_(0),
-  sensor_data_(nullptr)
+m_timer(0),
+m_calibMessageBox(0),
+m_reconstruct(false),
+m_calibrate(false),
+m_rec(0),
+num_sensor_(0),
+sensor_data_(nullptr),
+patient_form_(new PatientForm),
+exam_form_(new ExaminationForm)
 #ifndef _DEBUG
   ,
   viewer_(new Viewer())
@@ -53,19 +57,23 @@ MainWindow::MainWindow() :
   m_recLabel[0] = new QLabel;
   m_recLabel[1] = new QLabel;
   m_recLabel[2] = new QLabel;
-  QGridLayout* main_layout = new QGridLayout;
+  main_layout = new QGridLayout;
   main_layout->addWidget(patient_widget_, 0, 0, 2, 1);
   main_layout->addWidget(m_imgLabel[0], 0, 1);
   main_layout->addWidget(m_imgLabel[1], 0, 2);
-  main_layout->addWidget(m_imgLabel[2], 0, 3);
   main_layout->addWidget(m_recLabel[0], 1, 1);
   main_layout->addWidget(m_recLabel[1], 1, 2);
+  main_layout->addWidget(patient_form_, 0, 3);
+  main_layout->addWidget(exam_form_, 0, 3);
 #ifndef _DEBUG
   main_layout->addWidget(viewer_, 1, 3);
   viewer_->show();
 #else
   main_layout->addWidget(m_recLabel[2], 1, 2);
 #endif
+
+  connect(patient_widget_, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(onItemSelected(QTreeWidgetItem*, QTreeWidgetItem*)));
+  connect(patient_widget_, SIGNAL(itemActivated(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
 
   QWidget* central_widget = new QWidget;
   central_widget->setLayout(main_layout);
@@ -578,4 +586,28 @@ void MainWindow::calculateMirror()
 void MainWindow::showScene()
 {
   viewer_->showEntireScene();
+}
+
+void MainWindow::onItemClicked(QTreeWidgetItem* item, int column)
+{
+  qDebug() << "Item clicked" << item->text(column);
+}
+
+void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous)
+{
+  QString text = current->text(0);
+  qDebug() << "Currently seleted: " << text;
+  if (current->type() == PATIENT_ITEM) {
+    exam_form_->hide();
+    patient_form_->setData(text, "SURNAME");
+    patient_form_->show();
+    patient_form_->setDisabled(true);
+  }
+  else if (current->type() == EXAMINATION_ITEM) {
+    main_layout->removeWidget(patient_form_);
+    patient_form_->hide();
+    exam_form_->setName(text);
+    exam_form_->show();
+  }
+  m_imgLabel[2]->setText(text);
 }
