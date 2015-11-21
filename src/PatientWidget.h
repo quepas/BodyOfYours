@@ -2,6 +2,7 @@
 
 #include "PatientData.h"
 #include "ExaminationData.h"
+#include "PatientWidgetItem.h"
 
 #include <QTreeWidget>
 #include <QList>
@@ -14,10 +15,10 @@ public:
   PatientWidget(const QList<PatientData>& patients, QWidget* parent = 0);
   ~PatientWidget();
 
-  void buildTree(const QList<PatientData*>& patients);
+  void buildTree(const QList<PatientData>& patients);
 
-  void addPatient();
-  void addExamination();
+  QTreeWidgetItem* addPatient(PatientData data);
+  void addExamination(QTreeWidgetItem* parent, ExaminationData data);
 
 public slots:
   void showAddPatientDialog();

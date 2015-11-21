@@ -117,12 +117,15 @@ bool Database::deleteExamination(int id)
 QList<ExaminationData> Database::selectExamination(int patient_id)
 {
   QList<ExaminationData> list;
-  QSqlQuery query("SELECT id, patient_id, name FROM examination");
+  QSqlQuery query;
+  query.prepare("SELECT id, name FROM examination WHERE patient_id = :patient_id");
+  query.bindValue(":patient_id", patient_id);
+  query.exec();
   while (query.next()) {
     ExaminationData exam;
     exam.id = query.value(0).toInt();
-    exam.patient_id = query.value(1).toInt();
-    exam.name = query.value(2).toString();
+    exam.patient_id = patient_id;
+    exam.name = query.value(1).toString();
     list.push_back(exam);
   }
   return list;

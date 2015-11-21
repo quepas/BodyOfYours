@@ -13,18 +13,8 @@ PatientWidget::PatientWidget(const QList<PatientData>& patients, QWidget* parent
 {
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
   setHeaderLabels(QStringList(("Pacjent")));
-  for (auto& patient : patients) {
-    auto pt = PatientWidgetItem::createPatientItem(patient.id, patient.name);
-    pt->setIcon(0, QIcon("icon/broken8.png"));
-    addTopLevelItem(pt);
-    // add examinations
-    auto exams = Database::selectExamination(patient.id);
-    for (auto& exam : exams) {
-      auto ex = PatientWidgetItem::createExamItem(exam.id, exam.name);
-      ex->setIcon(0, QIcon("icon/stethoscope1.png"));
-      pt->addChild(ex);
-    }
-  }
+
+  buildTree(patients);
 
   // init signal/slots
   connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
@@ -53,7 +43,6 @@ void PatientWidget::showAddExaminationDialog()
     QMessageBox::information(this, "Nowe badanie", "W celu dodania badania zaznacz pacjenta.");
     return;
   }
-  current_item->addChild(PatientWidgetItem::createExamItem(0, "Badanie"));
   auto dialog = new ExaminationDialog();
   connect(dialog, SIGNAL(saveExamination(ExaminationData)), this, SLOT(onSaveExamination(ExaminationData)));
   dialog->show();
@@ -78,7 +67,7 @@ void PatientWidget::onSavePatient(QString name)
   patient.name = name;
   PatientData saved;
   Database::insertPatient(patient, saved);
-  addTopLevelItem(PatientWidgetItem::createPatientItem(saved.id, saved.name));
+  addPatient(saved);
 }
 
 void PatientWidget::showIndex()
@@ -99,21 +88,22 @@ void PatientWidget::showIndex()
   }
 }
 
-void PatientWidget::buildTree(const QList<PatientData*>& patients)
+void PatientWidget::buildTree(const QList<PatientData>& patients)
 {
   for (auto& patient : patients) {
-   /* addTopLevelItem(patient);
-    for (auto& examination : patient->examinations()) {
-      patient->addChild(examination);
-    }*/
+    auto top_item = addPatient(patient);
+    for (auto& exam : Database::selectExamination(patient.id)) {
+      addExamination(top_item, exam);
+    }
   }
 }
 
 void PatientWidget::onSaveExamination(ExaminationData data)
 {
   ExaminationData saved;
+  data.patient_id = currentItem()->data(0, ID).toInt();
   Database::insertExamination(data, saved);
-  currentItem()->addChild(PatientWidgetItem::createExamItem(saved.id, data.name));
+  addExamination(currentItem(), saved);
 }
 
 void PatientWidget::removeExamination()
@@ -152,4 +142,19 @@ void PatientWidget::showScan()
 void PatientWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
 {
   qDebug() << "Double clicked: " << item->text(0) << " (" << item->data(0, ID) << ")";
+}
+
+QTreeWidgetItem* PatientWidget::addPatient(PatientData data)
+{
+  auto item = PatientWidgetItem::createPatientItem(data.id, data.name);
+  item->setIcon(0, QIcon("icon/broken8.png"));
+  addTopLevelItem(item);
+  return item;
+}
+
+void PatientWidget::addExamination(QTreeWidgetItem* parent, ExaminationData data)
+{
+  auto item = PatientWidgetItem::createExamItem(data.id, data.name);
+  item->setIcon(0, QIcon("icon/stethoscope1.png"));
+  parent->addChild(item);
 }
