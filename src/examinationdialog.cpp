@@ -1,6 +1,6 @@
 #include "examinationdialog.h"
 #include "ui_examinationdialog.h"
-#include "ExaminationItem.h"
+#include "ExaminationData.h"
 
 #include <QDebug>
 

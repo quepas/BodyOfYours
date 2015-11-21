@@ -1,5 +1,6 @@
 #include "Database.h"
-#include "PatientItem.h"
+#include "PatientData.h"
+#include "ExaminationData.h"
 
 #include <QSqlQuery>
 #include <QSqlError>

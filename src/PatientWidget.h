@@ -1,6 +1,8 @@
 #pragma once
 
-#include "PatientItem.h"
+#include "PatientData.h"
+#include "ExaminationData.h"
+
 #include <QTreeWidget>
 #include <QList>
 
@@ -12,7 +14,7 @@ public:
   PatientWidget(const QList<PatientData>& patients, QWidget* parent = 0);
   ~PatientWidget();
 
-  void buildTree(const QList<PatientItem*>& patients);
+  void buildTree(const QList<PatientData*>& patients);
 
   void addPatient();
   void addExamination();

@@ -28,6 +28,7 @@
 #include "MeshProcessing.h"
 #include "patientform.h"
 #include "examinationform.h"
+#include "PatientWidgetItem.h"
 
 #include <vcg/complex/algorithms/update/position.h>
 
@@ -591,13 +592,13 @@ void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previ
 {
   QString text = current->text(0);
   qDebug() << "Currently seleted: " << text;
-  if (current->type() == PATIENT_ITEM) {
+  if (current->type() == PATIENT) {
     stacked_layout_->setCurrentIndex(0);
     PatientForm* patient_form_ = dynamic_cast<PatientForm*>(stacked_layout_->currentWidget());
     patient_form_->setData(text, "SURNAME");
     patient_form_->setDisabled(true);
   }
-  else if (current->type() == EXAMINATION_ITEM) {
+  else if (current->type() == EXAM) {
     stacked_layout_->setCurrentIndex(1);
     ExaminationForm* form = dynamic_cast<ExaminationForm*>(stacked_layout_->currentWidget());
     form->setName(text);

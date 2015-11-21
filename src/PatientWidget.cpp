@@ -49,11 +49,11 @@ void PatientWidget::showAddExaminationDialog()
     qDebug() << "No current item selected.";
     return;
   }
-  if (current_item->type() != PATIENT_ITEM) {
+  if (current_item->type() != PATIENT) {
     QMessageBox::information(this, "Nowe badanie", "W celu dodania badania zaznacz pacjenta.");
     return;
   }
-  current_item->addChild(new ExaminationItem(0, "Badanie"));
+  current_item->addChild(PatientWidgetItem::createExamItem(0, "Badanie"));
   auto dialog = new ExaminationDialog();
   connect(dialog, SIGNAL(saveExamination(ExaminationData)), this, SLOT(onSaveExamination(ExaminationData)));
   dialog->show();
@@ -78,7 +78,7 @@ void PatientWidget::onSavePatient(QString name)
   patient.name = name;
   PatientData saved;
   Database::insertPatient(patient, saved);
-  addTopLevelItem(new PatientItem(saved.id, saved.name));
+  addTopLevelItem(PatientWidgetItem::createPatientItem(saved.id, saved.name));
 }
 
 void PatientWidget::showIndex()
@@ -90,22 +90,22 @@ void PatientWidget::showIndex()
   qDebug() << "Current item:";
   qDebug() << "\ttext: " << currentItem()->text(0);
   qDebug() << "\tID: " << currentItem()->data(0, ID);
-  if (currentItem()->type() == PATIENT_ITEM) {
+  if (currentItem()->type() == PATIENT) {
     qDebug() << "\tpatient: " << currentIndex().row();
   }
-  else if (currentItem()->type() == EXAMINATION_ITEM) {
+  else if (currentItem()->type() == EXAM) {
     qDebug() << "\tpatient: " << indexOfTopLevelItem(currentItem()->parent());
     qDebug() << "\texamination: " << currentIndex().row();
   }
 }
 
-void PatientWidget::buildTree(const QList<PatientItem*>& patients)
+void PatientWidget::buildTree(const QList<PatientData*>& patients)
 {
   for (auto& patient : patients) {
-    addTopLevelItem(patient);
+   /* addTopLevelItem(patient);
     for (auto& examination : patient->examinations()) {
       patient->addChild(examination);
-    }
+    }*/
   }
 }
 
@@ -113,7 +113,7 @@ void PatientWidget::onSaveExamination(ExaminationData data)
 {
   ExaminationData saved;
   Database::insertExamination(data, saved);
-  currentItem()->addChild(new ExaminationItem(saved.id, data.name));
+  currentItem()->addChild(PatientWidgetItem::createExamItem(saved.id, data.name));
 }
 
 void PatientWidget::removeExamination()
@@ -122,7 +122,7 @@ void PatientWidget::removeExamination()
     qDebug() << "No current item selected.";
     return;
   }
-  if (currentItem()->type() != EXAMINATION_ITEM) {
+  if (currentItem()->type() != EXAM) {
     QMessageBox::information(this, "Usun badanie", "W celu usuniecia badania zaznacz badanie.");
     return;
   }
@@ -138,7 +138,7 @@ void PatientWidget::showScan()
     qDebug() << "[WARNING] No item currently selected.";
     return;
   }
-  if (currentItem()->type() != EXAMINATION_ITEM) {
+  if (currentItem()->type() != EXAM) {
     QMessageBox::information(this, "Pokaz skan", "W celu otwarcia skanu zaznacz badanie.");
     return;
   }
