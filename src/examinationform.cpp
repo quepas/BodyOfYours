@@ -15,5 +15,5 @@ ExaminationForm::~ExaminationForm()
 
 void ExaminationForm::setName(QString name)
 {
-  ui->lineEdit->setText(name);
+  ui->nameLineEdit->setText(name);
 }

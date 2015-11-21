@@ -6,35 +6,57 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>266</width>
-    <height>89</height>
+    <width>240</width>
+    <height>170</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLineEdit" name="lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>10</y>
-     <width>113</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>47</width>
-     <height>13</height>
+     <width>221</width>
+     <height>141</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Nazwa</string>
-   </property>
+   <layout class="QFormLayout" name="formLayout">
+    <property name="fieldGrowthPolicy">
+     <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+    </property>
+    <item row="0" column="0">
+     <widget class="QLabel" name="nameLabel">
+      <property name="text">
+       <string>Imię</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="nameLineEdit"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="dateLabel">
+      <property name="text">
+       <string>Data i czas</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QDateTimeEdit" name="dateDateTimeEdit"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="descLabel">
+      <property name="text">
+       <string>Opis</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="descLineEdit"/>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

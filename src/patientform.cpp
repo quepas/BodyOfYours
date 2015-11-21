@@ -15,6 +15,6 @@ PatientForm::~PatientForm()
 
 void PatientForm::setData(QString name, QString surname)
 {
-  ui->lineEdit->setText(name);
-  ui->lineEdit_2->setText(surname);
+  ui->nameLineEdit->setText(name);
+  ui->surnameLineEdit->setText(surname);
 }
