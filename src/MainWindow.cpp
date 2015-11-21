@@ -5,6 +5,7 @@
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QStackedLayout>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMessageBox>
@@ -33,15 +34,15 @@
 using namespace RecFusion;
 
 MainWindow::MainWindow() :
-m_timer(0),
-m_calibMessageBox(0),
-m_reconstruct(false),
-m_calibrate(false),
-m_rec(0),
-num_sensor_(0),
-sensor_data_(nullptr),
-patient_form_(new PatientForm),
-exam_form_(new ExaminationForm)
+  m_timer(0),
+  m_calibMessageBox(0),
+  m_reconstruct(false),
+  m_calibrate(false),
+  m_rec(0),
+  num_sensor_(0),
+  sensor_data_(nullptr),
+  patient_form_(new PatientForm),
+  exam_form_(new ExaminationForm)
 #ifndef _DEBUG
   ,
   viewer_(new Viewer())
@@ -56,11 +57,17 @@ exam_form_(new ExaminationForm)
   QGridLayout* grid = new QGridLayout;
   grid->addWidget(patient_widget_, 0, 0, 2, 1);
   patient_widget_->setMaximumWidth(300);
+  stacked_layout_ = new QStackedLayout;
+  stacked_layout_->addWidget(new PatientForm);
+  stacked_layout_->addWidget(new ExaminationForm);
 #ifndef _DEBUG
-  grid->addWidget(viewer_, 0, 1, 2, 1);
-  viewer_->show();
+  stacked_layout_->addWidget(viewer_);
 #endif
 
+  stacked_layout_->setCurrentIndex(0);
+  QWidget* viewport = new QWidget;
+  viewport->setLayout(stacked_layout_);
+  grid->addWidget(viewport, 0, 1, 2, 1);
   QWidget* central_widget = new QWidget;
   central_widget->setLayout(grid);
   setCentralWidget(central_widget);
@@ -585,14 +592,14 @@ void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previ
   QString text = current->text(0);
   qDebug() << "Currently seleted: " << text;
   if (current->type() == PATIENT_ITEM) {
-    exam_form_->hide();
+    stacked_layout_->setCurrentIndex(0);
+    PatientForm* patient_form_ = dynamic_cast<PatientForm*>(stacked_layout_->currentWidget());
     patient_form_->setData(text, "SURNAME");
-    patient_form_->show();
     patient_form_->setDisabled(true);
   }
   else if (current->type() == EXAMINATION_ITEM) {
-    patient_form_->hide();
-    exam_form_->setName(text);
-    exam_form_->show();
+    stacked_layout_->setCurrentIndex(1);
+    ExaminationForm* form = dynamic_cast<ExaminationForm*>(stacked_layout_->currentWidget());
+    form->setName(text);
   }
 }

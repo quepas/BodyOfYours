@@ -4,6 +4,7 @@
 #include <RecFusion.h>
 
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QStackedLayout>
 #include <vector>
 #include <QGridLayout>
 
@@ -53,6 +54,7 @@ private:
   QTimer* m_timer;
   Viewer* viewer_;
   QGridLayout* main_layout;
+  QStackedLayout* stacked_layout_;
   PatientForm* patient_form_;
   ExaminationForm* exam_form_;
 
