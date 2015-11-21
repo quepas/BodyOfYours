@@ -2,16 +2,17 @@
 
 #include "PatientItem.h"
 #include <QTreeWidget>
+#include <QList>
 
 static const int SCAN_ITEM = QTreeWidgetItem::UserType + 2;
 
-class PatientsWidget : public QTreeWidget
+class PatientWidget : public QTreeWidget
 {
  Q_OBJECT
 
 public:
-  PatientsWidget(QWidget* parent = 0);
-  ~PatientsWidget();
+  PatientWidget(const QList<PatientData>& patients, QWidget* parent = 0);
+  ~PatientWidget();
 
   void buildTree(const QList<PatientItem*>& patients);
 

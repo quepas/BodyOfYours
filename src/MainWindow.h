@@ -10,7 +10,7 @@
 
 #include "Viewer.h"
 #include "SensorData.h"
-#include "PatientsWidget.h"
+#include "PatientWidget.h"
 #include "patientform.h"
 #include "examinationform.h"
 
@@ -71,7 +71,7 @@ private:
   unsigned num_sensor_;
 
   QWindow* model_view_;
-  PatientsWidget* patient_widget_;
+  PatientWidget* patient_widget_;
 };
 
 #endif

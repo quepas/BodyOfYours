@@ -1,4 +1,4 @@
-#include "PatientsWidget.h"
+#include "PatientWidget.h"
 #include "PatientItem.h"
 #include "ExaminationItem.h"
 #include "PatientDialog.h"
@@ -10,11 +10,10 @@
 #include <QDebug>
 #include <QMessageBox>
 
-PatientsWidget::PatientsWidget(QWidget* parent /*= 0*/)
+PatientWidget::PatientWidget(const QList<PatientData>& patients, QWidget* parent /*= 0*/)
 {
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
   setHeaderLabels(QStringList(("Pacjent")));
-  auto patients = Database::selectPatient();
   for (auto& patient : patients) {
     auto pt = new PatientItem(patient.id, patient.name);
     pt->setIcon(0, QIcon("icon/broken8.png"));
@@ -32,19 +31,19 @@ PatientsWidget::PatientsWidget(QWidget* parent /*= 0*/)
   connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
 }
 
-PatientsWidget::~PatientsWidget()
+PatientWidget::~PatientWidget()
 {
 
 }
 
-void PatientsWidget::showAddPatientDialog()
+void PatientWidget::showAddPatientDialog()
 {
   auto dialog = new PatientDialog(this);
   connect(dialog, SIGNAL(savePatient(QString)), this, SLOT(onSavePatient(QString)));
   dialog->show();
 }
 
-void PatientsWidget::showAddExaminationDialog()
+void PatientWidget::showAddExaminationDialog()
 {
   auto current_item = currentItem();
   if (!current_item) {
@@ -61,7 +60,7 @@ void PatientsWidget::showAddExaminationDialog()
   dialog->show();
 }
 
-void PatientsWidget::removePatient()
+void PatientWidget::removePatient()
 {
   if (currentItem() != nullptr) {
     QString name = currentItem()->text(0);
@@ -74,7 +73,7 @@ void PatientsWidget::removePatient()
   }
 }
 
-void PatientsWidget::onSavePatient(QString name)
+void PatientWidget::onSavePatient(QString name)
 {
   PatientData patient;
   patient.name = name;
@@ -83,7 +82,7 @@ void PatientsWidget::onSavePatient(QString name)
   addTopLevelItem(new PatientItem(saved.id, saved.name));
 }
 
-void PatientsWidget::showIndex()
+void PatientWidget::showIndex()
 {
   if (!currentItem()) {
     qDebug() << "No current item selected.";
@@ -101,7 +100,7 @@ void PatientsWidget::showIndex()
   }
 }
 
-void PatientsWidget::buildTree(const QList<PatientItem*>& patients)
+void PatientWidget::buildTree(const QList<PatientItem*>& patients)
 {
   for (auto& patient : patients) {
     addTopLevelItem(patient);
@@ -111,7 +110,7 @@ void PatientsWidget::buildTree(const QList<PatientItem*>& patients)
   }
 }
 
-QList<PatientItem*> PatientsWidget::prepareTestData()
+QList<PatientItem*> PatientWidget::prepareTestData()
 {
   QList<PatientItem*> patients;
   auto patient_1 = new PatientItem(-1, "Pacjent 1");
@@ -125,14 +124,14 @@ QList<PatientItem*> PatientsWidget::prepareTestData()
   return patients;
 }
 
-void PatientsWidget::onSaveExamination(ExaminationData data)
+void PatientWidget::onSaveExamination(ExaminationData data)
 {
   ExaminationData saved;
   Database::insertExamination(data, saved);
   currentItem()->addChild(new ExaminationItem(saved.id, data.name));
 }
 
-void PatientsWidget::removeExamination()
+void PatientWidget::removeExamination()
 {
   if (!currentItem()) {
     qDebug() << "No current item selected.";
@@ -148,7 +147,7 @@ void PatientsWidget::removeExamination()
   item->parent()->removeChild(item);
 }
 
-void PatientsWidget::showScan()
+void PatientWidget::showScan()
 {
   if (!currentItem()) {
     qDebug() << "[WARNING] No item currently selected.";
@@ -165,7 +164,7 @@ void PatientsWidget::showScan()
   emit openScan(out.name);
 }
 
-void PatientsWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
+void PatientWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
 {
   qDebug() << "Double clicked: " << item->text(0) << " (" << item->data(0, ID) << ")";
 }

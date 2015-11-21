@@ -50,7 +50,7 @@ MainWindow::MainWindow() :
 {
   Database db("database.db");
   db.createScheme();
-  patient_widget_ = new PatientsWidget;
+  patient_widget_ = new PatientWidget(Database::selectPatient());
   connect(patient_widget_, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(onItemSelected(QTreeWidgetItem*, QTreeWidgetItem*)));
   connect(patient_widget_, SIGNAL(itemActivated(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
 
