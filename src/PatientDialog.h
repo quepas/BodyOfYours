@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PatientData.h"
+
 #include <QDialog>
 #include <QTextEdit>
 
@@ -16,7 +18,7 @@ public slots:
   void onSave();
 
 signals:
-  void savePatient(QString name);
+  void savePatient(PatientData name);
 
 private:
   QTextEdit* name_text;

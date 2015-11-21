@@ -29,7 +29,7 @@ public slots:
   void showIndex();
   void showScan();
 
-  void onSavePatient(QString name);
+  void onSavePatient(PatientData data);
   void onSaveExamination(ExaminationData data);
 
   void onItemDoubleClicked(QTreeWidgetItem* item, int column);

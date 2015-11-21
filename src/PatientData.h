@@ -6,4 +6,6 @@ struct PatientData
 {
   int id;
   QString name;
+  QString surname;
+  QString pesel;
 };

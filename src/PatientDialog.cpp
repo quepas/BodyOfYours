@@ -45,5 +45,7 @@ void PatientDialog::onClose()
 
 void PatientDialog::onSave()
 {
-  emit savePatient(name_text->toPlainText());
+  PatientData data;
+  data.name = name_text->toPlainText();
+  emit savePatient(data);
 }

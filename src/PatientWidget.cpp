@@ -28,7 +28,7 @@ PatientWidget::~PatientWidget()
 void PatientWidget::showAddPatientDialog()
 {
   auto dialog = new PatientDialog(this);
-  connect(dialog, SIGNAL(savePatient(QString)), this, SLOT(onSavePatient(QString)));
+  connect(dialog, SIGNAL(savePatient(PatientData)), this, SLOT(onSavePatient(PatientData)));
   dialog->show();
 }
 
@@ -61,12 +61,10 @@ void PatientWidget::removePatient()
   }
 }
 
-void PatientWidget::onSavePatient(QString name)
+void PatientWidget::onSavePatient(PatientData data)
 {
-  PatientData patient;
-  patient.name = name;
   PatientData saved;
-  Database::insertPatient(patient, saved);
+  Database::insertPatient(data, saved);
   addPatient(saved);
 }
 

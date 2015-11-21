@@ -55,12 +55,14 @@ MainWindow::MainWindow() :
   connect(patient_widget_, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(onItemSelected(QTreeWidgetItem*, QTreeWidgetItem*)));
   connect(patient_widget_, SIGNAL(itemActivated(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
 
+  connect(patient_form_, SIGNAL(savePatient(PatientData)), patient_widget_, SLOT(onSavePatient(PatientData)));
+
   QGridLayout* grid = new QGridLayout;
   grid->addWidget(patient_widget_, 0, 0, 2, 1);
   patient_widget_->setMaximumWidth(300);
   stacked_layout_ = new QStackedLayout;
-  stacked_layout_->addWidget(new PatientForm);
-  stacked_layout_->addWidget(new ExaminationForm);
+  stacked_layout_->addWidget(patient_form_);
+  stacked_layout_->addWidget(exam_form_);
 #ifndef _DEBUG
   stacked_layout_->addWidget(viewer_);
 #endif
