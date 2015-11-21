@@ -3,7 +3,7 @@
 #include <QtSql/QSqlDatabase>
 #include <QVariant>
   
-static int ID = QVariant::UserType + 1;
+//static int ID = QVariant::UserType + 1;
 struct PatientData;
 struct ExaminationData;
 

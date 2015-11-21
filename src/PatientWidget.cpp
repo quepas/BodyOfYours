@@ -1,9 +1,8 @@
 #include "PatientWidget.h"
-#include "PatientItem.h"
-#include "ExaminationItem.h"
 #include "PatientDialog.h"
 #include "Database.h"
 #include "examinationdialog.h"
+#include "PatientWidgetItem.h"
 
 #include <QTreeWidgetItem>
 
@@ -15,13 +14,13 @@ PatientWidget::PatientWidget(const QList<PatientData>& patients, QWidget* parent
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
   setHeaderLabels(QStringList(("Pacjent")));
   for (auto& patient : patients) {
-    auto pt = new PatientItem(patient.id, patient.name);
+    auto pt = PatientWidgetItem::createPatientItem(patient.id, patient.name);
     pt->setIcon(0, QIcon("icon/broken8.png"));
     addTopLevelItem(pt);
     // add examinations
     auto exams = Database::selectExamination(patient.id);
     for (auto& exam : exams) {
-      auto ex = new ExaminationItem(exam.id, exam.name);
+      auto ex = PatientWidgetItem::createExamItem(exam.id, exam.name);
       ex->setIcon(0, QIcon("icon/stethoscope1.png"));
       pt->addChild(ex);
     }
@@ -108,20 +107,6 @@ void PatientWidget::buildTree(const QList<PatientItem*>& patients)
       patient->addChild(examination);
     }
   }
-}
-
-QList<PatientItem*> PatientWidget::prepareTestData()
-{
-  QList<PatientItem*> patients;
-  auto patient_1 = new PatientItem(-1, "Pacjent 1");
-  QList<ExaminationItem*> examinations;
-  examinations.push_back(new ExaminationItem(-1, "Badanie 1"));
-  examinations.push_back(new ExaminationItem(-1, "Badanie 2"));
-  patient_1->insertExaminations(examinations);
-  patients.push_back(patient_1);
-  patients.push_back(new PatientItem(-1, "Pacjent 2"));
-  patients.push_back(new PatientItem(-1, "Pacjent 3"));
-  return patients;
 }
 
 void PatientWidget::onSaveExamination(ExaminationData data)

@@ -4,8 +4,6 @@
 #include <QTreeWidget>
 #include <QList>
 
-static const int SCAN_ITEM = QTreeWidgetItem::UserType + 2;
-
 class PatientWidget : public QTreeWidget
 {
  Q_OBJECT
@@ -19,7 +17,6 @@ public:
   void addPatient();
   void addExamination();
 
-  static QList<PatientItem*> prepareTestData();
 public slots:
   void showAddPatientDialog();
   void showAddExaminationDialog();
