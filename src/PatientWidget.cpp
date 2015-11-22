@@ -27,9 +27,9 @@ PatientWidget::~PatientWidget()
 
 void PatientWidget::showAddPatientDialog()
 {
-  auto dialog = new PatientDialog(this);
+  /*auto dialog = new PatientDialog(this);
   connect(dialog, SIGNAL(savePatient(PatientData)), this, SLOT(onSavePatient(PatientData)));
-  dialog->show();
+  dialog->show();*/
 }
 
 void PatientWidget::showAddExaminationDialog()

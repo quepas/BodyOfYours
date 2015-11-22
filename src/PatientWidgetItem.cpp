@@ -13,5 +13,5 @@ PatientWidgetItem* PatientWidgetItem::createPatientItem(int id, QString label, Q
 
 PatientWidgetItem* PatientWidgetItem::createExamItem(int id, QString label, QWidget* parent /*= nullptr*/)
 {
-  return new PatientWidgetItem(PATIENT, id, label, parent);
+  return new PatientWidgetItem(EXAM, id, label, parent);
 }

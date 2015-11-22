@@ -13,7 +13,7 @@ ExaminationForm::~ExaminationForm()
   delete ui;
 }
 
-void ExaminationForm::setName(QString name)
+void ExaminationForm::setData(const ExaminationData& data)
 {
-  ui->nameLineEdit->setText(name);
+  ui->nameLineEdit->setText(data.name);
 }

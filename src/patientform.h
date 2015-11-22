@@ -19,7 +19,8 @@ public:
   explicit PatientForm(QWidget *parent = 0);
   ~PatientForm();
 
-  void setData(QString name, QString surname);
+  void setData(const PatientData& data);
+  void clear();
 
 public slots:
   void onSave();

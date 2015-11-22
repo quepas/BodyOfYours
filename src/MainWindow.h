@@ -47,6 +47,8 @@ public slots:
   void onItemClicked(QTreeWidgetItem* item, int column);
   void onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous);
 
+  void addPatient();
+
 private:
   QLabel* m_imgLabel[3];
   QLabel* m_recLabel[3];

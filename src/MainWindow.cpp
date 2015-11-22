@@ -136,7 +136,7 @@ MainWindow::MainWindow() :
   // Add patient
   QAction* add_patient = new QAction("Dodaj pacjenta", this);
   addAction(add_patient);
-  connect(add_patient, SIGNAL(triggered()), patient_widget_, SLOT(showAddPatientDialog()));
+  connect(add_patient, SIGNAL(triggered()), this, SLOT(addPatient()));
   patient_toolbar->addAction(add_patient);
   // Remove patient
   QAction* remove_patient = new QAction("Usun pacjenta", this);
@@ -593,16 +593,29 @@ void MainWindow::onItemClicked(QTreeWidgetItem* item, int column)
 void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous)
 {
   QString text = current->text(0);
-  qDebug() << "Currently seleted: " << text;
+  int id = current->data(0, ID).toInt();
+  qDebug() << "Currently seleted ID: " << id;
   if (current->type() == PATIENT) {
     stacked_layout_->setCurrentIndex(0);
     PatientForm* patient_form_ = dynamic_cast<PatientForm*>(stacked_layout_->currentWidget());
-    patient_form_->setData(text, "SURNAME");
+    PatientData patient;
+    Database::selectPatient(id, patient);
+    patient_form_->setData(patient);
     patient_form_->setDisabled(true);
   }
   else if (current->type() == EXAM) {
     stacked_layout_->setCurrentIndex(1);
-    ExaminationForm* form = dynamic_cast<ExaminationForm*>(stacked_layout_->currentWidget());
-    form->setName(text);
+    exam_form_ = dynamic_cast<ExaminationForm*>(stacked_layout_->currentWidget());
+    ExaminationData exam;
+    Database::selectExamination(id, exam);
+    exam_form_->setData(exam);
   }
+}
+
+void MainWindow::addPatient()
+{
+  qDebug() << "MainWindow::addPatient()";
+  stacked_layout_->setCurrentIndex(0);
+  patient_form_->setDisabled(false);
+  patient_form_->clear();
 }

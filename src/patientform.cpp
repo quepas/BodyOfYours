@@ -29,10 +29,11 @@ PatientForm::~PatientForm()
   delete ui;
 }
 
-void PatientForm::setData(QString name, QString surname)
+void PatientForm::setData(const PatientData& data)
 {
-  ui->nameLineEdit->setText(name);
-  ui->surnameLineEdit->setText(surname);
+  ui->nameLineEdit->setText(data.name);
+  ui->surnameLineEdit->setText(data.surname);
+  ui->peselLineEdit->setText(data.pesel);
 }
 
 void PatientForm::onSave()
@@ -48,6 +49,11 @@ void PatientForm::onSave()
 void PatientForm::onClear()
 {
   qDebug() << "PatientForm::onClear()";
+  clear();
+}
+
+void PatientForm::clear()
+{
   ui->nameLineEdit->clear();
   ui->surnameLineEdit->clear();
   ui->peselLineEdit->clear();

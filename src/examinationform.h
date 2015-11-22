@@ -1,6 +1,7 @@
 #ifndef EXAMINATIONFORM_H
 #define EXAMINATIONFORM_H
 
+#include "ExaminationData.h"
 #include <QWidget>
 
 namespace Ui {
@@ -15,7 +16,7 @@ public:
   explicit ExaminationForm(QWidget *parent = 0);
   ~ExaminationForm();
 
-  void setName(QString name);
+  void setData(const ExaminationData& data);
 private:
   Ui::ExaminationForm *ui;
 };
