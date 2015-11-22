@@ -56,6 +56,7 @@ MainWindow::MainWindow() :
   connect(patient_widget_, SIGNAL(itemActivated(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
 
   connect(patient_form_, SIGNAL(savePatient(PatientData)), patient_widget_, SLOT(onSavePatient(PatientData)));
+  connect(exam_form_, SIGNAL(saveExam(ExaminationData)), patient_widget_, SLOT(onSaveExamination(ExaminationData)));
 
   QGridLayout* grid = new QGridLayout;
   grid->addWidget(patient_widget_, 0, 0, 2, 1);
@@ -146,7 +147,8 @@ MainWindow::MainWindow() :
   // Add examintation
   QAction* add_examination = new QAction("Dodaj badanie", this);
   addAction(add_examination);
-  connect(add_examination, SIGNAL(triggered()), patient_widget_, SLOT(showAddExaminationDialog()));
+  connect(add_examination, SIGNAL(triggered()), this, SLOT(addExam()));
+  //connect(add_examination, SIGNAL(triggered()), patient_widget_, SLOT(showAddExaminationDialog()));
   patient_toolbar->addAction(add_examination);
   // Remove examination
   QAction* remove_examination = new QAction("Usun badanie", this);
@@ -614,4 +616,12 @@ void MainWindow::addPatient()
   stacked_layout_->setCurrentIndex(0);
   patient_form_->setDisabled(false);
   patient_form_->clear();
+}
+
+void MainWindow::addExam()
+{
+  qDebug() << "MainWindow::addExam()";
+  stacked_layout_->setCurrentIndex(1);
+  exam_form_->setDisabled(false);
+  exam_form_->clear();
 }

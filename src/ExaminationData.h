@@ -10,6 +10,6 @@ struct ExaminationData
   QString scan_name;
 
   QString prepareLabel() {
-    return name;
+    return name + " (" + scan_name + ")";
   }
 };

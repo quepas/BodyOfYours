@@ -48,6 +48,7 @@ public slots:
   void onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous);
 
   void addPatient();
+  void addExam();
 
 private:
   QLabel* m_imgLabel[3];

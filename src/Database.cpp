@@ -27,6 +27,7 @@ void Database::createScheme()
   query.exec("CREATE TABLE examination ("
     "id INTEGER PRIMARY KEY, "
     "name varchar(100),"
+    "scan_name varchar(100),"
     "patient_id INTEGER,"
     "FOREIGN KEY(patient_id) REFERENCES patient(id))");
 }
@@ -105,9 +106,10 @@ bool Database::selectPatient(int id, PatientData& out)
 bool Database::insertExamination(ExaminationData in, ExaminationData& out)
 {
   QSqlQuery query;
-  query.prepare("INSERT INTO examination (name, patient_id) "
-    "VALUES (:name, :patient_id)");
+  query.prepare("INSERT INTO examination (name, scan_name, patient_id) "
+    "VALUES (:name, :scan_name, :patient_id)");
   query.bindValue(":name", in.name);
+  query.bindValue(":scan_name", in.scan_name);
   query.bindValue(":patient_id", in.patient_id);
   if (!query.exec()) {
     qDebug() << "[ERROR] Can't insert examination.";
@@ -128,7 +130,7 @@ QList<ExaminationData> Database::selectExamination(int patient_id)
 {
   QList<ExaminationData> list;
   QSqlQuery query;
-  query.prepare("SELECT id, name FROM examination WHERE patient_id = :patient_id");
+  query.prepare("SELECT id, name, scan_name FROM examination WHERE patient_id = :patient_id");
   query.bindValue(":patient_id", patient_id);
   query.exec();
   while (query.next()) {
@@ -136,6 +138,7 @@ QList<ExaminationData> Database::selectExamination(int patient_id)
     exam.id = query.value(0).toInt();
     exam.patient_id = patient_id;
     exam.name = query.value(1).toString();
+    exam.scan_name = query.value(2).toString();
     list.push_back(exam);
   }
   return list;
@@ -144,13 +147,14 @@ QList<ExaminationData> Database::selectExamination(int patient_id)
 bool Database::selectExamination(int id, ExaminationData& out)
 {
   QSqlQuery query;
-  query.prepare("SELECT id, name, patient_id FROM examination WHERE id = :id");
+  query.prepare("SELECT id, name, scan_name, patient_id FROM examination WHERE id = :id");
   query.bindValue(":id", id);
   query.exec();
   if (query.next()) {
     out.id = query.value(0).toInt();
     out.name = query.value(1).toString();
-    out.patient_id = query.value(2).toInt();
+    out.scan_name = query.value(2).toString();
+    out.patient_id = query.value(3).toInt();
     return true;
   }
   else {
