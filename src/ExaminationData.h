@@ -7,4 +7,9 @@ struct ExaminationData
   int id;
   int patient_id;
   QString name;
+  QString scan_name;
+
+  QString prepareLabel() {
+    return name;
+  }
 };

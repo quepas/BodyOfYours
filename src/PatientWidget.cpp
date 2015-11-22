@@ -144,7 +144,7 @@ void PatientWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
 
 QTreeWidgetItem* PatientWidget::addPatient(PatientData data)
 {
-  auto item = PatientWidgetItem::createPatientItem(data.id, data.name);
+  auto item = PatientWidgetItem::createPatientItem(data.id, data.prepareLabel());
   item->setIcon(0, QIcon("icon/broken8.png"));
   addTopLevelItem(item);
   return item;
@@ -152,7 +152,7 @@ QTreeWidgetItem* PatientWidget::addPatient(PatientData data)
 
 void PatientWidget::addExamination(QTreeWidgetItem* parent, ExaminationData data)
 {
-  auto item = PatientWidgetItem::createExamItem(data.id, data.name);
+  auto item = PatientWidgetItem::createExamItem(data.id, data.prepareLabel());
   item->setIcon(0, QIcon("icon/stethoscope1.png"));
   parent->addChild(item);
 }

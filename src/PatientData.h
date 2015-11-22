@@ -8,4 +8,8 @@ struct PatientData
   QString name;
   QString surname;
   QString pesel;
+
+  QString prepareLabel() {
+    return name + " " + surname + " (" + pesel + ")";
+  }
 };

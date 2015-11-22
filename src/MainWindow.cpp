@@ -467,11 +467,7 @@ void MainWindow::stopReconstruction()
   if (ok)
     std::cout << "Saved mesh as PLY (" << mesh.vertexCount() << " vertices, " << mesh.triangleCount() << " triangles)" << std::endl;
     */
-#ifndef _DEBUG
-  // Show mesh in viewer
-  MeshViewer viewer;
-  //viewer.showMesh(&mesh);
-#endif
+  // TODO: view mesh
 }
 
 
