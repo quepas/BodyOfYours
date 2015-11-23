@@ -23,13 +23,6 @@ PatientWidget::~PatientWidget()
 
 }
 
-void PatientWidget::showAddPatientDialog()
-{
-  /*auto dialog = new PatientDialog(this);
-  connect(dialog, SIGNAL(savePatient(PatientData)), this, SLOT(onSavePatient(PatientData)));
-  dialog->show();*/
-}
-
 void PatientWidget::showAddExaminationDialog()
 {
   auto current_item = currentItem();
@@ -37,7 +30,7 @@ void PatientWidget::showAddExaminationDialog()
     qDebug() << "No current item selected.";
     return;
   }
-  if (current_item->type() != PATIENT) {
+  if (!PatientWidgetItem::isPatient(current_item)) {
     QMessageBox::information(this, "Nowe badanie", "W celu dodania badania zaznacz pacjenta.");
     return;
   }
@@ -68,18 +61,19 @@ void PatientWidget::onSavePatient(PatientData data)
 
 void PatientWidget::showIndex()
 {
-  if (!currentItem()) {
+  auto item = currentItem();
+  if (!item) {
     qDebug() << "No current item selected.";
     return;
   }
   qDebug() << "Current item:";
-  qDebug() << "\ttext: " << currentItem()->text(0);
-  qDebug() << "\tID: " << currentItem()->data(0, ID);
-  if (currentItem()->type() == PATIENT) {
+  qDebug() << "\ttext: " << item->text(0);
+  qDebug() << "\tID: " << PatientWidgetItem::getId(item);
+  if (PatientWidgetItem::isPatient(item)) {
     qDebug() << "\tpatient: " << currentIndex().row();
   }
-  else if (currentItem()->type() == EXAM) {
-    qDebug() << "\tpatient: " << indexOfTopLevelItem(currentItem()->parent());
+  else if (PatientWidgetItem::isExamination(item)) {
+    qDebug() << "\tpatient: " << indexOfTopLevelItem(item->parent());
     qDebug() << "\texamination: " << currentIndex().row();
   }
 }
@@ -104,32 +98,32 @@ void PatientWidget::onSaveExamination(ExaminationData data)
 
 void PatientWidget::removeExamination()
 {
-  if (!currentItem()) {
+  auto item = currentItem();
+  if (!item) {
     qDebug() << "No current item selected.";
     return;
   }
-  if (currentItem()->type() != EXAM) {
+  if (!PatientWidgetItem::isExamination(item)) {
     QMessageBox::information(this, "Usun badanie", "W celu usuniecia badania zaznacz badanie.");
     return;
   }
-  auto item = currentItem();
-  int id = item->data(0, ID).toInt();
+  int id = PatientWidgetItem::getId(item);
   Database::deleteExamination(id);
   item->parent()->removeChild(item);
 }
 
 void PatientWidget::showScan()
 {
-  if (!currentItem()) {
+  auto item = currentItem();
+  if (!item) {
     qDebug() << "[WARNING] No item currently selected.";
     return;
   }
-  if (currentItem()->type() != EXAM) {
+  if (PatientWidgetItem::isExamination(item)) {
     QMessageBox::information(this, "Pokaz skan", "W celu otwarcia skanu zaznacz badanie.");
     return;
   }
-  auto item = currentItem();
-  int id = item->data(0, ID).toInt();
+  int id = PatientWidgetItem::getId(item);
   ExaminationData out;
   Database::selectExamination(id, out);
   emit openScan(out.name);
@@ -137,7 +131,7 @@ void PatientWidget::showScan()
 
 void PatientWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
 {
-  qDebug() << "Double clicked: " << item->text(0) << " (" << item->data(0, ID) << ")";
+  qDebug() << "Double clicked: " << item->text(0) << " (" << PatientWidgetItem::getId(item) << ")";
 }
 
 QTreeWidgetItem* PatientWidget::addPatient(PatientData data)
@@ -148,15 +142,38 @@ QTreeWidgetItem* PatientWidget::addPatient(PatientData data)
   return item;
 }
 
-void PatientWidget::addExamination(QTreeWidgetItem* parent, ExaminationData data)
+QTreeWidgetItem* PatientWidget::addExamination(QTreeWidgetItem* parent, ExaminationData data)
 {
   auto item = PatientWidgetItem::createExamItem(data.id, data.prepareLabel());
   item->setIcon(0, QIcon("icon/stethoscope1.png"));
   parent->addChild(item);
+  return item;
 }
 
 void PatientWidget::onDeletePatient()
 {
   qDebug() << "To delete patient with ID: " << currentItem()->data(0, ID);
   removePatient();
+}
+
+void PatientWidget::removeCurrentItem()
+{
+  QTreeWidgetItem* item = currentItem();
+  if (item != nullptr) {
+    qDebug() << "Remove current item: " << item->text(0) 
+             << " (" << (PatientWidgetItem::isPatient(item) ? "PATIENT" : "EXAMINATION") 
+             << ":" << PatientWidgetItem::getId(item) << ")";
+    if (PatientWidgetItem::isPatient(item)) {
+      //Database::deletePatient(currentItem()->data(0, ID).toInt());
+      auto item = takeTopLevelItem(currentIndex().row());
+
+      delete item;
+    }
+    else if (PatientWidgetItem::isExamination(item)) {
+
+    }
+    else {
+      qDebug() << "[ERROR]: Wrong type of item in PatientWidget.";
+    }
+  }
 }

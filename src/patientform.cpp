@@ -74,5 +74,5 @@ void PatientForm::setShowState(bool show_state)
   delete_button_->setVisible(show_state);
   delete_button_->setDisabled(!show_state);
   clear_button_->setVisible(!show_state);
-  save_button_->setDisabled(!show_state);
+  save_button_->setDisabled(show_state);
 }

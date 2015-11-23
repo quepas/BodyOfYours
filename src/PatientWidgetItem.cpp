@@ -15,3 +15,23 @@ PatientWidgetItem* PatientWidgetItem::createExamItem(int id, QString label, QWid
 {
   return new PatientWidgetItem(EXAM, id, label, parent);
 }
+
+bool PatientWidgetItem::isPatient(QTreeWidgetItem* item)
+{
+  return item->type() == PATIENT;
+}
+
+bool PatientWidgetItem::isExamination(QTreeWidgetItem* item)
+{
+  return item->type() == EXAM;
+}
+
+int PatientWidgetItem::getId(QTreeWidgetItem* item)
+{
+  return item->data(0, ID).toInt();
+}
+
+void PatientWidgetItem::setId(QTreeWidgetItem* item, int id)
+{
+  item->setData(0, ID, id);
+}

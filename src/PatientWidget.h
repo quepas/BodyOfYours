@@ -15,13 +15,15 @@ public:
   PatientWidget(const QList<PatientData>& patients, QWidget* parent = 0);
   ~PatientWidget();
 
+private:
   void buildTree(const QList<PatientData>& patients);
 
   QTreeWidgetItem* addPatient(PatientData data);
-  void addExamination(QTreeWidgetItem* parent, ExaminationData data);
+  QTreeWidgetItem* addExamination(QTreeWidgetItem* parent, ExaminationData data);
+
+  void removeCurrentItem();
 
 public slots:
-  void showAddPatientDialog();
   void showAddExaminationDialog();
   void removePatient();
   void removeExamination();

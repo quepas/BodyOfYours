@@ -592,9 +592,9 @@ void MainWindow::onItemClicked(QTreeWidgetItem* item, int column)
 void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous)
 {
   QString text = current->text(0);
-  int id = current->data(0, ID).toInt();
+  int id = PatientWidgetItem::getId(current);
   qDebug() << "Currently seleted ID: " << id;
-  if (current->type() == PATIENT) {
+  if (PatientWidgetItem::isPatient(current)) {
     stacked_layout_->setCurrentIndex(0);
     PatientForm* patient_form_ = dynamic_cast<PatientForm*>(stacked_layout_->currentWidget());
     PatientData patient;
@@ -602,7 +602,7 @@ void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previ
     patient_form_->setData(patient);
     patient_form_->setShowState(true);
   }
-  else if (current->type() == EXAM) {
+  else if (PatientWidgetItem::isExamination(current)) {
     stacked_layout_->setCurrentIndex(1);
     exam_form_ = dynamic_cast<ExaminationForm*>(stacked_layout_->currentWidget());
     ExaminationData exam;
