@@ -39,19 +39,6 @@ void PatientWidget::showAddExaminationDialog()
   dialog->show();*/
 }
 
-void PatientWidget::removePatient()
-{
-  if (currentItem() != nullptr) {
-    QString name = currentItem()->text(0);
-    qDebug() << "PatientsWidget => \n\tcurrent patient: " << name;
-    qDebug() << "\tcurrent index row: " << currentIndex().row();
-    qDebug() << "\tcurrent index column: " << currentIndex().column();
-    Database::deletePatient(currentItem()->data(0, ID).toInt());
-    auto item = takeTopLevelItem(currentIndex().row());
-    delete item;
-  }
-}
-
 void PatientWidget::onSavePatient(PatientData data)
 {
   PatientData saved;
@@ -96,22 +83,6 @@ void PatientWidget::onSaveExamination(ExaminationData data)
   addExamination(currentItem(), saved);
 }
 
-void PatientWidget::removeExamination()
-{
-  auto item = currentItem();
-  if (!item) {
-    qDebug() << "No current item selected.";
-    return;
-  }
-  if (!PatientWidgetItem::isExamination(item)) {
-    QMessageBox::information(this, "Usun badanie", "W celu usuniecia badania zaznacz badanie.");
-    return;
-  }
-  int id = PatientWidgetItem::getId(item);
-  Database::deleteExamination(id);
-  item->parent()->removeChild(item);
-}
-
 void PatientWidget::showScan()
 {
   auto item = currentItem();
@@ -153,26 +124,35 @@ QTreeWidgetItem* PatientWidget::addExamination(QTreeWidgetItem* parent, Examinat
 void PatientWidget::onDeletePatient()
 {
   qDebug() << "To delete patient with ID: " << currentItem()->data(0, ID);
-  removePatient();
 }
 
 void PatientWidget::removeCurrentItem()
 {
   QTreeWidgetItem* item = currentItem();
+  int id = PatientWidgetItem::getId(item);
   if (item != nullptr) {
     qDebug() << "Remove current item: " << item->text(0) 
              << " (" << (PatientWidgetItem::isPatient(item) ? "PATIENT" : "EXAMINATION") 
-             << ":" << PatientWidgetItem::getId(item) << ")";
+             << ":" << id << ")";
     if (PatientWidgetItem::isPatient(item)) {
-      //Database::deletePatient(currentItem()->data(0, ID).toInt());
-      auto item = takeTopLevelItem(currentIndex().row());
+      // Remove children
+      for (int i = 0; i < item->childCount(); ++i) {
+        delete item->child(i);
+      }
+      // Remove parent
       delete item;
+      if (!Database::deletePatient(id)) {
+        qDebug() << "[ERROR] Couldn't remove patient from DB with id: " << id;
+      }
     }
     else if (PatientWidgetItem::isExamination(item)) {
-
+      delete item;
+      if (!Database::deleteExamination(id)) {
+        qDebug() << "[ERROR] Couldn't remove examination from DB with id: " << id;
+      }
     }
     else {
-      qDebug() << "[ERROR]: Wrong type of item in PatientWidget with name: " << item->text(0) << ".";
+      qDebug() << "[WARNING] Wrong type of item in PatientWidget with name: " << item->text(0);
     }
   }
 }

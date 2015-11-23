@@ -21,12 +21,10 @@ private:
   QTreeWidgetItem* addPatient(PatientData data);
   QTreeWidgetItem* addExamination(QTreeWidgetItem* parent, ExaminationData data);
 
+public slots:
   void removeCurrentItem();
 
-public slots:
   void showAddExaminationDialog();
-  void removePatient();
-  void removeExamination();
 
   void showIndex();
   void showScan();

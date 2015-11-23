@@ -26,6 +26,7 @@ public:
   static QList<ExaminationData> selectExamination(int patient_id);
   static bool selectExamination(int id, ExaminationData& out);
   static bool selectLastExamination(ExaminationData& out);
+
 private:
   QSqlDatabase db_;
 };
