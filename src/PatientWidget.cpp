@@ -1,7 +1,5 @@
 #include "PatientWidget.h"
-#include "PatientDialog.h"
 #include "Database.h"
-#include "examinationdialog.h"
 #include "PatientWidgetItem.h"
 
 #include <QTreeWidgetItem>
@@ -43,9 +41,9 @@ void PatientWidget::showAddExaminationDialog()
     QMessageBox::information(this, "Nowe badanie", "W celu dodania badania zaznacz pacjenta.");
     return;
   }
-  auto dialog = new ExaminationDialog();
+  /*auto dialog = new ExaminationDialog();
   connect(dialog, SIGNAL(saveExamination(ExaminationData)), this, SLOT(onSaveExamination(ExaminationData)));
-  dialog->show();
+  dialog->show();*/
 }
 
 void PatientWidget::removePatient()
