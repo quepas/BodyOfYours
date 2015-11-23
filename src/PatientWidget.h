@@ -24,8 +24,6 @@ private:
 public slots:
   void removeCurrentItem();
 
-  void showAddExaminationDialog();
-
   void showIndex();
   void showScan();
 

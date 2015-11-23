@@ -66,13 +66,13 @@ MainWindow::MainWindow() :
   stacked_layout_->addWidget(patient_form_);
   stacked_layout_->addWidget(exam_form_);
 #ifndef _DEBUG
-  stacked_layout_->addWidget(viewer_);
+  grid->addWidget(viewer_, 1, 1);
 #endif
 
   stacked_layout_->setCurrentIndex(0);
   QWidget* viewport = new QWidget;
   viewport->setLayout(stacked_layout_);
-  grid->addWidget(viewport, 0, 1, 2, 1);
+  grid->addWidget(viewport, 0, 1);
   QWidget* central_widget = new QWidget;
   central_widget->setLayout(grid);
   setCentralWidget(central_widget);
@@ -131,9 +131,6 @@ MainWindow::MainWindow() :
 
   QToolBar* patient_toolbar = new QToolBar(this);
   addToolBar(patient_toolbar);
-
-  // DEBUG: patient's tree with test data
-  //patient_widget_->buildTree(PatientsWidget::prepareTestData());
 
   // Add patient
   QAction* add_patient = new QAction("Dodaj pacjenta", this);

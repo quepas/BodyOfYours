@@ -34,7 +34,7 @@ Viewer::Viewer()
 
 Viewer::~Viewer()
 {
-
+  clearMesh();
 }
 
 void Viewer::initializeGL()
@@ -79,5 +79,8 @@ void Viewer::removeMesh(QString name)
 
 void Viewer::clearMesh()
 {
+  for (auto mesh : mesh_map_) {
+    delete mesh;
+  }
   mesh_map_.clear();
 }

@@ -23,22 +23,6 @@ PatientWidget::~PatientWidget()
 
 }
 
-void PatientWidget::showAddExaminationDialog()
-{
-  auto current_item = currentItem();
-  if (!current_item) {
-    qDebug() << "No current item selected.";
-    return;
-  }
-  if (!PatientWidgetItem::isPatient(current_item)) {
-    QMessageBox::information(this, "Nowe badanie", "W celu dodania badania zaznacz pacjenta.");
-    return;
-  }
-  /*auto dialog = new ExaminationDialog();
-  connect(dialog, SIGNAL(saveExamination(ExaminationData)), this, SLOT(onSaveExamination(ExaminationData)));
-  dialog->show();*/
-}
-
 void PatientWidget::onSavePatient(PatientData data)
 {
   PatientData saved;
@@ -102,7 +86,13 @@ void PatientWidget::showScan()
 
 void PatientWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
 {
-  qDebug() << "Double clicked: " << item->text(0) << " (" << PatientWidgetItem::getId(item) << ")";
+  qDebug() << "[INFO] Double click on: " << item->text(0) << " (" << PatientWidgetItem::getId(item) << ")";
+  if (PatientWidgetItem::isExamination(item)) {
+    ExaminationData data;
+    Database::selectExamination(PatientWidgetItem::getId(item), data);
+    qDebug() << "[INFO] Opening 3d mesh: " << data.scan_name;
+    //emit openScan(data.scan_name);
+  }
 }
 
 QTreeWidgetItem* PatientWidget::addPatient(PatientData data)
@@ -129,8 +119,8 @@ void PatientWidget::onDeletePatient()
 void PatientWidget::removeCurrentItem()
 {
   QTreeWidgetItem* item = currentItem();
-  int id = PatientWidgetItem::getId(item);
   if (item != nullptr) {
+    int id = PatientWidgetItem::getId(item);
     qDebug() << "Remove current item: " << item->text(0) 
              << " (" << (PatientWidgetItem::isPatient(item) ? "PATIENT" : "EXAMINATION") 
              << ":" << id << ")";
