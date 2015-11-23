@@ -12,11 +12,15 @@ PatientForm::PatientForm(QWidget *parent) :
   connect(save_button_, SIGNAL(clicked()), this, SLOT(onSave()));
   clear_button_ = new QPushButton(tr("Wyczysc"));
   connect(clear_button_, SIGNAL(clicked()), this, SLOT(onClear()));
+  delete_button_ = new QPushButton(tr("Usun"));
+  connect(delete_button_, SIGNAL(clicked()), this, SLOT(onDelete()));
 
   buttons_layout_ = new QHBoxLayout;
   //buttons_layout_->addStretch(1);
   buttons_layout_->addWidget(save_button_);
   buttons_layout_->addWidget(clear_button_);
+  buttons_layout_->addWidget(delete_button_);
+  delete_button_->setVisible(false);
 
   setLayout(buttons_layout_);
 }
@@ -57,4 +61,18 @@ void PatientForm::clear()
   ui->nameLineEdit->clear();
   ui->surnameLineEdit->clear();
   ui->peselLineEdit->clear();
+}
+
+void PatientForm::onDelete()
+{
+  emit deletePatient();
+}
+
+void PatientForm::setShowState(bool show_state)
+{
+  ui->formLayoutWidget->setDisabled(show_state);
+  delete_button_->setVisible(show_state);
+  delete_button_->setDisabled(!show_state);
+  clear_button_->setVisible(!show_state);
+  save_button_->setDisabled(!show_state);
 }

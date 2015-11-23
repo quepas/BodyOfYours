@@ -31,6 +31,7 @@ public slots:
 
   void onSavePatient(PatientData data);
   void onSaveExamination(ExaminationData data);
+  void onDeletePatient();
 
   void onItemDoubleClicked(QTreeWidgetItem* item, int column);
 

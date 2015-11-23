@@ -22,18 +22,23 @@ public:
   void setData(const PatientData& data);
   void clear();
 
+  void setShowState(bool show_state);
+
 public slots:
   void onSave();
   void onClear();
+  void onDelete();
 
 signals:
   void savePatient(PatientData name);
+  void deletePatient();
 
 private:
   Ui::PatientForm *ui;
 
   QPushButton* save_button_;
   QPushButton* clear_button_;
+  QPushButton* delete_button_;
   QHBoxLayout* buttons_layout_;
 };
 

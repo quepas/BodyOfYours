@@ -156,3 +156,9 @@ void PatientWidget::addExamination(QTreeWidgetItem* parent, ExaminationData data
   item->setIcon(0, QIcon("icon/stethoscope1.png"));
   parent->addChild(item);
 }
+
+void PatientWidget::onDeletePatient()
+{
+  qDebug() << "To delete patient with ID: " << currentItem()->data(0, ID);
+  removePatient();
+}

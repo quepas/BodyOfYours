@@ -56,6 +56,7 @@ MainWindow::MainWindow() :
   connect(patient_widget_, SIGNAL(itemActivated(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
 
   connect(patient_form_, SIGNAL(savePatient(PatientData)), patient_widget_, SLOT(onSavePatient(PatientData)));
+  connect(patient_form_, SIGNAL(deletePatient()), patient_widget_, SLOT(onDeletePatient()));
   connect(exam_form_, SIGNAL(saveExam(ExaminationData)), patient_widget_, SLOT(onSaveExamination(ExaminationData)));
 
   QGridLayout* grid = new QGridLayout;
@@ -599,7 +600,7 @@ void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previ
     PatientData patient;
     Database::selectPatient(id, patient);
     patient_form_->setData(patient);
-    patient_form_->setDisabled(true);
+    patient_form_->setShowState(true);
   }
   else if (current->type() == EXAM) {
     stacked_layout_->setCurrentIndex(1);
@@ -607,6 +608,7 @@ void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previ
     ExaminationData exam;
     Database::selectExamination(id, exam);
     exam_form_->setData(exam);
+    exam_form_->setDisabled(true);
   }
 }
 
