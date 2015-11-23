@@ -59,11 +59,17 @@ bool Database::insertPatient(PatientData in, PatientData& out)
 
 bool Database::deletePatient(int id)
 {
-  QSqlQuery query;
-  query.prepare("DELETE FROM patient WHERE id = :id");
-  query.bindValue(":id", id);
-  return query.exec();
-  // TODO: delete patient's examinations!
+  bool status;
+  // remove patient's examinations
+  QSqlQuery remove_exam;
+  remove_exam.prepare("DELETE FROM examination WHERE patient_id = :patient_id");
+  remove_exam.bindValue(":patient_id", id);
+  status = remove_exam.exec();
+  // remove patient
+  QSqlQuery remove_patient;
+  remove_patient.prepare("DELETE FROM patient WHERE id = :id");
+  remove_patient.bindValue(":id", id);
+  return status && remove_patient.exec();
 }
 
 QList<PatientData> Database::selectPatient()

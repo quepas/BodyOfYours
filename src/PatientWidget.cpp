@@ -166,14 +166,13 @@ void PatientWidget::removeCurrentItem()
     if (PatientWidgetItem::isPatient(item)) {
       //Database::deletePatient(currentItem()->data(0, ID).toInt());
       auto item = takeTopLevelItem(currentIndex().row());
-
       delete item;
     }
     else if (PatientWidgetItem::isExamination(item)) {
 
     }
     else {
-      qDebug() << "[ERROR]: Wrong type of item in PatientWidget.";
+      qDebug() << "[ERROR]: Wrong type of item in PatientWidget with name: " << item->text(0) << ".";
     }
   }
 }
