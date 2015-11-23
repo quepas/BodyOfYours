@@ -53,7 +53,7 @@ MainWindow::MainWindow() :
   db.createScheme();
   patient_widget_ = new PatientWidget(Database::selectPatient());
   connect(patient_widget_, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(onItemSelected(QTreeWidgetItem*, QTreeWidgetItem*)));
-  connect(patient_widget_, SIGNAL(itemActivated(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
+  connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(openScan(QString)));
 
   connect(patient_form_, SIGNAL(savePatient(PatientData)), patient_widget_, SLOT(onSavePatient(PatientData)));
   connect(patient_form_, SIGNAL(deletePatient()), patient_widget_, SLOT(onDeletePatient()));
@@ -149,13 +149,6 @@ MainWindow::MainWindow() :
   connect(remove_selected, SIGNAL(triggered()), patient_widget_, SLOT(removeCurrentItem()));
   patient_toolbar->addAction(remove_selected);
 
-  // Show examination scan
-  QAction* show_scan = new QAction("Pokaz skan", this);
-  addAction(show_scan);
-  connect(show_scan, SIGNAL(triggered()), patient_widget_, SLOT(showScan()));
-  connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(onOpen3DModel(QString)));
-  patient_toolbar->addAction(show_scan);
-
   // DEBUG: show index
   QAction* show_index = new QAction("Pokaz indeks", this);
   addAction(show_index);
@@ -200,10 +193,10 @@ MainWindow::MainWindow() :
   toolbar->addAction(a);
 
   // Open 3D model
-  a = new QAction("Open 3D Model", this);
-  connect(a, SIGNAL(triggered()), this, SLOT(open3DModel()));
+  /*a = new QAction("Open 3D Model", this);
+  connect(a, SIGNAL(triggered()), this, SLOT(open3DModel(TODO)));
   addAction(a);
-  toolbar->addAction(a);
+  toolbar->addAction(a);*/
 
   // Compute diff
   a = new QAction("Wylicz roznice", this);
@@ -533,21 +526,13 @@ void MainWindow::processFrames()
   update();
 }
 
-void MainWindow::open3DModel()
+void MainWindow::openScan(QString filename)
 {
-  QString fn = QFileDialog::getOpenFileName(this, tr("Open 3D Model File..."), 
-                                            QString(), tr("3D Model-Files (*.ply);;All Files (*)"));
-  std::cout << fn.toStdString() << std::endl;
-  auto filename = QString::fromStdString(fn.toStdString());
-  qDebug() << "[INFO] Opening 3D model: " << filename;
+  qDebug() << "[INFO] Opening scan: " << filename;
+  viewer_->clearMesh();
   CMesh* mesh = new CMesh;
   openMesh(filename, *(mesh));
   viewer_->addMesh("open&show", mesh);
-}
-
-void MainWindow::onOpen3DModel(QString filename)
-{
-  qDebug() << "[INFO] Opening 3D model: " << filename;
 }
 
 void MainWindow::calculateDiff()
@@ -569,16 +554,6 @@ void MainWindow::calculateDiff()
 void MainWindow::calculateMirror()
 {
   //flipMeshXAxis(*(viewer_->cmesh_));
-}
-
-void MainWindow::showScene()
-{
-  viewer_->showEntireScene();
-}
-
-void MainWindow::onItemClicked(QTreeWidgetItem* item, int column)
-{
-  qDebug() << "Item clicked" << item->text(column);
 }
 
 void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous)

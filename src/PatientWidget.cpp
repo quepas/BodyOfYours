@@ -91,7 +91,7 @@ void PatientWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
     ExaminationData data;
     Database::selectExamination(PatientWidgetItem::getId(item), data);
     qDebug() << "[INFO] Opening 3d mesh: " << data.scan_name;
-    //emit openScan(data.scan_name);
+    emit openScan("data/" + data.scan_name);
   }
 }
 

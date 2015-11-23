@@ -39,12 +39,9 @@ public slots:
   void startReconstruction();
   void stopReconstruction();
 
-  void open3DModel();
+  void openScan(QString filename);
   void calculateDiff();
   void calculateMirror();
-  void showScene();
-  void onOpen3DModel(QString filename);
-  void onItemClicked(QTreeWidgetItem* item, int column);
   void onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous);
 
   void addPatient();
