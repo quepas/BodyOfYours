@@ -10,7 +10,7 @@ SensorData::SensorData(const Sensor& sensor)
   int w = sensor.depthWidth();
   int h = sensor.depthHeight();
   K = sensor.depthIntrinsics();
-  T = IdentityMat4();
+  T = identityMat4();
   color_image = new ColorImage(w, h);
   depth_image = new DepthImage(w, h);
   scene_image = new ColorImage(w, h);
@@ -39,7 +39,7 @@ bool SensorData::HasCalibrationImages()
 
 void SensorData::ResetT()
 {
-  T = IdentityMat4();
+  T = identityMat4();
 }
 
 bool SensorData::IsCalibrated()

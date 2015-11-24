@@ -30,11 +30,6 @@ public:
   ~MainWindow();
 
 public slots:
-  void calibrate();
-  void performCalibration();
-  void saveCalibration();
-  void loadCalibration();
-
   void openScan(QString filename);
   void calculateDiff();
   void calculateMirror();

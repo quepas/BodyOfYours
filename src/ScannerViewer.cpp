@@ -18,7 +18,7 @@ ScannerViewer::ScannerViewer(Scanner* scanner, QWidget* parent /*= nullptr*/)
 
 ScannerViewer::~ScannerViewer()
 {
-  for (int i = 0; i < MAX_NUM_SENSORS; ++i) {
+  for (int i = 0; i < num_sensors_; ++i) {
     delete image_camera_[i];
     delete image_scene_[i];
   }

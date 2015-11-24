@@ -4,7 +4,7 @@ using std::string;
 using std::to_string;
 using RecFusion::Mat4;
 
-Mat4 IdentityMat4() {
+Mat4 identityMat4() {
   Mat4 mat;
   for (unsigned i = 0; i < 4; ++i) {
     for (unsigned j = 0; j < 4; ++j) {
@@ -14,13 +14,13 @@ Mat4 IdentityMat4() {
   return mat;
 }
 
-string Mat4ToString(Mat4 matrix)
+QString mat4ToString(Mat4 matrix)
 {
-  string str;
-  for (int i = 0; i < 4; ++i) {
-    for (int j = 0; j < 4; ++j) {
-      str += to_string(matrix(i, j));
-      if (i < 4) {
+  QString str;
+  for (int row = 0; row < 4; ++row) {
+    for (int col = 0; col < 4; ++col) {
+      str += matrix(row, col);
+      if (row < 4) {
         str += " ,";
       }
     }

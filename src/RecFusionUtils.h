@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
+#include <QString>
 #include <RecFusion.h>
 
-RecFusion::Mat4 IdentityMat4();
-std::string Mat4ToString(RecFusion::Mat4 matrix);
+RecFusion::Mat4 identityMat4();
+QString mat4ToString(RecFusion::Mat4 matrix);
