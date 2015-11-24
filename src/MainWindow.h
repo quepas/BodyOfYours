@@ -35,9 +35,6 @@ public slots:
   void saveCalibration();
   void loadCalibration();
 
-  void startReconstruction();
-  void stopReconstruction();
-
   void openScan(QString filename);
   void calculateDiff();
   void calculateMirror();

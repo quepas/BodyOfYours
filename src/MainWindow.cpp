@@ -31,13 +31,13 @@
 #include "PatientWidgetItem.h"
 #include "PatientWidgetToolbar.h"
 #include "Scanner.h"
+#include "ScannerToolbar.h"
 
 #include <vcg/complex/algorithms/update/position.h>
 
 using namespace RecFusion;
 
 MainWindow::MainWindow() :
-  m_timer(0),
   m_calibMessageBox(0),
   m_reconstruct(false),
   m_calibrate(false),
@@ -101,6 +101,9 @@ MainWindow::MainWindow() :
   auto* patient_widget_toolbar = new PatientWidgetToolbar(patient_widget_, this);
   addToolBar(patient_widget_toolbar);
 
+  auto scanner_toolbar = new ScannerToolbar(scanner_, this);
+  addToolBar(scanner_toolbar);
+
   // Add patient
   QAction* add_patient = new QAction("Dodaj pacjenta", this);
   addAction(add_patient);
@@ -136,19 +139,6 @@ MainWindow::MainWindow() :
   connect(a,SIGNAL(triggered()),this,SLOT(loadCalibration()));
   addAction(a);
   toolbar->addAction(a);
-  a = new QAction("Start Reconstruction",this);
-  a->setShortcut(QKeySequence("F5"));
-  //a->setDisabled(num_sensor_ == 0);
-  connect(a,SIGNAL(triggered()),this,SLOT(startReconstruction()));
-  addAction(a);
-  toolbar->addAction(a);
-  a = new QAction("Stop Reconstruction", this);
-  a->setShortcut(QKeySequence("F6"));
-  //a->setDisabled(num_sensor_ == 0);
-  connect(a, SIGNAL(triggered()), this, SLOT(stopReconstruction()));
-  addAction(a);
-  toolbar->addAction(a);
-
   // Compute diff
   a = new QAction("Wylicz roznice", this);
   connect(a, SIGNAL(triggered()), this, SLOT(calculateDiff()));
@@ -171,7 +161,6 @@ MainWindow::~MainWindow()
   }
 
   // Delete all allocated data
-  delete m_timer;
   delete m_rec;
   delete sensor_data_;
   delete patient_widget_;
@@ -326,18 +315,6 @@ void MainWindow::loadCalibration()
     for (int r = 0; r < 4; ++r)
       for (int c = 0; c < 4; ++c)
         m_sensorT[i](r, c) = tmp[i][c * 4 + r];
-}
-
-
-void MainWindow::startReconstruction()
-{
-  scanner_->startReconstruction();
-}
-
-
-void MainWindow::stopReconstruction()
-{
-  scanner_->stopReconstruction();
 }
 
 void MainWindow::openScan(QString filename)
