@@ -30,8 +30,6 @@ public:
   ~MainWindow();
 
 public slots:
-  void processFrames();
-
   void calibrate();
   void performCalibration();
   void saveCalibration();
@@ -52,7 +50,6 @@ private:
   QLabel* m_imgLabel[3];
   QLabel* m_recLabel[3];
   QMessageBox* m_calibMessageBox;
-  QTimer* m_timer;
   Viewer* viewer_;
   Scanner* scanner_;
   QGridLayout* main_layout;

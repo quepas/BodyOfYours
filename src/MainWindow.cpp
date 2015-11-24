@@ -138,13 +138,13 @@ MainWindow::MainWindow() :
   toolbar->addAction(a);
   a = new QAction("Start Reconstruction",this);
   a->setShortcut(QKeySequence("F5"));
-  a->setDisabled(num_sensor_ == 0);
+  //a->setDisabled(num_sensor_ == 0);
   connect(a,SIGNAL(triggered()),this,SLOT(startReconstruction()));
   addAction(a);
   toolbar->addAction(a);
   a = new QAction("Stop Reconstruction", this);
   a->setShortcut(QKeySequence("F6"));
-  a->setDisabled(num_sensor_ == 0);
+  //a->setDisabled(num_sensor_ == 0);
   connect(a, SIGNAL(triggered()), this, SLOT(stopReconstruction()));
   addAction(a);
   toolbar->addAction(a);
@@ -160,10 +160,6 @@ MainWindow::MainWindow() :
   connect(a, SIGNAL(triggered()), this, SLOT(calculateMirror()));
   addAction(a);
   toolbar->addAction(a);
-
-  m_timer = new QTimer(this);
-  connect(m_timer,SIGNAL(timeout()),this,SLOT(processFrames()));
-  m_timer->start(50);
 }
 
 MainWindow::~MainWindow()
@@ -335,79 +331,13 @@ void MainWindow::loadCalibration()
 
 void MainWindow::startReconstruction()
 {
+  scanner_->startReconstruction();
 }
 
 
 void MainWindow::stopReconstruction()
 {
-}
-
-
-void MainWindow::processFrames()
-{
-  for (unsigned i = 0; i < sensors_data_.size(); ++i) {
-    if (!sensors_data_[i]->HasRegularImages())
-      return;
-  }
-
-  // Grab images from sensor
-  bool ok[3];
-  for (unsigned i = 0; i < num_sensor_; ++i) {
-    ok[i] = m_sensor[i]->readImage(*(sensors_data_[i]->depth_image), *(sensors_data_[i]->color_image), 40);
-  }
-
-  // Process images
-  for (unsigned i = 0; i < num_sensor_; ++i)
-  {
-    if (!ok[i]) continue;
-    sensor_data_ = sensors_data_[i];
-
-    // Get image size
-    int w = sensor_data_->color_image->width();
-    int h = sensor_data_->color_image->height();
-
-    if (m_reconstruct && m_rec)
-    {
-      // Add frame to reconstruction
-      bool status = false;
-#ifndef _DEBUG
-      bool ret = m_rec->addFrame(
-        i,
-        *sensor_data_->depth_image,
-        *sensor_data_->color_image,
-        &status,
-        sensor_data_->scene_image,
-        0,
-        &sensor_data_->T);
-#else
-      bool ret = false;
-#endif
-
-      if (ret && status)
-      {
-        // Display rendering of current reconstruction when tracking succeeded
-        QImage image(sensor_data_->scene_image->data(), w, h, QImage::Format_RGB888);
-        m_recLabel[i]->setPixmap(QPixmap::fromImage(image).scaled(w, h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-      }
-    }
-    else if (m_calibrate)
-    {
-      // Save calibration frame
-      for (unsigned i = 0; i < num_sensor_; ++i) {
-        auto data = sensors_data_[i];
-        memcpy(data->calib_color_image->data(), data->color_image->data(), w * h * 3);
-        memcpy(data->calib_depth_image->data(), data->depth_image->data(), w * h * 2);
-        data->calib_image_valid = true;
-      }
-    }
-
-    // Display captured images in GUI
-    QImage image(sensor_data_->color_image->data(), w, h, QImage::Format_RGB888);
-    m_imgLabel[i]->setPixmap(QPixmap::fromImage(image).scaled(w/2.0, h/2.0, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-  }
-
-  // Update GUI
-  update();
+  scanner_->stopReconstruction();
 }
 
 void MainWindow::openScan(QString filename)

@@ -2,6 +2,7 @@
 
 #include "SensorData.h"
 #include <QObject>
+#include <QTimer>
 #include <RecFusion.h>
 
 class Scanner : public QObject
@@ -18,10 +19,12 @@ private:
   RecFusion::Reconstruction* reconstruction_;
   SensorData* sensors_data_[MAX_NUM_SENSORS];
   bool rec_in_progress_;
+  QTimer* timer_;
 
 public slots:
   void startReconstruction();
   void stopReconstruction();
+  void processFrames();
 
 signals:
   void foundSensor(int num, QStringList names);
