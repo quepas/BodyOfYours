@@ -6,12 +6,13 @@
 
 #include <QDebug>
 #include <QMessageBox>
+#include <QAction>
+#include <QPushButton>
 
 PatientWidget::PatientWidget(const QList<PatientData>& patients, QWidget* parent /*= 0*/)
 {
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
   setHeaderLabels(QStringList(("Pacjent")));
-
   buildTree(patients);
 
   // init signal/slots

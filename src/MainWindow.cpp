@@ -29,6 +29,7 @@
 #include "patientform.h"
 #include "examinationform.h"
 #include "PatientWidgetItem.h"
+#include "PatientWidgetToolbar.h"
 
 #include <vcg/complex/algorithms/update/position.h>
 
@@ -132,6 +133,9 @@ MainWindow::MainWindow() :
   QToolBar* patient_toolbar = new QToolBar(this);
   addToolBar(patient_toolbar);
 
+  auto* patient_widget_toolbar = new PatientWidgetToolbar(this);
+  addToolBar(patient_widget_toolbar);
+
   // Add patient
   QAction* add_patient = new QAction("Dodaj pacjenta", this);
   addAction(add_patient);
@@ -192,12 +196,6 @@ MainWindow::MainWindow() :
   addAction(a);
   toolbar->addAction(a);
 
-  // Open 3D model
-  /*a = new QAction("Open 3D Model", this);
-  connect(a, SIGNAL(triggered()), this, SLOT(open3DModel(TODO)));
-  addAction(a);
-  toolbar->addAction(a);*/
-
   // Compute diff
   a = new QAction("Wylicz roznice", this);
   connect(a, SIGNAL(triggered()), this, SLOT(calculateDiff()));
@@ -207,12 +205,6 @@ MainWindow::MainWindow() :
   // Flip by X axis
   a = new QAction("Wylicz odbicie lustrzane", this);
   connect(a, SIGNAL(triggered()), this, SLOT(calculateMirror()));
-  addAction(a);
-  toolbar->addAction(a);
-
-  // Show entire scene
-  a = new QAction("Pokaz cala scene", this);
-  connect(a, SIGNAL(triggered()), this, SLOT(showScene()));
   addAction(a);
   toolbar->addAction(a);
 
