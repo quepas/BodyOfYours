@@ -31,25 +31,6 @@ void PatientWidget::onSavePatient(PatientData data)
   addPatient(saved);
 }
 
-void PatientWidget::showIndex()
-{
-  auto item = currentItem();
-  if (!item) {
-    qDebug() << "No current item selected.";
-    return;
-  }
-  qDebug() << "Current item:";
-  qDebug() << "\ttext: " << item->text(0);
-  qDebug() << "\tID: " << PatientWidgetItem::getId(item);
-  if (PatientWidgetItem::isPatient(item)) {
-    qDebug() << "\tpatient: " << currentIndex().row();
-  }
-  else if (PatientWidgetItem::isExamination(item)) {
-    qDebug() << "\tpatient: " << indexOfTopLevelItem(item->parent());
-    qDebug() << "\texamination: " << currentIndex().row();
-  }
-}
-
 void PatientWidget::buildTree(const QList<PatientData>& patients)
 {
   for (auto& patient : patients) {
@@ -75,14 +56,14 @@ void PatientWidget::showScan()
     qDebug() << "[WARNING] No item currently selected.";
     return;
   }
-  if (PatientWidgetItem::isExamination(item)) {
+  if (!PatientWidgetItem::isExamination(item)) {
     QMessageBox::information(this, "Pokaz skan", "W celu otwarcia skanu zaznacz badanie.");
     return;
   }
   int id = PatientWidgetItem::getId(item);
   ExaminationData out;
   Database::selectExamination(id, out);
-  emit openScan(out.name);
+  emit openScan("data/" + out.scan_name);
 }
 
 void PatientWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)

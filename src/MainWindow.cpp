@@ -133,7 +133,7 @@ MainWindow::MainWindow() :
   QToolBar* patient_toolbar = new QToolBar(this);
   addToolBar(patient_toolbar);
 
-  auto* patient_widget_toolbar = new PatientWidgetToolbar(this);
+  auto* patient_widget_toolbar = new PatientWidgetToolbar(patient_widget_, this);
   addToolBar(patient_widget_toolbar);
 
   // Add patient
@@ -145,19 +145,7 @@ MainWindow::MainWindow() :
   QAction* add_examination = new QAction("Dodaj badanie", this);
   addAction(add_examination);
   connect(add_examination, SIGNAL(triggered()), this, SLOT(addExam()));
-  //connect(add_examination, SIGNAL(triggered()), patient_widget_, SLOT(showAddExaminationDialog()));
   patient_toolbar->addAction(add_examination);
-  // Remove selected item
-  QAction* remove_selected = new QAction("Usun zaznaczony element", this);
-  addAction(remove_selected);
-  connect(remove_selected, SIGNAL(triggered()), patient_widget_, SLOT(removeCurrentItem()));
-  patient_toolbar->addAction(remove_selected);
-
-  // DEBUG: show index
-  QAction* show_index = new QAction("Pokaz indeks", this);
-  addAction(show_index);
-  connect(show_index, SIGNAL(triggered()), patient_widget_, SLOT(showIndex()));
-  patient_toolbar->addAction(show_index);
 
   QToolBar* toolbar = new QToolBar(this);
   addToolBar(toolbar);

@@ -3,8 +3,7 @@
 #include <QAction>
 #include <QDebug>
 
-PatientWidgetToolbar::PatientWidgetToolbar(QWidget* parent /*= nullptr*/)
-  : QToolBar(parent)
+PatientWidgetToolbar::PatientWidgetToolbar(PatientWidget* patient_widget, QWidget* parent /*= nullptr*/) : QToolBar(parent)
 {
   add_patient_ = addAction(QIcon("icon/broken8.png"), tr("Nowy pacjent"));
   add_patient_->setToolTip(tr("Nowy pacjent"));
@@ -16,12 +15,22 @@ PatientWidgetToolbar::PatientWidgetToolbar(QWidget* parent /*= nullptr*/)
   calculate_diff_->setToolTip(tr("Roznica skanow"));
   calculate_mirror_ = addAction(QIcon("icon/two25.png"), tr("Odbicie lustrzane skanow"));
   calculate_mirror_->setToolTip(tr("Odbicie lustrzane skanow"));
+  show_scan_ = addAction(QIcon(tr("icon/radiography.png")), tr("Pokaz skan"));
+  show_scan_->setToolTip(tr("Wyswietl skan"));
 
   connect(add_patient_, &QAction::triggered, [=]{ emit addNewPatient(); });
   connect(add_examination_, &QAction::triggered, [=]{ emit addNewExamination(); });
-  connect(remove_item_, &QAction::triggered, [=]{ emit removeItem(); });
+  connect(remove_item_, &QAction::triggered, [=]{ patient_widget->removeCurrentItem(); });
   connect(calculate_diff_, &QAction::triggered, [=]{ emit calculateDiff(); });
   connect(calculate_mirror_, &QAction::triggered, [=]{ emit calculateMirror(); });
+  connect(show_scan_, &QAction::triggered, [=]{ patient_widget->showScan(); });
+  connect(patient_widget, &PatientWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
+    bool is_patient = PatientWidgetItem::isPatient(current);
+    add_examination_->setEnabled(is_patient);
+    calculate_diff_->setEnabled(!is_patient);
+    calculate_mirror_->setEnabled(!is_patient);
+    show_scan_->setEnabled(!is_patient);
+  });
 }
 
 PatientWidgetToolbar::~PatientWidgetToolbar()
@@ -31,4 +40,5 @@ PatientWidgetToolbar::~PatientWidgetToolbar()
   delete remove_item_;
   delete calculate_diff_;
   delete calculate_mirror_;
+  delete show_scan_;
 }

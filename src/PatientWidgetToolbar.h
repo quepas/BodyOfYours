@@ -1,5 +1,6 @@
 #pragma once
 
+#include "PatientWidget.h"
 #include <QAction>
 #include <QToolBar>
 
@@ -7,7 +8,7 @@ class PatientWidgetToolbar : public QToolBar
 {
   Q_OBJECT
 public:
-  PatientWidgetToolbar(QWidget* parent = nullptr);
+  PatientWidgetToolbar(PatientWidget* patient_widget, QWidget* parent = nullptr);
   ~PatientWidgetToolbar();
 
 private:
@@ -16,11 +17,11 @@ private:
   QAction* remove_item_;
   QAction* calculate_diff_;
   QAction* calculate_mirror_;
+  QAction* show_scan_;
 
 signals:
   void addNewPatient();
   void addNewExamination();
-  void removeItem();
   void calculateDiff();
   void calculateMirror();
 };

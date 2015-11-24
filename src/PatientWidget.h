@@ -24,7 +24,6 @@ private:
 public slots:
   void removeCurrentItem();
 
-  void showIndex();
   void showScan();
 
   void onSavePatient(PatientData data);
