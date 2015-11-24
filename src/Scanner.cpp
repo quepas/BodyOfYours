@@ -1,5 +1,6 @@
 #include "Scanner.h"
 #include <QDebug>
+#include <QImage>
 
 using RecFusion::Mesh;
 using RecFusion::MeshViewer;
@@ -111,19 +112,19 @@ void Scanner::stopReconstruction()
 
 void Scanner::processFrames()
 {
-  for (unsigned i = 0; i < num_sensors_; ++i) {
+  for (int i = 0; i < num_sensors_; ++i) {
     if (!sensors_data_[i]->HasRegularImages())
       return;
   }
-
   // Grab images from sensor
   bool is_data_ok[3];
-  for (unsigned i = 0; i < num_sensors_; ++i) {
+  for (int i = 0; i < num_sensors_; ++i) {
     is_data_ok[i] = sensors_[i]->readImage(*(sensors_data_[i]->depth_image), *(sensors_data_[i]->color_image), 40);
   }
-
+  QList<ImageData> img_camera;
+  QList<ImageData> img_scene;
   // Process images
-  for (unsigned i = 0; i < num_sensors_; ++i)
+  for (int i = 0; i < num_sensors_; ++i)
   {
     if (!is_data_ok[i]) continue;
     auto data = sensors_data_[i];
@@ -135,21 +136,21 @@ void Scanner::processFrames()
     if (rec_in_progress_ && reconstruction_)
     {
       // Add frame to reconstruction
-      bool status = false;
-      bool ret = reconstruction_->addFrame(
+      bool is_recon_ok = false;
+      bool is_frame_ok = reconstruction_->addFrame(
         i,
         *data->depth_image,
         *data->color_image,
-        &status,
+        &is_recon_ok,
         data->scene_image,
         0,
         &data->T);
 
-      if (ret && status)
+      if (is_frame_ok && is_recon_ok)
       {
         // Display rendering of current reconstruction when tracking succeeded
-       /* QImage image(data->scene_image->data(), w, h, QImage::Format_RGB888);
-        m_recLabel[i]->setPixmap(QPixmap::fromImage(image).scaled(w, h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));*/
+       QImage image(data->scene_image->data(), w, h, QImage::Format_RGB888);
+       img_scene.append({image, w, h});
       }
     }
     /*else if (m_calibrate)
@@ -164,10 +165,8 @@ void Scanner::processFrames()
     }*/
 
     // Display captured images in GUI
-   /* QImage image(data->color_image->data(), w, h, QImage::Format_RGB888);
-    m_imgLabel[i]->setPixmap(QPixmap::fromImage(image).scaled(w / 2.0, h / 2.0, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));*/
+    QImage image(data->color_image->data(), w, h, QImage::Format_RGB888);
+    img_camera.append({image, w, h});
   }
-
-  // Update GUI
-  //update();
+  emit sendImages(img_camera, img_scene);
 }

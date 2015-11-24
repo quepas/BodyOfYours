@@ -32,6 +32,7 @@
 #include "PatientWidgetToolbar.h"
 #include "Scanner.h"
 #include "ScannerToolbar.h"
+#include "ScannerViewer.h"
 
 #include <vcg/complex/algorithms/update/position.h>
 
@@ -69,21 +70,24 @@ MainWindow::MainWindow() :
   stacked_layout_->addWidget(patient_form_);
   stacked_layout_->addWidget(exam_form_);
 #ifndef _DEBUG
-  grid->addWidget(viewer_, 1, 1);
+  //grid->addWidget(viewer_, 1, 1);
 #endif
 
+  scanner_ = new Scanner();
   stacked_layout_->setCurrentIndex(0);
   QWidget* viewport = new QWidget;
-  viewport->setLayout(stacked_layout_);
-  grid->addWidget(viewport, 0, 1);
+  //viewport->setLayout(stacked_layout_);
+
+  ScannerViewer* scanner_viewer = new ScannerViewer(scanner_, this);
+  scanner_viewer->setMinimumWidth(500);
+  scanner_viewer->setMinimumHeight(500);
+  grid->addWidget(scanner_viewer, 0, 1);
   QWidget* central_widget = new QWidget;
   central_widget->setLayout(grid);
   setCentralWidget(central_widget);
 
   resize(1366, 768);
   showMaximized();
-
-  scanner_ = new Scanner();
 
   // Create message box for calibration dialog
   m_calibMessageBox = new QMessageBox(this);

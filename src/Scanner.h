@@ -2,8 +2,17 @@
 
 #include "SensorData.h"
 #include <QObject>
+#include <QImage>
 #include <QTimer>
 #include <RecFusion.h>
+
+struct ImageData
+{
+  ImageData(QImage img, int w, int h)
+    : image(img), width(w), height(h) {}
+  QImage image;
+  int width, height;
+};
 
 class Scanner : public QObject
 {
@@ -11,6 +20,8 @@ class Scanner : public QObject
 public:
   Scanner();
   ~Scanner();
+
+  int num_sensors() { return num_sensors_; }
 
 private:
   static const int MAX_NUM_SENSORS = 3;
@@ -28,4 +39,5 @@ public slots:
 
 signals:
   void foundSensor(int num, QStringList names);
+  void sendImages(QList<ImageData> image_rgb, QList<ImageData> image_recon);
 };
