@@ -30,6 +30,7 @@
 #include "examinationform.h"
 #include "PatientWidgetItem.h"
 #include "PatientWidgetToolbar.h"
+#include "Scanner.h"
 
 #include <vcg/complex/algorithms/update/position.h>
 
@@ -43,6 +44,7 @@ MainWindow::MainWindow() :
   m_rec(0),
   num_sensor_(0),
   sensor_data_(nullptr),
+  scanner_(nullptr),
   patient_form_(new PatientForm),
   exam_form_(new ExaminationForm)
 #ifndef _DEBUG
@@ -81,44 +83,7 @@ MainWindow::MainWindow() :
   resize(1366, 768);
   showMaximized();
 
-  // Initialize pointers to zero
-  m_sensor[0] = m_sensor[1] = m_sensor[2] = nullptr;
-
-  // Output RecFusion SDK version
-  qDebug() << "Using RecFusionSDK " << RecFusionSDK::majorVersion() << "." << RecFusionSDK::minorVersion();
-
-  // Load license file
-  bool ok = RecFusionSDK::setLicenseFile("License.dat");
-  if (!ok)
-    qDebug() << "Invalid RecFusion license. Export will be disabled.";
-
-  // Instantiate sensor objects
-  m_sensor[0] = new Sensor();
-  m_sensor[1] = new Sensor();
-  m_sensor[2] = new Sensor();
-
-#ifndef _DEBUG
-  num_sensor_ = m_sensor[0]->deviceCount();
-  qDebug() << QString("Number of sensors connected: ") + QString::number(num_sensor_);
-
-  for (unsigned i = 0; i < num_sensor_; ++i) {
-    ok = m_sensor[i]->open(i);
-    if (!ok)
-    {
-      QMessageBox::warning(this, "Initialization", "Couldn't open sensor num. " + QString::number(i) + ". Exiting.");
-      QTimer::singleShot(0, this, SLOT(close()));
-    }
-    else
-    {
-      // Get sensor properties
-      sensor_data_ = new SensorData(*m_sensor[i]);
-      sensors_data_.push_back(sensor_data_);
-      int w = m_sensor[i]->depthWidth();
-      int h = m_sensor[i]->depthHeight();
-      m_imgLabel[i]->resize(w, h);
-    }
-  }
-#endif
+  scanner_ = new Scanner();
 
   // Create message box for calibration dialog
   m_calibMessageBox = new QMessageBox(this);
@@ -370,72 +335,11 @@ void MainWindow::loadCalibration()
 
 void MainWindow::startReconstruction()
 {
-  m_reconstruct = false;
-
-  // Delete reconstruction object if there is one
-  delete m_rec;
-  m_rec = 0;
-
-  // Set reconstruction parameters for two sensors
-  ReconstructionParams params(num_sensor_);
-
-  // Set per-sensor parameters
-  for (unsigned i = 0; i < num_sensor_; ++i)
-  {
-    auto data = sensors_data_[i];
-    auto depth_image = data->depth_image;
-    auto color_image = data->color_image;
-#ifndef _DEBUG
-    params.setImageSize(color_image->width(), color_image->height(), depth_image->width(), depth_image->height(), i);
-#endif
-    params.setIntrinsics(data->K, i);
-  }
-
-  //params.setVolumePosition(Vec3(0, 200, 1650));
-  //params.setVolumeResolution(Vec3i(204, 512, 204));
-  //params.setVolumeSize(Vec3(800, 2000, 800));
-
-  // Set volume parameters
-  params.setVolumePosition(Vec3(0, 0, 1000));
-  params.setVolumeResolution(Vec3i(256, 256, 256));
-  params.setVolumeSize(Vec3(1000, 1000, 1000)); // x3 100
-
-  // Create reconstruction object
-  m_rec = new Reconstruction(params);
-
-  // Start reconstruction
-  m_reconstruct = true;
 }
 
 
 void MainWindow::stopReconstruction()
 {
-  // Stop reconstruction
-  m_reconstruct = false;
-  if (!m_rec)
-    return;
-
-  // Get reconstructed mesh
-  Mesh* mesh = new Mesh;
-  bool ok = m_rec->getMesh(mesh);
-  // TODO: display reconstructed mesh
-
-  // Delete reconstruction object
-  delete m_rec;
-  m_rec = 0;
-  if (!ok)
-  {
-    std::cout << "Couldn't retrieve mesh" << std::endl;
-    return;
-  }
-  /*
-  std::cout << "Reconstructed mesh (" << mesh.vertexCount() << " vertices, " << mesh.triangleCount() << " triangles)" << std::endl;
-  // Save mesh to file
-  ok = mesh.save("mesh.ply", Mesh::PLY);
-  if (ok)
-    std::cout << "Saved mesh as PLY (" << mesh.vertexCount() << " vertices, " << mesh.triangleCount() << " triangles)" << std::endl;
-    */
-  // TODO: view mesh
 }
 
 

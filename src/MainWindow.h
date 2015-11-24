@@ -13,6 +13,7 @@
 #include "PatientWidget.h"
 #include "patientform.h"
 #include "examinationform.h"
+#include "Scanner.h"
 
 class QLabel;
 class QMessageBox;
@@ -53,6 +54,7 @@ private:
   QMessageBox* m_calibMessageBox;
   QTimer* m_timer;
   Viewer* viewer_;
+  Scanner* scanner_;
   QGridLayout* main_layout;
   QStackedLayout* stacked_layout_;
   PatientForm* patient_form_;
