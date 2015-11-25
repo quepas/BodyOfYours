@@ -10,6 +10,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QPushButton>
+#include <QTabWidget>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QMenu>
 
@@ -78,8 +79,11 @@ MainWindow::MainWindow() :
   QWidget* viewport = new QWidget;
   viewport->setLayout(stacked_layout_);
   ScannerViewer* scanner_viewer = new ScannerViewer(scanner_, this);
-  //grid->addWidget(viewport, 0, 1);
-  grid->addWidget(scanner_viewer, 0, 1);
+  QTabWidget* viewport_tabs = new QTabWidget(this);
+  viewport_tabs->addTab(viewport, tr("Formatki"));
+  viewport_tabs->addTab(viewer_, tr("Wizualizacja"));
+  viewport_tabs->addTab(scanner_viewer, tr("Podglad"));
+  grid->addWidget(viewport_tabs, 0, 1, 2, 1);
   QWidget* central_widget = new QWidget;
   central_widget->setLayout(grid);
   setCentralWidget(central_widget);
