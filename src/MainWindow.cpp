@@ -1,51 +1,18 @@
 #include "MainWindow.h"
 
 #include <QDebug>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QStackedLayout>
-#include <QtWidgets/QInputDialog>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QMessageBox>
-#include <QtWidgets/QPushButton>
+#include <QAction>
 #include <QTabWidget>
-#include <QtWidgets/QToolBar>
-#include <QtWidgets/QMenu>
+#include <QToolBar>
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QElapsedTimer>
-#include <QtCore/QTimer>
-#include <QtCore/QMutex>
-
-#include <iomanip>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
-#include "RecFusionUtils.h"
 #include "Database.h"
 #include "MeshProcessing.h"
-#include "patientform.h"
-#include "examinationform.h"
 #include "PatientWidgetItem.h"
 #include "PatientWidgetToolbar.h"
-#include "Scanner.h"
 #include "ScannerToolbar.h"
 #include "ScannerViewer.h"
 
-#include <vcg/complex/algorithms/update/position.h>
-
-using namespace RecFusion;
-
 MainWindow::MainWindow() :
-  m_calibMessageBox(0),
-  m_reconstruct(false),
-  m_calibrate(false),
-  m_rec(0),
-  num_sensor_(0),
-  sensor_data_(nullptr),
   scanner_(nullptr),
   patient_form_(new PatientForm),
   exam_form_(new ExaminationForm)
@@ -130,15 +97,8 @@ MainWindow::MainWindow() :
 
 MainWindow::~MainWindow()
 {
-  // Close and delete sensors
-  for (unsigned i = 0; i < num_sensor_; ++i) {
-    m_sensor[i]->close();
-    delete m_sensor[i];
-  }
 
   // Delete all allocated data
-  delete m_rec;
-  delete sensor_data_;
   delete patient_widget_;
 }
 
