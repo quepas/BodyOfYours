@@ -68,31 +68,10 @@ MainWindow::MainWindow() :
   addToolBar(scanner_toolbar);
 
   // Add patient
-  QAction* add_patient = new QAction("Dodaj pacjenta", this);
-  addAction(add_patient);
-  connect(add_patient, SIGNAL(triggered()), this, SLOT(addPatient()));
-  patient_toolbar->addAction(add_patient);
-  // Add examintation
-  QAction* add_examination = new QAction("Dodaj badanie", this);
-  addAction(add_examination);
-  connect(add_examination, SIGNAL(triggered()), this, SLOT(addExam()));
-  patient_toolbar->addAction(add_examination);
-
-  QToolBar* toolbar = new QToolBar(this);
-  addToolBar(toolbar);
-
-  QAction* a;
-  // Compute diff
-  a = new QAction("Wylicz roznice", this);
-  connect(a, SIGNAL(triggered()), this, SLOT(calculateDiff()));
-  addAction(a);
-  toolbar->addAction(a);
-
-  // Flip by X axis
-  a = new QAction("Wylicz odbicie lustrzane", this);
-  connect(a, SIGNAL(triggered()), this, SLOT(calculateMirror()));
-  addAction(a);
-  toolbar->addAction(a);
+  connect(patient_widget_toolbar, SIGNAL(addNewPatient()), this, SLOT(addPatient()));
+  connect(patient_widget_toolbar, SIGNAL(addNewExamination()), this, SLOT(addExam()));
+  connect(patient_widget_toolbar, SIGNAL(calculateDiff()), this, SLOT(calculateDiff()));
+  connect(patient_widget_toolbar, SIGNAL(calculateMirror()), this, SLOT(calculateMirror()));
 }
 
 MainWindow::~MainWindow()
