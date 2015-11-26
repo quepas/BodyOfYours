@@ -83,4 +83,5 @@ void Viewer::clearMesh()
     delete mesh;
   }
   mesh_map_.clear();
+  update();
 }

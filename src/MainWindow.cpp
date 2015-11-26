@@ -11,6 +11,7 @@
 #include "PatientWidgetToolbar.h"
 #include "ScannerToolbar.h"
 #include "ScannerViewer.h"
+#include "ViewerToolbar.h"
 
 MainWindow::MainWindow() :
   scanner_(nullptr),
@@ -67,6 +68,9 @@ MainWindow::MainWindow() :
   auto scanner_toolbar = new ScannerToolbar(scanner_, this);
   addToolBar(scanner_toolbar);
 
+  auto viewer_toolbar = new ViewerToolbar(viewer_, this);
+  addToolBar(viewer_toolbar);
+
   // Add patient
   connect(patient_widget_toolbar, SIGNAL(addNewPatient()), this, SLOT(addPatient()));
   connect(patient_widget_toolbar, SIGNAL(addNewExamination()), this, SLOT(addExam()));
@@ -76,7 +80,6 @@ MainWindow::MainWindow() :
 
 MainWindow::~MainWindow()
 {
-
   // Delete all allocated data
   delete patient_widget_;
 }
