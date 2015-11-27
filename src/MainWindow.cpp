@@ -38,9 +38,6 @@ MainWindow::MainWindow() :
   stacked_layout_ = new QStackedLayout;
   stacked_layout_->addWidget(patient_form_);
   stacked_layout_->addWidget(exam_form_);
-#ifndef _DEBUG
-  //grid->addWidget(viewer_, 1, 1);
-#endif
 
   scanner_ = new Scanner(this);
   stacked_layout_->setCurrentIndex(0);
@@ -49,7 +46,11 @@ MainWindow::MainWindow() :
   ScannerViewer* scanner_viewer = new ScannerViewer(scanner_, this);
   QTabWidget* viewport_tabs = new QTabWidget(this);
   viewport_tabs->addTab(viewport, tr("Formatki"));
+#ifndef _DEBUG
   viewport_tabs->addTab(viewer_, tr("Wizualizacja"));
+#else
+  viewport_tabs->addTab(new QLabel(tr("Debug mode")), tr("Wizualizacja"));
+#endif
   viewport_tabs->addTab(scanner_viewer, tr("Podglad"));
   grid->addWidget(viewport_tabs, 0, 1, 2, 1);
   QWidget* central_widget = new QWidget;
@@ -68,9 +69,9 @@ MainWindow::MainWindow() :
   auto scanner_toolbar = new ScannerToolbar(scanner_, this);
   addToolBar(scanner_toolbar);
 
-  auto viewer_toolbar = new ViewerToolbar(viewer_, this);
+  ViewerToolbar* viewer_toolbar = new ViewerToolbar(viewer_, this);
   addToolBar(viewer_toolbar);
-
+  connect(viewer_toolbar, SIGNAL(showTabWithIndex(int)), viewport_tabs, SLOT(setCurrentIndex(int)));
   // Add patient
   connect(patient_widget_toolbar, SIGNAL(addNewPatient()), this, SLOT(addPatient()));
   connect(patient_widget_toolbar, SIGNAL(addNewExamination()), this, SLOT(addExam()));

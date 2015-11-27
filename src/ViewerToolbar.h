@@ -16,5 +16,8 @@ private:
   QAction* clear_viewer_;
   Viewer* viewer_;
 
-  void openMeshFromFile();
+  bool openMeshFromFile();
+
+signals:
+  void showTabWithIndex(int);
 };
