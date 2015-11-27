@@ -3,6 +3,7 @@
 #include <QMainWindow>
 #include <QStackedLayout>
 #include <QGridLayout>
+#include <QTabWidget>
 
 #include "Viewer.h"
 #include "PatientWidget.h"
@@ -35,4 +36,5 @@ private:
   PatientForm* patient_form_;
   ExaminationForm* exam_form_;
   PatientWidget* patient_widget_;
+  QTabWidget* viewport_tabs_;
 };

@@ -2,7 +2,6 @@
 
 #include <QDebug>
 #include <QAction>
-#include <QTabWidget>
 #include <QToolBar>
 
 #include "Database.h"
@@ -44,15 +43,15 @@ MainWindow::MainWindow() :
   QWidget* viewport = new QWidget;
   viewport->setLayout(stacked_layout_);
   ScannerViewer* scanner_viewer = new ScannerViewer(scanner_, this);
-  QTabWidget* viewport_tabs = new QTabWidget(this);
-  viewport_tabs->addTab(viewport, tr("Formatki"));
+  viewport_tabs_ = new QTabWidget(this);
+  viewport_tabs_->addTab(viewport, tr("Formatki"));
 #ifndef _DEBUG
-  viewport_tabs->addTab(viewer_, tr("Wizualizacja"));
+  viewport_tabs_->addTab(viewer_, tr("Wizualizacja"));
 #else
-  viewport_tabs->addTab(new QLabel(tr("Debug mode")), tr("Wizualizacja"));
+  viewport_tabs_->addTab(new QLabel(tr("Debug mode")), tr("Wizualizacja"));
 #endif
-  viewport_tabs->addTab(scanner_viewer, tr("Podglad"));
-  grid->addWidget(viewport_tabs, 0, 1, 2, 1);
+  viewport_tabs_->addTab(scanner_viewer, tr("Podglad"));
+  grid->addWidget(viewport_tabs_, 0, 1, 2, 1);
   QWidget* central_widget = new QWidget;
   central_widget->setLayout(grid);
   setCentralWidget(central_widget);
@@ -71,7 +70,7 @@ MainWindow::MainWindow() :
 
   ViewerToolbar* viewer_toolbar = new ViewerToolbar(viewer_, this);
   addToolBar(viewer_toolbar);
-  connect(viewer_toolbar, SIGNAL(showTabWithIndex(int)), viewport_tabs, SLOT(setCurrentIndex(int)));
+  connect(viewer_toolbar, SIGNAL(showTabWithIndex(int)), viewport_tabs_, SLOT(setCurrentIndex(int)));
   // Add patient
   connect(patient_widget_toolbar, SIGNAL(addNewPatient()), this, SLOT(addPatient()));
   connect(patient_widget_toolbar, SIGNAL(addNewExamination()), this, SLOT(addExam()));
@@ -137,6 +136,7 @@ void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previ
       exam_form_->setData(exam);
       exam_form_->setDisabled(true);
     }
+    viewport_tabs_->setCurrentIndex(0);
   }
 }
 
