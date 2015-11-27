@@ -71,7 +71,8 @@ MainWindow::MainWindow() :
   ViewerToolbar* viewer_toolbar = new ViewerToolbar(viewer_, this);
   addToolBar(viewer_toolbar);
   connect(viewer_toolbar, SIGNAL(showTabWithIndex(int)), viewport_tabs_, SLOT(setCurrentIndex(int)));
-  // Add patient
+  connect(patient_widget_, SIGNAL(showTabWithIndex(int)), viewport_tabs_, SLOT(setCurrentIndex(int)));
+  // Add patient 
   connect(patient_widget_toolbar, SIGNAL(addNewPatient()), this, SLOT(addPatient()));
   connect(patient_widget_toolbar, SIGNAL(addNewExamination()), this, SLOT(addExam()));
   connect(patient_widget_toolbar, SIGNAL(calculateDiff()), this, SLOT(calculateDiff()));
@@ -95,23 +96,31 @@ void MainWindow::openScan(QString filename)
 
 void MainWindow::calculateDiff()
 {
-  QString n_ref = "data/A.ply";
-  QString n_mesh = "data/B.ply";
+  auto items = patient_widget_->selectedItems();
+  if (items.size() == 2) {
+    int idA = PatientWidgetItem::getId(items[0]);
+    int idB = PatientWidgetItem::getId(items[1]);
 
-  CMesh ref, mesh;
-  openMesh(n_ref, ref);
-  openMesh(n_mesh, mesh);
-  CMesh out;
-  computeDifference(ref, mesh, out);
-  auto* pmesh = new CMesh;
-  vcg::tri::Append<CMesh, CMesh>::MeshCopy(*(pmesh), mesh);
-  viewer_->clearMesh();
-  viewer_->addMesh("diff", pmesh);
+    ExaminationData data;
+    Database::selectExamination(idA, data);
+    CMesh meshA;
+    openMesh("data/" + data.scan_name, meshA);
+    Database::selectExamination(idB, data);
+    CMesh meshB;
+    openMesh("data/" + data.scan_name, meshB);
+    CMesh out;
+    computeDifference(meshA, meshB, out);
+    auto* pmesh = new CMesh;
+    vcg::tri::Append<CMesh, CMesh>::MeshCopy(*(pmesh), meshB);
+    viewer_->clearMesh();
+    viewer_->addMesh("diff", pmesh);
+    viewport_tabs_->setCurrentIndex(1);
+  }
 }
 
 void MainWindow::calculateMirror()
 {
-  //flipMeshXAxis(*(viewer_->cmesh_));
+  //flipMeshXAxis(*(viewer_->ma));
 }
 
 void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous)

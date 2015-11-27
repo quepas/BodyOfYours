@@ -34,4 +34,5 @@ public slots:
 
 signals:
   void openScan(QString filename);
+  void showTabWithIndex(int);
 };

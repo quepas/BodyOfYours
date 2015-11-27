@@ -25,11 +25,13 @@ PatientWidgetToolbar::PatientWidgetToolbar(PatientWidget* patient_widget, QWidge
   connect(calculate_mirror_, &QAction::triggered, [=]{ emit calculateMirror(); });
   connect(show_scan_, &QAction::triggered, [=]{ patient_widget->showScan(); });
   connect(patient_widget, &PatientWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
-    bool is_patient = PatientWidgetItem::isPatient(current);
-    add_examination_->setEnabled(is_patient);
-    calculate_diff_->setEnabled(!is_patient);
-    calculate_mirror_->setEnabled(!is_patient);
-    show_scan_->setEnabled(!is_patient);
+    if (current) {
+      bool is_patient = PatientWidgetItem::isPatient(current);
+      add_examination_->setEnabled(is_patient);
+      calculate_diff_->setEnabled(!is_patient);
+      calculate_mirror_->setEnabled(!is_patient);
+      show_scan_->setEnabled(!is_patient);
+    }
   });
 }
 
