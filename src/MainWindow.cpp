@@ -18,7 +18,7 @@ MainWindow::MainWindow() :
   exam_form_(new ExaminationForm)
 #ifndef _DEBUG
   ,
-  viewer_(new Viewer())
+  viewer_(new MeshViewer())
 #endif
 {
   Database db("database.db");

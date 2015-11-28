@@ -1,4 +1,4 @@
-#include "Viewer.h"
+#include "MeshViewer.h"
 #include "MeshProcessing.h"
 
 #include <assimp\vector3.h>
@@ -7,7 +7,7 @@
 using namespace std;
 using RecFusion::Mesh;
 
-void Viewer::draw()
+void MeshViewer::draw()
 {
   if (!mesh_map_.isEmpty()) {
     for (auto mesh : mesh_map_) {
@@ -21,37 +21,37 @@ void Viewer::draw()
   }
 }
 
-void Viewer::init()
+void MeshViewer::init()
 {
   // Restore previous viewer state.
   restoreStateFromFile();
 }
 
-Viewer::Viewer()
+MeshViewer::MeshViewer()
 {
 
 }
 
-Viewer::~Viewer()
+MeshViewer::~MeshViewer()
 {
   clearMesh();
 }
 
-void Viewer::initializeGL()
+void MeshViewer::initializeGL()
 {
   QGLViewer::initializeGL();
   this->setSceneRadius(10000.0);
   this->toggleFPSIsDisplayed();
 }
 
-void Viewer::drawFace(CFace& face)
+void MeshViewer::drawFace(CFace& face)
 {
   for (int i = 0; i < face.VN(); ++i) {
     drawVertexFromFace(face, i);
   }
 }
 
-void Viewer::drawVertexFromFace(CFace& face, int vertex_num)
+void MeshViewer::drawVertexFromFace(CFace& face, int vertex_num)
 {
   auto point = face.V(vertex_num)->P();
   auto normal = face.V(vertex_num)->N();
@@ -61,7 +61,7 @@ void Viewer::drawVertexFromFace(CFace& face, int vertex_num)
   glVertex3f(point.X(), point.Y(), point.Z());
 }
 
-void Viewer::addMesh(QString name, CMesh* mesh)
+void MeshViewer::addMesh(QString name, CMesh* mesh)
 {
   if (mesh_map_.contains(name)) {
     qDebug() << "[WARNING] Render map already contains mesh: " << name
@@ -70,14 +70,14 @@ void Viewer::addMesh(QString name, CMesh* mesh)
   mesh_map_.insert(name, mesh);
 }
 
-void Viewer::removeMesh(QString name)
+void MeshViewer::removeMesh(QString name)
 {
   if (mesh_map_.remove(name) == 0) {
     qDebug() << "[WARNING] Render map doesn't contain mesh: " << name;
   }
 }
 
-void Viewer::clearMesh()
+void MeshViewer::clearMesh()
 {
   for (auto mesh : mesh_map_) {
     delete mesh;
@@ -86,7 +86,7 @@ void Viewer::clearMesh()
   update();
 }
 
-CMesh* Viewer::getLastMesh()
+CMesh* MeshViewer::getLastMesh()
 {
   if (mesh_map_.isEmpty()) return nullptr;
   auto it = mesh_map_.end();

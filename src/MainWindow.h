@@ -5,7 +5,7 @@
 #include <QGridLayout>
 #include <QTabWidget>
 
-#include "Viewer.h"
+#include "MeshViewer.h"
 #include "PatientWidget.h"
 #include "patientform.h"
 #include "examinationform.h"
@@ -29,7 +29,7 @@ public slots:
   void addExam();
 
 private:
-  Viewer* viewer_;
+  MeshViewer* viewer_;
   Scanner* scanner_;
   QGridLayout* main_layout;
   QStackedLayout* stacked_layout_;

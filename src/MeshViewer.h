@@ -8,12 +8,12 @@
 class CMesh;
 class CFace;
 
-class Viewer : public QGLViewer
+class MeshViewer : public QGLViewer
 {
   Q_OBJECT
 public:
-  Viewer();
-  ~Viewer();
+  MeshViewer();
+  ~MeshViewer();
 
   void addMesh(QString name, CMesh* mesh);
   void removeMesh(QString name);
