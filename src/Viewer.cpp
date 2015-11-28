@@ -85,3 +85,11 @@ void Viewer::clearMesh()
   mesh_map_.clear();
   update();
 }
+
+CMesh* Viewer::getLastMesh()
+{
+  if (mesh_map_.isEmpty()) return nullptr;
+  auto it = mesh_map_.end();
+  --it;
+  return *it;
+}

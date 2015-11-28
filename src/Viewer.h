@@ -18,6 +18,7 @@ public:
   void addMesh(QString name, CMesh* mesh);
   void removeMesh(QString name);
   void clearMesh();
+  CMesh* getLastMesh();
 
 protected :
   virtual void initializeGL();

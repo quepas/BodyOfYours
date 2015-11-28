@@ -120,7 +120,11 @@ void MainWindow::calculateDiff()
 
 void MainWindow::calculateMirror()
 {
-  //flipMeshXAxis(*(viewer_->ma));
+  CMesh* mesh = viewer_->getLastMesh();
+  if (mesh) {
+    flipMeshXAxis(*mesh);
+    viewer_->update();
+  }
 }
 
 void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous)
