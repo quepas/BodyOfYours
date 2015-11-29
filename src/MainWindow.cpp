@@ -13,9 +13,7 @@
 #include "ViewerToolbar.h"
 
 MainWindow::MainWindow() :
-  scanner_(nullptr),
-  patient_form_(new PatientForm),
-  exam_form_(new ExaminationForm)
+  scanner_(nullptr)
 #ifndef _DEBUG
   ,
   viewer_(new MeshViewer())
@@ -23,28 +21,18 @@ MainWindow::MainWindow() :
 {
   Database db("database.db");
   db.createScheme();
+  form_viewer_ = new FormViewer(this);
   patient_widget_ = new PatientWidget(Database::selectPatient());
   connect(patient_widget_, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(onItemSelected(QTreeWidgetItem*, QTreeWidgetItem*)));
   connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(openScan(QString)));
-
-  connect(patient_form_, SIGNAL(savePatient(PatientData)), patient_widget_, SLOT(onSavePatient(PatientData)));
-  connect(patient_form_, SIGNAL(deletePatient()), patient_widget_, SLOT(onDeletePatient()));
-  connect(exam_form_, SIGNAL(saveExam(ExaminationData)), patient_widget_, SLOT(onSaveExamination(ExaminationData)));
-
   QGridLayout* grid = new QGridLayout;
   grid->addWidget(patient_widget_, 0, 0, 2, 1);
   patient_widget_->setMaximumWidth(300);
-  stacked_layout_ = new QStackedLayout;
-  stacked_layout_->addWidget(patient_form_);
-  stacked_layout_->addWidget(exam_form_);
-
   scanner_ = new Scanner(this);
-  stacked_layout_->setCurrentIndex(0);
   QWidget* viewport = new QWidget;
-  viewport->setLayout(stacked_layout_);
   ScannerViewer* scanner_viewer = new ScannerViewer(scanner_, this);
   viewport_tabs_ = new QTabWidget(this);
-  viewport_tabs_->addTab(viewport, tr("Formatki"));
+  viewport_tabs_->addTab(form_viewer_, tr("Formatki"));
 #ifndef _DEBUG
   viewport_tabs_->addTab(viewer_, tr("Wizualizacja"));
 #else
@@ -134,20 +122,14 @@ void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previ
     int id = PatientWidgetItem::getId(current);
     qDebug() << "Currently seleted ID: " << id;
     if (PatientWidgetItem::isPatient(current)) {
-      stacked_layout_->setCurrentIndex(0);
-      PatientForm* patient_form_ = dynamic_cast<PatientForm*>(stacked_layout_->currentWidget());
       PatientData patient;
       Database::selectPatient(id, patient);
-      patient_form_->setData(patient);
-      patient_form_->setShowState(true);
+      form_viewer_->showPatient(patient);
     }
     else if (PatientWidgetItem::isExamination(current)) {
-      stacked_layout_->setCurrentIndex(1);
-      exam_form_ = dynamic_cast<ExaminationForm*>(stacked_layout_->currentWidget());
       ExaminationData exam;
       Database::selectExamination(id, exam);
-      exam_form_->setData(exam);
-      exam_form_->setDisabled(true);
+      form_viewer_->ShowExamination(exam);
     }
     viewport_tabs_->setCurrentIndex(0);
   }
@@ -156,15 +138,9 @@ void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previ
 void MainWindow::addPatient()
 {
   qDebug() << "MainWindow::addPatient()";
-  stacked_layout_->setCurrentIndex(0);
-  patient_form_->setDisabled(false);
-  patient_form_->clear();
 }
 
 void MainWindow::addExam()
 {
   qDebug() << "MainWindow::addExam()";
-  stacked_layout_->setCurrentIndex(1);
-  exam_form_->setDisabled(false);
-  exam_form_->clear();
 }
