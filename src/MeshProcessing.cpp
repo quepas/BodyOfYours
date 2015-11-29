@@ -80,7 +80,7 @@ void computeDifference(CMesh& reference, CMesh& mesh, CMesh& out)
 
   unsigned long n_samples_target = 10* max(reference.fn, mesh.fn);// take 10 samples per face
   bool NumberOfSamples = true;
-  double n_samples_per_area_unit;
+  double n_samples_per_area_unit = 1;
   double dist1_max, dist2_max;
 
   // Forward distance.

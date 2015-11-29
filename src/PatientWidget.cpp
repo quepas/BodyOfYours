@@ -9,7 +9,8 @@
 #include <QAction>
 #include <QPushButton>
 
-PatientWidget::PatientWidget(const QList<PatientData>& patients, QWidget* parent /*= 0*/)
+PatientWidget::PatientWidget(FormViewer* form_viewer, const QList<PatientData>& patients, QWidget* parent /*= 0*/)
+  : QTreeWidget(parent), form_viewer_(form_viewer)
 {
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
   setHeaderLabels(QStringList(("Pacjent")));
@@ -17,6 +18,25 @@ PatientWidget::PatientWidget(const QList<PatientData>& patients, QWidget* parent
 
   // init signal/slots
   connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
+  connect(this, &PatientWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
+    qDebug() << "PatientWidget::currentItemChanged()";
+    if (current) {
+      QString text = current->text(0);
+      int id = PatientWidgetItem::getId(current);
+      qDebug() << "Currently seleted ID: " << id;
+      if (PatientWidgetItem::isPatient(current)) {
+        PatientData patient;
+        Database::selectPatient(id, patient);
+        form_viewer_->showPatient(patient);
+      }
+      else if (PatientWidgetItem::isExamination(current)) {
+        ExaminationData exam;
+        Database::selectExamination(id, exam);
+        form_viewer_->ShowExamination(exam);
+      }
+      emit showTabWithIndex(0);
+    }
+  });
 }
 
 PatientWidget::~PatientWidget()

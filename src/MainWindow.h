@@ -7,8 +7,6 @@
 
 #include "MeshViewer.h"
 #include "PatientWidget.h"
-#include "patientform.h"
-#include "examinationform.h"
 #include "Scanner.h"
 #include "FormViewer.h"
 
@@ -24,7 +22,6 @@ public slots:
   void openScan(QString filename);
   void calculateDiff();
   void calculateMirror();
-  void onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous);
 
 private:
   MeshViewer* viewer_;

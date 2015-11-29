@@ -22,8 +22,7 @@ MainWindow::MainWindow() :
   Database db("database.db");
   db.createScheme();
   form_viewer_ = new FormViewer(this);
-  patient_widget_ = new PatientWidget(Database::selectPatient());
-  connect(patient_widget_, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(onItemSelected(QTreeWidgetItem*, QTreeWidgetItem*)));
+  patient_widget_ = new PatientWidget(form_viewer_, Database::selectPatient());
   connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(openScan(QString)));
   QGridLayout* grid = new QGridLayout;
   grid->addWidget(patient_widget_, 0, 0, 2, 1);
@@ -60,9 +59,6 @@ MainWindow::MainWindow() :
   addToolBar(viewer_toolbar);
   connect(viewer_toolbar, SIGNAL(showTabWithIndex(int)), viewport_tabs_, SLOT(setCurrentIndex(int)));
   connect(patient_widget_, SIGNAL(showTabWithIndex(int)), viewport_tabs_, SLOT(setCurrentIndex(int)));
-  // Add patient 
-  connect(patient_widget_toolbar, SIGNAL(addNewPatient()), this, SLOT(addPatient()));
-  connect(patient_widget_toolbar, SIGNAL(addNewExamination()), this, SLOT(addExam()));
   connect(patient_widget_toolbar, SIGNAL(calculateDiff()), this, SLOT(calculateDiff()));
   connect(patient_widget_toolbar, SIGNAL(calculateMirror()), this, SLOT(calculateMirror()));
 }
@@ -112,25 +108,5 @@ void MainWindow::calculateMirror()
   if (mesh) {
     flipMeshXAxis(*mesh);
     viewer_->update();
-  }
-}
-
-void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous)
-{
-  if (current) {
-    QString text = current->text(0);
-    int id = PatientWidgetItem::getId(current);
-    qDebug() << "Currently seleted ID: " << id;
-    if (PatientWidgetItem::isPatient(current)) {
-      PatientData patient;
-      Database::selectPatient(id, patient);
-      form_viewer_->showPatient(patient);
-    }
-    else if (PatientWidgetItem::isExamination(current)) {
-      ExaminationData exam;
-      Database::selectExamination(id, exam);
-      form_viewer_->ShowExamination(exam);
-    }
-    viewport_tabs_->setCurrentIndex(0);
   }
 }
