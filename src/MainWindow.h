@@ -26,9 +26,6 @@ public slots:
   void calculateMirror();
   void onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previous);
 
-  void addPatient();
-  void addExam();
-
 private:
   MeshViewer* viewer_;
   Scanner* scanner_;

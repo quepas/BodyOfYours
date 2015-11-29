@@ -134,13 +134,3 @@ void MainWindow::onItemSelected(QTreeWidgetItem* current, QTreeWidgetItem* previ
     viewport_tabs_->setCurrentIndex(0);
   }
 }
-
-void MainWindow::addPatient()
-{
-  qDebug() << "MainWindow::addPatient()";
-}
-
-void MainWindow::addExam()
-{
-  qDebug() << "MainWindow::addExam()";
-}
