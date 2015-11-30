@@ -1,6 +1,7 @@
 #include "patientform.h"
 #include "ui_patientform.h"
 
+#include <QGroupBox>
 #include <QDebug>
 
 PatientForm::PatientForm(QWidget *parent) :
@@ -8,28 +9,13 @@ PatientForm::PatientForm(QWidget *parent) :
   ui(new Ui::PatientForm)
 {
   ui->setupUi(this);
-  save_button_ = new QPushButton(tr("Zapisz"));
-  connect(save_button_, SIGNAL(clicked()), this, SLOT(onSave()));
-  clear_button_ = new QPushButton(tr("Wyczysc"));
-  connect(clear_button_, SIGNAL(clicked()), this, SLOT(onClear()));
-  delete_button_ = new QPushButton(tr("Usun"));
-  connect(delete_button_, SIGNAL(clicked()), this, SLOT(onDelete()));
-
-  buttons_layout_ = new QHBoxLayout;
-  //buttons_layout_->addStretch(1);
-  buttons_layout_->addWidget(save_button_);
-  buttons_layout_->addWidget(clear_button_);
-  buttons_layout_->addWidget(delete_button_);
-  delete_button_->setVisible(false);
-
-  setLayout(buttons_layout_);
+  form_buttons_ = new FormButtons(this);
+  ui->formLayout->addWidget(form_buttons_->toQWidget());
+  connect(form_buttons_, SIGNAL(buttonClicked(int)), this, SLOT(onButtonClicked(int)));
 }
 
 PatientForm::~PatientForm()
 {
-  delete save_button_;
-  delete clear_button_;
-  delete buttons_layout_;
   delete ui;
 }
 
@@ -40,22 +26,6 @@ void PatientForm::setData(const PatientData& data)
   ui->peselLineEdit->setText(data.pesel);
 }
 
-void PatientForm::onSave()
-{
-  qDebug() << "onSave()";
-  PatientData data;
-  data.name = ui->nameLineEdit->text();
-  data.surname = ui->surnameLineEdit->text();
-  data.pesel = ui->peselLineEdit->text();
-  emit savePatient(data);
-}
-
-void PatientForm::onClear()
-{
-  qDebug() << "PatientForm::onClear()";
-  clear();
-}
-
 void PatientForm::clear()
 {
   ui->nameLineEdit->clear();
@@ -63,16 +33,33 @@ void PatientForm::clear()
   ui->peselLineEdit->clear();
 }
 
-void PatientForm::onDelete()
-{
-  emit deletePatient();
-}
-
 void PatientForm::setShowState(bool show_state)
 {
   ui->formLayoutWidget->setDisabled(show_state);
-  delete_button_->setVisible(show_state);
-  delete_button_->setDisabled(!show_state);
-  clear_button_->setVisible(!show_state);
-  save_button_->setDisabled(show_state);
+}
+
+void PatientForm::onButtonClicked(int button)
+{
+  switch (button) {
+  case FormButtons::SAVE: {
+    PatientData data;
+    data.name = ui->nameLineEdit->text();
+    data.surname = ui->surnameLineEdit->text();
+    data.pesel = ui->peselLineEdit->text();
+    emit savePatient(data); 
+    break;
+  }
+  case FormButtons::CLEAR:
+    clear();
+    break;
+  case FormButtons::CANCEL:
+    break;
+  case FormButtons::LOCK:
+    break;
+  case FormButtons::UNLOCK:
+    break;
+  default:
+    break;
+  }
+  qDebug() << "PatientForm::onButtonClicked()";
 }

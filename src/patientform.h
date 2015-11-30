@@ -2,6 +2,7 @@
 #define PATIENTFORM_H
 
 #include "PatientData.h"
+#include "FormButtons.h"
 
 #include <QWidget>
 #include <QPushButton>
@@ -25,9 +26,7 @@ public:
   void setShowState(bool show_state);
 
 public slots:
-  void onSave();
-  void onClear();
-  void onDelete();
+  void onButtonClicked(int button);
 
 signals:
   void savePatient(PatientData name);
@@ -36,10 +35,7 @@ signals:
 private:
   Ui::PatientForm *ui;
 
-  QPushButton* save_button_;
-  QPushButton* clear_button_;
-  QPushButton* delete_button_;
-  QHBoxLayout* buttons_layout_;
+  FormButtons* form_buttons_;
 };
 
 #endif // PATIENTFORM_H
