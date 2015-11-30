@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PatientWidget.h"
+#include "PatientTreeWidget.h"
 #include <QAction>
 #include <QToolBar>
 
@@ -8,7 +8,7 @@ class PatientWidgetToolbar : public QToolBar
 {
   Q_OBJECT
 public:
-  PatientWidgetToolbar(PatientWidget* patient_widget, QWidget* parent = nullptr);
+  PatientWidgetToolbar(PatientTreeWidget* patient_widget, QWidget* parent = nullptr);
   ~PatientWidgetToolbar();
 
 private:

@@ -3,7 +3,7 @@
 #include <QAction>
 #include <QDebug>
 
-PatientWidgetToolbar::PatientWidgetToolbar(PatientWidget* patient_widget, QWidget* parent /*= nullptr*/) : QToolBar(parent)
+PatientWidgetToolbar::PatientWidgetToolbar(PatientTreeWidget* patient_widget, QWidget* parent /*= nullptr*/) : QToolBar(parent)
 {
   add_patient_ = addAction(QIcon("icon/broken8.png"), tr("Nowy pacjent"));
   add_patient_->setToolTip(tr("Nowy pacjent"));
@@ -24,7 +24,7 @@ PatientWidgetToolbar::PatientWidgetToolbar(PatientWidget* patient_widget, QWidge
   connect(calculate_diff_, &QAction::triggered, [=]{ emit calculateDiff(); });
   connect(calculate_mirror_, &QAction::triggered, [=]{ emit calculateMirror(); });
   connect(show_scan_, &QAction::triggered, [=]{ patient_widget->showScan(); });
-  connect(patient_widget, &PatientWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
+  connect(patient_widget, &PatientTreeWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
     if (current) {
       bool is_patient = PatientWidgetItem::isPatient(current);
       add_examination_->setEnabled(is_patient);

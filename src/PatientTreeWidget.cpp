@@ -1,4 +1,4 @@
-#include "PatientWidget.h"
+#include "PatientTreeWidget.h"
 #include "Database.h"
 #include "PatientWidgetItem.h"
 
@@ -9,7 +9,7 @@
 #include <QAction>
 #include <QPushButton>
 
-PatientWidget::PatientWidget(FormViewer* form_viewer, const QList<PatientData>& patients, QWidget* parent /*= 0*/)
+PatientTreeWidget::PatientTreeWidget(FormViewer* form_viewer, const QList<PatientData>& patients, QWidget* parent /*= 0*/)
   : QTreeWidget(parent), form_viewer_(form_viewer)
 {
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
@@ -20,7 +20,7 @@ PatientWidget::PatientWidget(FormViewer* form_viewer, const QList<PatientData>& 
   connect(form_viewer->examination_form(), SIGNAL(saveExam(ExaminationData)), this, SLOT(onSaveExamination(ExaminationData)));
   // init signal/slots
   connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
-  connect(this, &PatientWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
+  connect(this, &PatientTreeWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
     qDebug() << "PatientWidget::currentItemChanged()";
     if (current) {
       QString text = current->text(0);
@@ -41,19 +41,19 @@ PatientWidget::PatientWidget(FormViewer* form_viewer, const QList<PatientData>& 
   });
 }
 
-PatientWidget::~PatientWidget()
+PatientTreeWidget::~PatientTreeWidget()
 {
 
 }
 
-void PatientWidget::onSavePatient(PatientData data)
+void PatientTreeWidget::onSavePatient(PatientData data)
 {
   PatientData saved;
   Database::insertPatient(data, saved);
   addPatient(saved);
 }
 
-void PatientWidget::buildTree(const QList<PatientData>& patients)
+void PatientTreeWidget::buildTree(const QList<PatientData>& patients)
 {
   for (auto& patient : patients) {
     auto top_item = addPatient(patient);
@@ -63,7 +63,7 @@ void PatientWidget::buildTree(const QList<PatientData>& patients)
   }
 }
 
-void PatientWidget::onSaveExamination(ExaminationData data)
+void PatientTreeWidget::onSaveExamination(ExaminationData data)
 {
   ExaminationData saved;
   data.patient_id = currentItem()->data(0, ID).toInt();
@@ -71,7 +71,7 @@ void PatientWidget::onSaveExamination(ExaminationData data)
   addExamination(currentItem(), saved);
 }
 
-void PatientWidget::showScan()
+void PatientTreeWidget::showScan()
 {
   auto item = currentItem();
   if (!item) {
@@ -88,7 +88,7 @@ void PatientWidget::showScan()
   emit openScan("data/" + out.scan_name);
 }
 
-void PatientWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
+void PatientTreeWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
 {
   qDebug() << "[INFO] Double click on: " << item->text(0) << " (" << PatientWidgetItem::getId(item) << ")";
   if (PatientWidgetItem::isExamination(item)) {
@@ -100,7 +100,7 @@ void PatientWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
   }
 }
 
-QTreeWidgetItem* PatientWidget::addPatient(PatientData data)
+QTreeWidgetItem* PatientTreeWidget::addPatient(PatientData data)
 {
   auto item = PatientWidgetItem::createPatientItem(data.id, data.prepareLabel());
   item->setIcon(0, QIcon("icon/broken8.png"));
@@ -108,7 +108,7 @@ QTreeWidgetItem* PatientWidget::addPatient(PatientData data)
   return item;
 }
 
-QTreeWidgetItem* PatientWidget::addExamination(QTreeWidgetItem* parent, ExaminationData data)
+QTreeWidgetItem* PatientTreeWidget::addExamination(QTreeWidgetItem* parent, ExaminationData data)
 {
   auto item = PatientWidgetItem::createExamItem(data.id, data.prepareLabel());
   item->setIcon(0, QIcon("icon/stethoscope1.png"));
@@ -116,12 +116,12 @@ QTreeWidgetItem* PatientWidget::addExamination(QTreeWidgetItem* parent, Examinat
   return item;
 }
 
-void PatientWidget::onDeletePatient()
+void PatientTreeWidget::onDeletePatient()
 {
   qDebug() << "To delete patient with ID: " << currentItem()->data(0, ID);
 }
 
-void PatientWidget::removeCurrentItem()
+void PatientTreeWidget::removeCurrentItem()
 {
   QTreeWidgetItem* item = currentItem();
   if (item != nullptr) {
@@ -152,12 +152,12 @@ void PatientWidget::removeCurrentItem()
   }
 }
 
-void PatientWidget::onNewPatient()
+void PatientTreeWidget::onNewPatient()
 {
   form_viewer_->newPatient();
 }
 
-void PatientWidget::onNewExamination()
+void PatientTreeWidget::onNewExamination()
 {
   form_viewer_->newExamination();
 }

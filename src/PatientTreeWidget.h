@@ -8,13 +8,13 @@
 #include <QTreeWidget>
 #include <QList>
 
-class PatientWidget : public QTreeWidget
+class PatientTreeWidget : public QTreeWidget
 {
   Q_OBJECT
 
 public:
-  PatientWidget(FormViewer* form_viewer, const QList<PatientData>& patients, QWidget* parent = 0);
-  ~PatientWidget();
+  PatientTreeWidget(FormViewer* form_viewer, const QList<PatientData>& patients, QWidget* parent = 0);
+  ~PatientTreeWidget();
 
 private:
   void buildTree(const QList<PatientData>& patients);

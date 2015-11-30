@@ -22,7 +22,7 @@ MainWindow::MainWindow() :
   Database db("database.db");
   db.createScheme();
   form_viewer_ = new FormViewer(this);
-  patient_widget_ = new PatientWidget(form_viewer_, Database::selectPatient());
+  patient_widget_ = new PatientTreeWidget(form_viewer_, Database::selectPatient());
   connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(openScan(QString)));
   QGridLayout* grid = new QGridLayout;
   grid->addWidget(patient_widget_, 0, 0, 2, 1);
