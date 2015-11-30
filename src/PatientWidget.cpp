@@ -149,3 +149,13 @@ void PatientWidget::removeCurrentItem()
     }
   }
 }
+
+void PatientWidget::onNewPatient()
+{
+  form_viewer_->newPatient();
+}
+
+void PatientWidget::onNewExamination()
+{
+  form_viewer_->newExamination();
+}

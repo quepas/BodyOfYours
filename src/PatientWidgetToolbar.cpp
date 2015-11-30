@@ -18,8 +18,8 @@ PatientWidgetToolbar::PatientWidgetToolbar(PatientWidget* patient_widget, QWidge
   show_scan_ = addAction(QIcon(tr("icon/radiography.png")), tr("Pokaz skan"));
   show_scan_->setToolTip(tr("Wyswietl skan"));
 
-  connect(add_patient_, &QAction::triggered, [=]{ emit addNewPatient(); });
-  connect(add_examination_, &QAction::triggered, [=]{ emit addNewExamination(); });
+  connect(add_patient_, &QAction::triggered, [=]{ patient_widget->onNewPatient(); });
+  connect(add_examination_, &QAction::triggered, [=]{ patient_widget->onNewExamination(); });
   connect(remove_item_, &QAction::triggered, [=]{ patient_widget->removeCurrentItem(); });
   connect(calculate_diff_, &QAction::triggered, [=]{ emit calculateDiff(); });
   connect(calculate_mirror_, &QAction::triggered, [=]{ emit calculateMirror(); });

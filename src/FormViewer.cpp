@@ -33,10 +33,12 @@ void FormViewer::ShowExamination(ExaminationData data)
 
 void FormViewer::newPatient()
 {
+  patient_form_->clear();
   setCurrentIndex(0);
 }
 
 void FormViewer::newExamination()
 {
+  exam_form_->clear();
   setCurrentIndex(1);
 }

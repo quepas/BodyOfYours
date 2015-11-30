@@ -35,6 +35,9 @@ public slots:
 
   void onItemDoubleClicked(QTreeWidgetItem* item, int column);
 
+  void onNewPatient();
+  void onNewExamination();
+
 signals:
   void openScan(QString filename);
   void showTabWithIndex(int);

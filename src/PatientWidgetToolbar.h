@@ -20,8 +20,6 @@ private:
   QAction* show_scan_;
 
 signals:
-  void addNewPatient();
-  void addNewExamination();
   void calculateDiff();
   void calculateMirror();
 };
