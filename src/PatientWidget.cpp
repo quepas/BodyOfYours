@@ -16,6 +16,8 @@ PatientWidget::PatientWidget(FormViewer* form_viewer, const QList<PatientData>& 
   setHeaderLabels(QStringList(("Pacjent")));
   buildTree(patients);
 
+  connect(form_viewer->patient_form(), SIGNAL(savePatient(PatientData)), this, SLOT(onSavePatient(PatientData)));
+  connect(form_viewer->examination_form(), SIGNAL(saveExam(ExaminationData)), this, SLOT(onSaveExamination(ExaminationData)));
   // init signal/slots
   connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
   connect(this, &PatientWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {

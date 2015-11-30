@@ -1,4 +1,5 @@
 #include "FormViewer.h"
+#include "PatientData.h"
 
 FormViewer::FormViewer(QWidget* parent /*= nullptr*/)
   : QStackedWidget(parent)
