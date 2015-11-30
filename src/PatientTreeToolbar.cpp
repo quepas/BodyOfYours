@@ -1,9 +1,9 @@
-#include "PatientWidgetToolbar.h"
+#include "PatientTreeToolbar.h"
 
 #include <QAction>
 #include <QDebug>
 
-PatientWidgetToolbar::PatientWidgetToolbar(PatientTreeWidget* patient_widget, QWidget* parent /*= nullptr*/) : QToolBar(parent)
+PatientTreeToolbar::PatientTreeToolbar(PatientTreeWidget* patient_widget, QWidget* parent /*= nullptr*/) : QToolBar(parent)
 {
   add_patient_ = addAction(QIcon("icon/broken8.png"), tr("Nowy pacjent"));
   add_patient_->setToolTip(tr("Nowy pacjent"));
@@ -26,7 +26,7 @@ PatientWidgetToolbar::PatientWidgetToolbar(PatientTreeWidget* patient_widget, QW
   connect(show_scan_, &QAction::triggered, [=]{ patient_widget->showScan(); });
   connect(patient_widget, &PatientTreeWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
     if (current) {
-      bool is_patient = PatientWidgetItem::isPatient(current);
+      bool is_patient = PatientTreeItem::isPatient(current);
       add_examination_->setEnabled(is_patient);
       calculate_diff_->setEnabled(!is_patient);
       calculate_mirror_->setEnabled(!is_patient);
@@ -35,7 +35,7 @@ PatientWidgetToolbar::PatientWidgetToolbar(PatientTreeWidget* patient_widget, QW
   });
 }
 
-PatientWidgetToolbar::~PatientWidgetToolbar()
+PatientTreeToolbar::~PatientTreeToolbar()
 {
   delete add_examination_;
   delete add_patient_;

@@ -1,6 +1,6 @@
 #include "PatientTreeWidget.h"
 #include "Database.h"
-#include "PatientWidgetItem.h"
+#include "PatientTreeItem.h"
 
 #include <QTreeWidgetItem>
 
@@ -24,14 +24,14 @@ PatientTreeWidget::PatientTreeWidget(FormViewer* form_viewer, const QList<Patien
     qDebug() << "PatientWidget::currentItemChanged()";
     if (current) {
       QString text = current->text(0);
-      int id = PatientWidgetItem::getId(current);
+      int id = PatientTreeItem::getId(current);
       qDebug() << "Currently seleted ID: " << id;
-      if (PatientWidgetItem::isPatient(current)) {
+      if (PatientTreeItem::isPatient(current)) {
         PatientData patient;
         Database::selectPatient(id, patient);
         form_viewer_->showPatient(patient);
       }
-      else if (PatientWidgetItem::isExamination(current)) {
+      else if (PatientTreeItem::isExamination(current)) {
         ExaminationData exam;
         Database::selectExamination(id, exam);
         form_viewer_->ShowExamination(exam);
@@ -78,11 +78,11 @@ void PatientTreeWidget::showScan()
     qDebug() << "[WARNING] No item currently selected.";
     return;
   }
-  if (!PatientWidgetItem::isExamination(item)) {
+  if (!PatientTreeItem::isExamination(item)) {
     QMessageBox::information(this, "Pokaz skan", "W celu otwarcia skanu zaznacz badanie.");
     return;
   }
-  int id = PatientWidgetItem::getId(item);
+  int id = PatientTreeItem::getId(item);
   ExaminationData out;
   Database::selectExamination(id, out);
   emit openScan("data/" + out.scan_name);
@@ -90,10 +90,10 @@ void PatientTreeWidget::showScan()
 
 void PatientTreeWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
 {
-  qDebug() << "[INFO] Double click on: " << item->text(0) << " (" << PatientWidgetItem::getId(item) << ")";
-  if (PatientWidgetItem::isExamination(item)) {
+  qDebug() << "[INFO] Double click on: " << item->text(0) << " (" << PatientTreeItem::getId(item) << ")";
+  if (PatientTreeItem::isExamination(item)) {
     ExaminationData data;
-    Database::selectExamination(PatientWidgetItem::getId(item), data);
+    Database::selectExamination(PatientTreeItem::getId(item), data);
     qDebug() << "[INFO] Opening 3d mesh: " << data.scan_name;
     emit openScan("data/" + data.scan_name);
     emit showTabWithIndex(1);
@@ -102,7 +102,7 @@ void PatientTreeWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
 
 QTreeWidgetItem* PatientTreeWidget::addPatient(PatientData data)
 {
-  auto item = PatientWidgetItem::createPatientItem(data.id, data.prepareLabel());
+  auto item = PatientTreeItem::createPatientItem(data.id, data.prepareLabel());
   item->setIcon(0, QIcon("icon/broken8.png"));
   addTopLevelItem(item);
   return item;
@@ -110,7 +110,7 @@ QTreeWidgetItem* PatientTreeWidget::addPatient(PatientData data)
 
 QTreeWidgetItem* PatientTreeWidget::addExamination(QTreeWidgetItem* parent, ExaminationData data)
 {
-  auto item = PatientWidgetItem::createExamItem(data.id, data.prepareLabel());
+  auto item = PatientTreeItem::createExamItem(data.id, data.prepareLabel());
   item->setIcon(0, QIcon("icon/stethoscope1.png"));
   parent->addChild(item);
   return item;
@@ -125,11 +125,11 @@ void PatientTreeWidget::removeCurrentItem()
 {
   QTreeWidgetItem* item = currentItem();
   if (item != nullptr) {
-    int id = PatientWidgetItem::getId(item);
+    int id = PatientTreeItem::getId(item);
     qDebug() << "Remove current item: " << item->text(0) 
-             << " (" << (PatientWidgetItem::isPatient(item) ? "PATIENT" : "EXAMINATION") 
+             << " (" << (PatientTreeItem::isPatient(item) ? "PATIENT" : "EXAMINATION") 
              << ":" << id << ")";
-    if (PatientWidgetItem::isPatient(item)) {
+    if (PatientTreeItem::isPatient(item)) {
       // Remove children
       for (int i = 0; i < item->childCount(); ++i) {
         delete item->child(i);
@@ -140,7 +140,7 @@ void PatientTreeWidget::removeCurrentItem()
         qDebug() << "[ERROR] Couldn't remove patient from DB with id: " << id;
       }
     }
-    else if (PatientWidgetItem::isExamination(item)) {
+    else if (PatientTreeItem::isExamination(item)) {
       delete item;
       if (!Database::deleteExamination(id)) {
         qDebug() << "[ERROR] Couldn't remove examination from DB with id: " << id;

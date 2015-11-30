@@ -6,8 +6,8 @@
 
 #include "Database.h"
 #include "MeshProcessing.h"
-#include "PatientWidgetItem.h"
-#include "PatientWidgetToolbar.h"
+#include "PatientTreeItem.h"
+#include "PatientTreeToolbar.h"
 #include "ScannerToolbar.h"
 #include "ScannerViewer.h"
 #include "ViewerToolbar.h"
@@ -49,7 +49,7 @@ MainWindow::MainWindow() :
   QToolBar* patient_toolbar = new QToolBar(this);
   addToolBar(patient_toolbar);
 
-  auto* patient_widget_toolbar = new PatientWidgetToolbar(patient_widget_, this);
+  auto* patient_widget_toolbar = new PatientTreeToolbar(patient_widget_, this);
   addToolBar(patient_widget_toolbar);
 
   auto scanner_toolbar = new ScannerToolbar(scanner_, this);
@@ -82,8 +82,8 @@ void MainWindow::calculateDiff()
 {
   auto items = patient_widget_->selectedItems();
   if (items.size() == 2) {
-    int idA = PatientWidgetItem::getId(items[0]);
-    int idB = PatientWidgetItem::getId(items[1]);
+    int idA = PatientTreeItem::getId(items[0]);
+    int idB = PatientTreeItem::getId(items[1]);
 
     ExaminationData data;
     Database::selectExamination(idA, data);

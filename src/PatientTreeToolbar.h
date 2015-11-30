@@ -4,12 +4,12 @@
 #include <QAction>
 #include <QToolBar>
 
-class PatientWidgetToolbar : public QToolBar
+class PatientTreeToolbar : public QToolBar
 {
   Q_OBJECT
 public:
-  PatientWidgetToolbar(PatientTreeWidget* patient_widget, QWidget* parent = nullptr);
-  ~PatientWidgetToolbar();
+  PatientTreeToolbar(PatientTreeWidget* patient_widget, QWidget* parent = nullptr);
+  ~PatientTreeToolbar();
 
 private:
   QAction* add_patient_;

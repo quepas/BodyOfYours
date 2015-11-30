@@ -3,7 +3,7 @@
 #include "FormViewer.h"
 #include "PatientData.h"
 #include "ExaminationData.h"
-#include "PatientWidgetItem.h"
+#include "PatientTreeItem.h"
 
 #include <QTreeWidget>
 #include <QList>
