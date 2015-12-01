@@ -48,6 +48,7 @@ ipch/
 *.pro.user
 *moc_*
 ui_*.h
+*.pro
 
 # CMake files
 CMakeCache.txt
@@ -58,3 +59,13 @@ cmake_install.cmake
 /external/include
 /external/lib
 /data
+
+# Database
+*.db
+
+# various
+various/
+
+# icons/gfx/ui
+icon/
+ui/
