@@ -17,7 +17,7 @@ public:
 
 public slots:
   void showPatient(PatientData data);
-  void ShowExamination(ExaminationData data);
+  void showExamination(ExaminationData data);
   void newPatient();
   void newExamination();
 

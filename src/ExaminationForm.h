@@ -1,10 +1,9 @@
 #pragma once
 
+#include "ExaminationData.h"
 #include "Form.h"
 #include <QWidget>
 #include <QLineEdit>
-
-struct ExaminationData;
 
 class ExaminationForm : public Form
 {

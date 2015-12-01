@@ -24,7 +24,7 @@ void FormViewer::showPatient(PatientData data)
   patient_form_->fill(data);
 }
 
-void FormViewer::ShowExamination(ExaminationData data)
+void FormViewer::showExamination(ExaminationData data)
 {
   patient_form_->clear();
   exam_form_->clear();

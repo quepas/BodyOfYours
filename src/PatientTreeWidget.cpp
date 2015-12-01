@@ -34,7 +34,7 @@ PatientTreeWidget::PatientTreeWidget(FormViewer* form_viewer, const QList<Patien
       else if (PatientTreeItem::isExamination(current)) {
         ExaminationData exam;
         Database::selectExamination(id, exam);
-        form_viewer_->ShowExamination(exam);
+        form_viewer_->showExamination(exam);
       }
       emit showTabWithIndex(0);
     }
