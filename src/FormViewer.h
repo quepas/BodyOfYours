@@ -1,6 +1,6 @@
 #pragma once
 
-#include "patientform.h"
+#include "PatientForm.h"
 #include "examinationform.h"
 #include "PatientData.h"
 #include "ExaminationData.h"

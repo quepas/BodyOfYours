@@ -21,7 +21,7 @@ void FormViewer::showPatient(PatientData data)
   patient_form_->clear();
   exam_form_->clear();
   setCurrentIndex(0);
-  patient_form_->setData(data);
+  patient_form_->fill(data);
 }
 
 void FormViewer::ShowExamination(ExaminationData data)

@@ -1,41 +1,39 @@
-#include "patientform.h"
-#include "ui_patientform.h"
+#include "PatientForm.h"
 
-#include <QGroupBox>
 #include <QDebug>
 
-PatientForm::PatientForm(QWidget *parent) :
-  QWidget(parent),
-  ui(new Ui::PatientForm)
+PatientForm::PatientForm(QWidget *parent) 
+  : Form(parent)
 {
-  ui->setupUi(this);
-  form_buttons_ = new FormButtons(this);
-  ui->formLayout->addWidget(form_buttons_->toQWidget());
-  connect(form_buttons_, SIGNAL(buttonClicked(int)), this, SLOT(onButtonClicked(int)));
+  name = new QLineEdit(this);
+  surname = new QLineEdit(this);
+  pesel = new QLineEdit(this);
+  form_->addRow(tr("Imie"), name);
+  form_->addRow(tr("Nazwisko"), surname);
+  form_->addRow(tr("PESEL"), pesel);
+  connect(buttons_, SIGNAL(buttonClicked(int)), this, SLOT(onButtonClicked(int)));
 }
 
 PatientForm::~PatientForm()
 {
-  delete ui;
+  delete name;
+  delete surname;
+  delete pesel;
 }
 
-void PatientForm::setData(const PatientData& data)
+void PatientForm::fill(const PatientData& data)
 {
-  ui->nameLineEdit->setText(data.name);
-  ui->surnameLineEdit->setText(data.surname);
-  ui->peselLineEdit->setText(data.pesel);
+  name->setText(data.name);
+  surname->setText(data.surname);
+  pesel->setText(data.pesel);
+  form_widget_->setEnabled(false);
 }
 
 void PatientForm::clear()
 {
-  ui->nameLineEdit->clear();
-  ui->surnameLineEdit->clear();
-  ui->peselLineEdit->clear();
-}
-
-void PatientForm::setShowState(bool show_state)
-{
-  ui->formLayoutWidget->setDisabled(show_state);
+  name->clear();
+  surname->clear();
+  pesel->clear();
 }
 
 void PatientForm::onButtonClicked(int button)
@@ -43,9 +41,9 @@ void PatientForm::onButtonClicked(int button)
   switch (button) {
   case FormButtons::SAVE: {
     PatientData data;
-    data.name = ui->nameLineEdit->text();
-    data.surname = ui->surnameLineEdit->text();
-    data.pesel = ui->peselLineEdit->text();
+    data.name = name->text();
+    data.surname = surname->text();
+    data.pesel = pesel->text();
     emit savePatient(data); 
     break;
   }

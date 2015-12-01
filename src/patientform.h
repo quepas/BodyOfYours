@@ -1,18 +1,15 @@
-#ifndef PATIENTFORM_H
-#define PATIENTFORM_H
+#pragma once
 
+#include "Form.h"
 #include "PatientData.h"
 #include "FormButtons.h"
 
 #include <QWidget>
-#include <QPushButton>
-#include <QHBoxLayout>
+#include <QFormLayout>
+#include <QLineEdit>
+#include <QVBoxLayout>
 
-namespace Ui {
-  class PatientForm;
-}
-
-class PatientForm : public QWidget
+class PatientForm : public Form
 {
   Q_OBJECT
 
@@ -20,10 +17,8 @@ public:
   explicit PatientForm(QWidget *parent = 0);
   ~PatientForm();
 
-  void setData(const PatientData& data);
+  void fill(const PatientData& data);
   void clear();
-
-  void setShowState(bool show_state);
 
 public slots:
   void onButtonClicked(int button);
@@ -33,9 +28,7 @@ signals:
   void deletePatient();
 
 private:
-  Ui::PatientForm *ui;
-
-  FormButtons* form_buttons_;
+  QLineEdit* name;
+  QLineEdit* surname;
+  QLineEdit* pesel;
 };
-
-#endif // PATIENTFORM_H
