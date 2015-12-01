@@ -29,7 +29,7 @@ void FormViewer::ShowExamination(ExaminationData data)
   patient_form_->clear();
   exam_form_->clear();
   setCurrentIndex(1);
-  exam_form_->setData(data);
+  exam_form_->fill(data);
 }
 
 void FormViewer::newPatient()

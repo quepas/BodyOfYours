@@ -1,13 +1,10 @@
 #pragma once
 
 #include "Form.h"
-#include "PatientData.h"
-#include "FormButtons.h"
-
 #include <QWidget>
-#include <QFormLayout>
 #include <QLineEdit>
-#include <QVBoxLayout>
+
+struct PatientData;
 
 class PatientForm : public Form
 {
@@ -24,7 +21,7 @@ public slots:
   void onButtonClicked(int button);
 
 signals:
-  void savePatient(PatientData name);
+  void savePatient(PatientData data);
   void deletePatient();
 
 private:
