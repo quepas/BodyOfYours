@@ -19,3 +19,8 @@ Form::~Form()
   delete form_widget_;
   delete main_;
 }
+
+void Form::setEnabled(bool enabled)
+{
+  form_widget_->setEnabled(enabled);
+}

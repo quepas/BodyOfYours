@@ -23,6 +23,7 @@ void ExaminationForm::fill(const ExaminationData& data)
 {
   name->setText(data.name);
   scan_name->setText(data.scan_name);
+  setEnabled(false);
 }
 
 void ExaminationForm::clear()
@@ -47,11 +48,12 @@ void ExaminationForm::onButtonClicked(int button)
   case FormButtons::CANCEL:
     break;
   case FormButtons::LOCK:
+    setEnabled(false);
     break;
   case FormButtons::UNLOCK:
+    setEnabled(true);
     break;
   default:
     break;
   }
-  qDebug() << "ExaminationForm::onButtonClicked()";
 }

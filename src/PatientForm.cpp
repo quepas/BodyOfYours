@@ -27,7 +27,7 @@ void PatientForm::fill(const PatientData& data)
   name->setText(data.name);
   surname->setText(data.surname);
   pesel->setText(data.pesel);
-  form_widget_->setEnabled(false);
+  setEnabled(false);
 }
 
 void PatientForm::clear()
@@ -53,12 +53,16 @@ void PatientForm::onButtonClicked(int button)
     break;
   case FormButtons::CANCEL:
     break;
+  case FormButtons::REMOVE:
+    emit removeCurrentPatient();
+    break;
   case FormButtons::LOCK:
+    setEnabled(false);
     break;
   case FormButtons::UNLOCK:
+    setEnabled(true);
     break;
   default:
     break;
   }
-  qDebug() << "PatientForm::onButtonClicked()";
 }

@@ -22,7 +22,7 @@ public slots:
 
 signals:
   void savePatient(PatientData data);
-  void deletePatient();
+  void removeCurrentPatient();
 
 private:
   QLineEdit* name;

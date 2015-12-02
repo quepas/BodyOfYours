@@ -12,6 +12,8 @@ public:
   explicit Form(QWidget* parent = nullptr);
   ~Form();
 
+  void setEnabled(bool enabled);
+
 protected:
   QFormLayout* form_;
   QWidget* form_widget_;
