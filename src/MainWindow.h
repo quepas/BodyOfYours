@@ -5,6 +5,7 @@
 #include <QGridLayout>
 #include <QTabWidget>
 
+#include "ActionHub.h"
 #include "MeshViewer.h"
 #include "PatientTreeWidget.h"
 #include "Scanner.h"
@@ -30,4 +31,5 @@ private:
   PatientTreeWidget* patient_widget_;
   QTabWidget* viewport_tabs_;
   FormViewer* form_viewer_;
+  ActionHub* action_hub_;
 };

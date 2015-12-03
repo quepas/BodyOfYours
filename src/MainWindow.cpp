@@ -4,6 +4,7 @@
 #include <QAction>
 #include <QToolBar>
 
+#include "GuiActions.h"
 #include "Database.h"
 #include "MeshProcessing.h"
 #include "PatientTreeItem.h"
@@ -52,7 +53,7 @@ MainWindow::MainWindow() :
   auto* patient_widget_toolbar = new PatientTreeToolbar(patient_widget_, this);
   addToolBar(patient_widget_toolbar);
 
-  auto scanner_toolbar = new ScannerToolbar(scanner_, this);
+  auto scanner_toolbar = new ScannerToolbar(this);
   addToolBar(scanner_toolbar);
 
   ViewerToolbar* viewer_toolbar = new ViewerToolbar(viewer_, this);
@@ -61,6 +62,12 @@ MainWindow::MainWindow() :
   connect(patient_widget_, SIGNAL(showTabWithIndex(int)), viewport_tabs_, SLOT(setCurrentIndex(int)));
   connect(patient_widget_toolbar, SIGNAL(calculateDiff()), this, SLOT(calculateDiff()));
   connect(patient_widget_toolbar, SIGNAL(calculateMirror()), this, SLOT(calculateMirror()));
+
+  ActionHub::addAction(new ActionAddNewPatient(this, form_viewer_));
+  ActionHub::addAction(new ActionAddNewExamination(this, patient_widget_));
+  ActionHub::addAction(new ActionDeletePatient(this, patient_widget_));
+  ActionHub::addAction(new ActionStartReconstruction(this, scanner_));
+  ActionHub::addAction(new ActionStopReconstruction(this, scanner_));
 }
 
 MainWindow::~MainWindow()

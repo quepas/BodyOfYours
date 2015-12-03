@@ -1,6 +1,7 @@
 #include "ScannerToolbar.h"
+#include "GuiActions.h"
 
-ScannerToolbar::ScannerToolbar(Scanner * scanner, QWidget* parent /*= nullptr*/)
+ScannerToolbar::ScannerToolbar(QWidget* parent /*= nullptr*/)
   : QToolBar(parent)
 {
   start_recon_ = addAction(QIcon("icon/player2.png"), tr("Rozpocznij rekonstrukcje"));
@@ -9,10 +10,10 @@ ScannerToolbar::ScannerToolbar(Scanner * scanner, QWidget* parent /*= nullptr*/)
   stop_recon_->setToolTip(tr("Zatrzymaj rekonstrukcje"));
 
   connect(start_recon_, &QAction::triggered, [=]{
-    scanner->startReconstruction();
+    ActionHub::trigger(ActionStartReconstruction::TYPE());
   });
   connect(stop_recon_, &QAction::triggered, [=]{
-    scanner->stopReconstruction();
+    ActionHub::trigger(ActionStopReconstruction::TYPE());
   });
 }
 
