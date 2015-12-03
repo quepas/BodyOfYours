@@ -151,13 +151,3 @@ void PatientTreeWidget::removeCurrentItem()
     }
   }
 }
-
-void PatientTreeWidget::onNewPatient()
-{
-  form_viewer_->newPatient();
-}
-
-void PatientTreeWidget::onNewExamination()
-{
-  form_viewer_->newExamination();
-}

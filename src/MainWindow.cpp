@@ -64,7 +64,7 @@ MainWindow::MainWindow() :
   connect(patient_widget_toolbar, SIGNAL(calculateMirror()), this, SLOT(calculateMirror()));
 
   ActionHub::addAction(new ActionAddNewPatient(this, form_viewer_));
-  ActionHub::addAction(new ActionAddNewExamination(this, patient_widget_));
+  ActionHub::addAction(new ActionAddNewExamination(this, form_viewer_));
   ActionHub::addAction(new ActionDeletePatient(this, patient_widget_));
   ActionHub::addAction(new ActionStartReconstruction(this, scanner_));
   ActionHub::addAction(new ActionStopReconstruction(this, scanner_));

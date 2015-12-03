@@ -13,8 +13,8 @@ CREATE_ACTION(ActionAddNewPatient, {
 }, FormViewer* form_viewer)
 
 CREATE_ACTION(ActionAddNewExamination, {
-  patient_widget->onNewExamination();
-}, PatientTreeWidget* patient_widget)
+  form_viewer->newExamination();
+}, FormViewer* form_viewer)
 
 CREATE_ACTION(ActionDeletePatient, {
   widget->removeCurrentItem();
