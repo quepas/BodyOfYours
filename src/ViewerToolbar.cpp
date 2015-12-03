@@ -1,5 +1,6 @@
 #include "ViewerToolbar.h"
 
+#include "GuiActions.h"
 #include "MeshProcessing.h"
 #include <QDebug>
 #include <QFileDialog>
@@ -17,7 +18,7 @@ ViewerToolbar::ViewerToolbar(MeshViewer* viewer, QWidget* parent) : QToolBar(par
     }
   });
   connect(clear_viewer_, &QAction::triggered, [=]{
-    viewer->clearMesh();
+    ActionHub::trigger(ActionMeshViewerClear::TYPE());
     emit showTabWithIndex(1);
   });
 }

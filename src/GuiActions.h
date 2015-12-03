@@ -4,6 +4,7 @@
 #include "Action.h"
 
 #include "FormViewer.h"
+#include "MeshViewer.h"
 #include "PatientTreeWidget.h"
 #include "Scanner.h"
 
@@ -30,3 +31,7 @@ CREATE_ACTION(ActionStartReconstruction, {
 CREATE_ACTION(ActionStopReconstruction, {
   scanner->stopReconstruction();
 }, Scanner* scanner)
+
+CREATE_ACTION(ActionMeshViewerClear, {
+  viewer->clearMesh();
+}, MeshViewer* viewer);

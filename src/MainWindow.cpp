@@ -68,6 +68,7 @@ MainWindow::MainWindow() :
   ActionHub::addAction(new ActionDeletePatient(this, patient_widget_));
   ActionHub::addAction(new ActionStartReconstruction(this, scanner_));
   ActionHub::addAction(new ActionStopReconstruction(this, scanner_));
+  ActionHub::addAction(new ActionMeshViewerClear(this, viewer_));
 }
 
 MainWindow::~MainWindow()
