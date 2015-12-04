@@ -1,5 +1,6 @@
 #include "ExaminationForm.h"
 #include "ExaminationData.h"
+#include "GuiActions.h"
 
 #include <QDebug>
 
@@ -55,6 +56,8 @@ void ExaminationForm::onButtonClicked(int button)
   case FormButtons::CANCEL:
     break;
   case FormButtons::REMOVE:
+    clear();
+    ActionHub::trigger(ActionDeleteCurrentItem::TYPE());
     break;
   case FormButtons::LOCK:
     setEnabled(false);

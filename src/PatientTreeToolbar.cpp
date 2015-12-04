@@ -27,7 +27,7 @@ PatientTreeToolbar::PatientTreeToolbar(PatientTreeWidget* patient_widget, QWidge
     ActionHub::trigger(ActionAddNewExamination::TYPE());
   });
   connect(remove_item_, &QAction::triggered, [=]{
-    ActionHub::trigger(ActionDeletePatient::TYPE());
+    ActionHub::trigger(ActionDeleteCurrentItem::TYPE());
   });
   connect(calculate_diff_, &QAction::triggered, [=]{ emit calculateDiff(); });
   connect(calculate_mirror_, &QAction::triggered, [=]{ emit calculateMirror(); });

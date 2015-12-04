@@ -16,7 +16,7 @@ CREATE_ACTION(ActionAddNewExamination, {
   form_viewer->newExamination();
 }, FormViewer* form_viewer)
 
-CREATE_ACTION(ActionDeletePatient, {
+CREATE_ACTION(ActionDeleteCurrentItem, {
   widget->removeCurrentItem();
 }, PatientTreeWidget* widget)
 

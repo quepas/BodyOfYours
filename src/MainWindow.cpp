@@ -6,6 +6,7 @@
 
 #include "GuiActions.h"
 #include "Database.h"
+#include "MeshDifferenceDlg.h"
 #include "MeshProcessing.h"
 #include "PatientTreeItem.h"
 #include "PatientTreeToolbar.h"
@@ -65,7 +66,7 @@ MainWindow::MainWindow() :
 
   ActionHub::addAction(new ActionAddNewPatient(this, form_viewer_));
   ActionHub::addAction(new ActionAddNewExamination(this, form_viewer_));
-  ActionHub::addAction(new ActionDeletePatient(this, patient_widget_));
+  ActionHub::addAction(new ActionDeleteCurrentItem(this, patient_widget_));
   ActionHub::addAction(new ActionStartReconstruction(this, scanner_));
   ActionHub::addAction(new ActionStopReconstruction(this, scanner_));
   ActionHub::addAction(new ActionMeshViewerClear(this, viewer_));
@@ -88,6 +89,23 @@ void MainWindow::openScan(QString filename)
 
 void MainWindow::calculateDiff()
 {
+  auto item = patient_widget_->currentItem();
+  if (item && PatientTreeItem::isExamination(item)) {
+    qDebug() << item->text(0);
+    auto parent = item->parent();
+    qDebug() << "\tparent: " << parent->text(0);
+    QStringList options;
+    for (int i = 0; i < parent->childCount(); ++i) {
+      auto child = parent->child(i);
+      if (child != item) {
+        QString entry = parent->child(i)->text(0);
+        qDebug() << "\t\tchild: " << entry;
+        options.append(entry);
+      }
+    }
+    (new MeshDifferenceDlg(this, options))->show();
+  }
+  /*
   auto items = patient_widget_->selectedItems();
   if (items.size() == 2) {
     int idA = PatientTreeItem::getId(items[0]);
@@ -107,7 +125,7 @@ void MainWindow::calculateDiff()
     viewer_->clearMesh();
     viewer_->addMesh("diff", pmesh);
     viewport_tabs_->setCurrentIndex(1);
-  }
+  }*/
 }
 
 void MainWindow::calculateMirror()
