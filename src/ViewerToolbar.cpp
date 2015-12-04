@@ -28,11 +28,19 @@ ViewerToolbar::ViewerToolbar(MeshViewer* viewer, QWidget* parent) : QToolBar(par
   });
   connect(previous_quality_map_, &QAction::triggered, [=]{
     qDebug() << "Prev quality map";
-    applyQualityToMesh(*(viewer_->getLastMesh()), nullptr);
+    auto mesh = viewer_->getLastMesh();
+    if (mesh) {
+      applyQualityToMesh(*mesh, nullptr);
+      viewer_->update();
+    }
   });
   connect(next_quality_map_, &QAction::triggered, [=]{
     qDebug() << "Next quality map";
-    applyQualityToMesh(*(viewer_->getLastMesh()), nullptr);
+    auto mesh = viewer_->getLastMesh();
+    if (mesh) {
+      applyQualityToMesh(*mesh, nullptr);
+      viewer_->update();
+    }
   });
 }
 
