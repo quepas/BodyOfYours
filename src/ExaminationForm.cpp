@@ -31,6 +31,8 @@ void ExaminationForm::clear()
 {
   name->clear();
   scan_name->clear();
+  setEnabled(true);
+  buttons_->setNewFormState();
 }
 
 void ExaminationForm::onButtonClicked(int button)
@@ -41,12 +43,18 @@ void ExaminationForm::onButtonClicked(int button)
     data.name = name->text();
     data.scan_name = scan_name->text();
     emit saveExam(data);
+    setEnabled(false);
     break;
   }
+  case FormButtons::MODIFY:
+    setEnabled(false);
+    break;
   case FormButtons::CLEAR:
     clear();
     break;
   case FormButtons::CANCEL:
+    break;
+  case FormButtons::REMOVE:
     break;
   case FormButtons::LOCK:
     setEnabled(false);
