@@ -12,8 +12,11 @@ public:
   FormButtons(QWidget* parent = nullptr);
   ~FormButtons();
 
+  void setLocked(bool locked);
+
   void setNewFormState();
   void setShowFormState();
+  void setAfterModifyFormState();
 
   enum BUTTON
   {

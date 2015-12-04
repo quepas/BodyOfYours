@@ -22,6 +22,7 @@ public slots:
 
 signals:
   void savePatient(PatientData data);
+  void modifyPatient(PatientData data);
   void removeCurrentPatient();
 
 private:

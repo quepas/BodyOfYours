@@ -30,6 +30,7 @@ public slots:
   void showScan();
 
   void onSavePatient(PatientData data);
+  void onModifyPatient(PatientData data);
   void onSaveExamination(ExaminationData data);
   void onDeletePatient();
 

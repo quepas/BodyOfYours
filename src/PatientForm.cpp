@@ -1,5 +1,6 @@
 #include "PatientForm.h"
 #include "PatientData.h"
+#include "GuiActions.h"
 
 #include <QDebug>
 
@@ -28,6 +29,7 @@ void PatientForm::fill(const PatientData& data)
   surname->setText(data.surname);
   pesel->setText(data.pesel);
   setEnabled(false);
+  buttons_->setShowFormState();
 }
 
 void PatientForm::clear()
@@ -35,6 +37,8 @@ void PatientForm::clear()
   name->clear();
   surname->clear();
   pesel->clear();
+  setEnabled(true);
+  buttons_->setNewFormState();
 }
 
 void PatientForm::onButtonClicked(int button)
@@ -45,16 +49,20 @@ void PatientForm::onButtonClicked(int button)
     data.name = name->text();
     data.surname = surname->text();
     data.pesel = pesel->text();
-    emit savePatient(data); 
+    emit savePatient(data);
+    setEnabled(false);
     break;
   }
+  case FormButtons::MODIFY:
+    setEnabled(false);
+    break;
   case FormButtons::CLEAR:
     clear();
     break;
   case FormButtons::CANCEL:
     break;
   case FormButtons::REMOVE:
-    emit removeCurrentPatient();
+    ActionHub::trigger(ActionDeletePatient::TYPE());
     break;
   case FormButtons::LOCK:
     setEnabled(false);

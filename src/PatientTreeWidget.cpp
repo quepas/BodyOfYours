@@ -17,6 +17,7 @@ PatientTreeWidget::PatientTreeWidget(FormViewer* form_viewer, const QList<Patien
   buildTree(patients);
 
   connect(form_viewer->patient_form(), SIGNAL(savePatient(PatientData)), this, SLOT(onSavePatient(PatientData)));
+  connect(form_viewer->patient_form(), SIGNAL(modifyPatient(PatientData)), this, SLOT(onModifyPatient(PatientData)));
   connect(form_viewer->examination_form(), SIGNAL(saveExam(ExaminationData)), this, SLOT(onSaveExamination(ExaminationData)));
   // init signal/slots
   connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
@@ -51,6 +52,11 @@ void PatientTreeWidget::onSavePatient(PatientData data)
   PatientData saved;
   Database::insertPatient(data, saved);
   addPatient(saved);
+}
+
+void PatientTreeWidget::onModifyPatient(PatientData data)
+{
+
 }
 
 void PatientTreeWidget::buildTree(const QList<PatientData>& patients)

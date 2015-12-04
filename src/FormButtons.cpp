@@ -17,9 +17,10 @@ FormButtons::FormButtons(QWidget* parent /*= nullptr*/)
   addButton(clear_button_, CLEAR);
   buttons_layout_->addWidget(clear_button_);
   // CANCEL
-  //cancel_button_ = new QPushButton(QIcon(tr("icon/delete85.png")), tr("Anuluj"), buttons_);
-  //addButton(cancel_button_, CANCEL);
-  //buttons_layout_->addWidget(cancel_button_);
+  cancel_button_ = new QPushButton(QIcon(tr("icon/delete85.png")), tr("Anuluj"), buttons_);
+  addButton(cancel_button_, CANCEL);
+  buttons_layout_->addWidget(cancel_button_);
+  cancel_button_->setVisible(false);
   // DELETE
   remove_button_ = new QPushButton(QIcon(tr("icon/delete81.png")), tr("Usun"), buttons_);
   addButton(remove_button_, REMOVE);
@@ -35,7 +36,24 @@ FormButtons::FormButtons(QWidget* parent /*= nullptr*/)
   buttons_layout_->addWidget(unlock_button_);
 
   // Current buttons state
-  setNewFormState();
+  setShowFormState();
+  setLocked(true);
+  // MODIFY
+  connect(modify_button_, &QPushButton::clicked, [=]{
+    setLocked(true);
+  });
+  // CANCEL
+  connect(cancel_button_, &QPushButton::clicked, [=]{
+    setLocked(true);
+  });
+  // CLEAR
+  connect(clear_button_, &QPushButton::clicked, [=]{
+    setLocked(true);
+  });
+  // REMOVE
+  connect(remove_button_, &QPushButton::clicked, [=]{
+    setLocked(true);
+  });
 
   // SAVE -> MODIFY
   connect(save_button_, &QPushButton::clicked, [=]{
@@ -43,12 +61,10 @@ FormButtons::FormButtons(QWidget* parent /*= nullptr*/)
   });
   // LOCK <-> UNLOCK
   connect(lock_button_, &QPushButton::clicked, [=]{
-    unlock_button_->setVisible(true);
-    lock_button_->setVisible(false);
+    setLocked(true);
   });
   connect(unlock_button_, &QPushButton::clicked, [=]{
-    unlock_button_->setVisible(false);
-    lock_button_->setVisible(true);
+    setLocked(false);
   });
 }
 
@@ -68,10 +84,29 @@ void FormButtons::setNewFormState()
 {
   save_button_->setVisible(true);
   modify_button_->setVisible(false);
+  remove_button_->setVisible(false);
+  clear_button_->setVisible(true);
+  setLocked(false);
+  unlock_button_->setVisible(false);
+  lock_button_->setVisible(false);
 }
 
 void FormButtons::setShowFormState()
 {
   save_button_->setVisible(false);
   modify_button_->setVisible(true);
+  clear_button_->setVisible(false);
+  remove_button_->setVisible(true);
+  setLocked(true);
+}
+
+void FormButtons::setLocked(bool locked)
+{
+  save_button_->setDisabled(locked);
+  modify_button_->setDisabled(locked);
+  clear_button_->setDisabled(locked);
+  cancel_button_->setDisabled(locked);
+  remove_button_->setDisabled(locked);
+  unlock_button_->setVisible(locked);
+  lock_button_->setVisible(!locked);
 }

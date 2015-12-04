@@ -24,6 +24,7 @@ void ExaminationForm::fill(const ExaminationData& data)
   name->setText(data.name);
   scan_name->setText(data.scan_name);
   setEnabled(false);
+  buttons_->setShowFormState();
 }
 
 void ExaminationForm::clear()
