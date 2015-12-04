@@ -5,6 +5,7 @@
 #include <vcg/complex/algorithms/update/component_ep.h>
 #include <vcg/complex/algorithms/update/bounding.h>
 #include "sampling.h"
+#include <random>
 
 using vcg::tri::Append;
 using vcg::tri::Clean;
@@ -163,4 +164,23 @@ void flipMeshXAxis(CMesh& mesh)
   transform.SetIdentity();
   transform[0][0] = -1.0;
   UpdatePosition<CMesh>::Matrix(mesh, transform, false);
+}
+
+void retriveQualityFromMesh(CMesh& mesh, float*& quality)
+{
+  int size = mesh.vert.size();
+  qDebug() << "Num. of vertex with quality: " << size;
+  for (CMesh::VertexIterator vi = mesh.vert.begin(); vi != mesh.vert.end(); ++vi) {
+    //float a = vi->Q();
+  }
+}
+
+void applyQualityToMesh(CMesh& mesh, float* quality)
+{
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  for (CMesh::VertexIterator vi = mesh.vert.begin(); vi != mesh.vert.end(); ++vi) {
+    vi->Q() = std::generate_canonical<float, 10>(gen);
+  }
+  vcg::tri::UpdateColor<CMesh>::PerVertexQualityRamp(mesh);
 }

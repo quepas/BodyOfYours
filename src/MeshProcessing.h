@@ -18,3 +18,5 @@ void computeDifference(CMesh& reference, CMesh& mesh, CMesh& out);
 void computeMirror(CMesh& reference, CMesh& mesh, CMesh& out);
 void flipMeshXAxis(CMesh& mesh);
 void flipMeshXAxis(CMesh& base, CMesh& out);
+void retriveQualityFromMesh(CMesh& mesh, float*& quality);
+void applyQualityToMesh(CMesh& mesh, float* quality);

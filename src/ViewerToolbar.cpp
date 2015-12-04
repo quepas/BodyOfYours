@@ -12,6 +12,11 @@ ViewerToolbar::ViewerToolbar(MeshViewer* viewer, QWidget* parent) : QToolBar(par
   clear_viewer_ = addAction(QIcon("icon/warning39.png"), tr("Wyczysc widok wizualizacji"));
   clear_viewer_->setToolTip(tr("Wyczysc widok wizualizacji"));
 
+  previous_quality_map_ = addAction(QIcon("icon/window58.png"), tr("Poprzednia mapa kolorow"));
+  previous_quality_map_->setToolTip(tr("Poprzednia mapa kolorow"));
+  next_quality_map_ = addAction(QIcon("icon/expand43.png"), tr("Nastepna mapa kolorow"));
+  previous_quality_map_->setToolTip(tr("Nastepna mapa kolorow"));
+
   connect(open_mesh_, &QAction::triggered, [=]{
     if (openMeshFromFile()) {
       emit showTabWithIndex(1);
@@ -20,6 +25,14 @@ ViewerToolbar::ViewerToolbar(MeshViewer* viewer, QWidget* parent) : QToolBar(par
   connect(clear_viewer_, &QAction::triggered, [=]{
     ActionHub::trigger(ActionMeshViewerClear::TYPE());
     emit showTabWithIndex(1);
+  });
+  connect(previous_quality_map_, &QAction::triggered, [=]{
+    qDebug() << "Prev quality map";
+    applyQualityToMesh(*(viewer_->getLastMesh()), nullptr);
+  });
+  connect(next_quality_map_, &QAction::triggered, [=]{
+    qDebug() << "Next quality map";
+    applyQualityToMesh(*(viewer_->getLastMesh()), nullptr);
   });
 }
 
