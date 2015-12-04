@@ -36,8 +36,9 @@ FormButtons::FormButtons(QWidget* parent /*= nullptr*/)
   buttons_layout_->addWidget(unlock_button_);
 
   // Current buttons state
-  setShowFormState();
-  setLocked(true);
+  setNewFormState();
+  setLocked(false);
+  lock_button_->setVisible(false);
   // MODIFY
   connect(modify_button_, &QPushButton::clicked, [=]{
     setLocked(true);

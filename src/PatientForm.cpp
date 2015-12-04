@@ -62,6 +62,7 @@ void PatientForm::onButtonClicked(int button)
   case FormButtons::CANCEL:
     break;
   case FormButtons::REMOVE:
+    clear();
     ActionHub::trigger(ActionDeletePatient::TYPE());
     break;
   case FormButtons::LOCK:
