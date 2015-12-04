@@ -20,6 +20,7 @@ private:
   void buildTree(const QList<PatientData>& patients);
 
   QTreeWidgetItem* addPatient(PatientData data);
+  QTreeWidgetItem* modifyPatient(PatientData data);
   QTreeWidgetItem* addExamination(QTreeWidgetItem* parent, ExaminationData data);
 
   FormViewer* form_viewer_;

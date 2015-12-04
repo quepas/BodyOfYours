@@ -109,6 +109,22 @@ bool Database::selectPatient(int id, PatientData& out)
   return false;
 }
 
+bool Database::updatePatientOnly(PatientData data)
+{
+  QSqlQuery query;
+  query.prepare(
+    "UPDATE patient SET "
+      "name = :name,"
+      "surname = :surname,"
+      "pesel = :pesel "
+    "WHERE id = :id");
+  query.bindValue(":id", data.id);
+  query.bindValue(":name", data.name);
+  query.bindValue(":surname", data.surname);
+  query.bindValue(":pesel", data.pesel);
+  return query.exec();
+}
+
 bool Database::insertExamination(ExaminationData in, ExaminationData& out)
 {
   QSqlQuery query;

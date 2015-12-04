@@ -29,4 +29,7 @@ private:
   QLineEdit* name;
   QLineEdit* surname;
   QLineEdit* pesel;
+  int id;
+
+  PatientData getData();
 };

@@ -16,6 +16,7 @@ public:
 
   static bool insertPatient(PatientData data);
   static bool insertPatient(PatientData in, PatientData& out);
+  static bool updatePatientOnly(PatientData data);
   static bool deletePatient(int id);
   static QList<PatientData> selectPatient();
   static bool selectPatient(int id, PatientData& out);

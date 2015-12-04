@@ -56,7 +56,8 @@ void PatientTreeWidget::onSavePatient(PatientData data)
 
 void PatientTreeWidget::onModifyPatient(PatientData data)
 {
-
+  Database::updatePatientOnly(data);
+  modifyPatient(data);
 }
 
 void PatientTreeWidget::buildTree(const QList<PatientData>& patients)
@@ -112,6 +113,18 @@ QTreeWidgetItem* PatientTreeWidget::addPatient(PatientData data)
   item->setIcon(0, QIcon("icon/broken8.png"));
   addTopLevelItem(item);
   return item;
+}
+
+QTreeWidgetItem* PatientTreeWidget::modifyPatient(PatientData data)
+{
+  for (int i = 0; i < topLevelItemCount(); ++i) {
+    auto item = topLevelItem(i);
+    if (PatientTreeItem::isPatient(item) && PatientTreeItem::getId(item) == data.id) {
+      item->setText(0, data.prepareLabel());
+      return item;
+    }
+  }
+  return nullptr;
 }
 
 QTreeWidgetItem* PatientTreeWidget::addExamination(QTreeWidgetItem* parent, ExaminationData data)

@@ -20,5 +20,6 @@ class Action : public QAction
   Q_OBJECT
 public:
   Action(QObject* parent) : QAction(parent) {}
+  virtual ~Action() {}
   virtual QString type() = 0;
 };

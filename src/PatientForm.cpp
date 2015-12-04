@@ -25,6 +25,7 @@ PatientForm::~PatientForm()
 
 void PatientForm::fill(const PatientData& data)
 {
+  id = data.id;
   name->setText(data.name);
   surname->setText(data.surname);
   pesel->setText(data.pesel);
@@ -45,16 +46,13 @@ void PatientForm::onButtonClicked(int button)
 {
   switch (button) {
   case FormButtons::SAVE: {
-    PatientData data;
-    data.name = name->text();
-    data.surname = surname->text();
-    data.pesel = pesel->text();
-    emit savePatient(data);
+    emit savePatient(getData());
     setEnabled(false);
     break;
   }
   case FormButtons::MODIFY:
     setEnabled(false);
+    emit modifyPatient(getData());
     break;
   case FormButtons::CLEAR:
     clear();
@@ -74,4 +72,14 @@ void PatientForm::onButtonClicked(int button)
   default:
     break;
   }
+}
+
+PatientData PatientForm::getData()
+{
+  PatientData data;
+  data.id = id;
+  data.name = name->text();
+  data.surname = surname->text();
+  data.pesel = pesel->text();
+  return data;
 }
