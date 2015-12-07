@@ -13,6 +13,7 @@
 #include "ScannerToolbar.h"
 #include "ScannerViewer.h"
 #include "ViewerToolbar.h"
+#include "PForm.h"
 
 MainWindow::MainWindow() :
   scanner_(nullptr)
@@ -33,7 +34,9 @@ MainWindow::MainWindow() :
   QWidget* viewport = new QWidget;
   ScannerViewer* scanner_viewer = new ScannerViewer(scanner_, this);
   viewport_tabs_ = new QTabWidget(this);
-  viewport_tabs_->addTab(form_viewer_, tr("Formatki"));
+  //viewport_tabs_->addTab(form_viewer_, tr("Formatki"));
+  PForm* pform = new PForm(this);
+  viewport_tabs_->addTab(pform, tr("Formatki"));
 #ifndef _DEBUG
   viewport_tabs_->addTab(viewer_, tr("Wizualizacja"));
 #else
