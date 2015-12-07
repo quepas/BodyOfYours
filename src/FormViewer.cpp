@@ -4,10 +4,11 @@
 FormViewer::FormViewer(QWidget* parent /*= nullptr*/)
   : QStackedWidget(parent)
 {
-  patient_form_ = new PatientForm(this);
-  exam_form_ = new ExaminationForm(this);
-  addWidget(patient_form_);
-  addWidget(exam_form_);
+  /*patient_form_ = new PatientForm(this);
+  exam_form_ = new ExaminationForm(this);*/
+
+  /*addWidget(patient_form_);
+  addWidget(exam_form_);*/
 }
 
 FormViewer::~FormViewer()
@@ -18,28 +19,28 @@ FormViewer::~FormViewer()
 
 void FormViewer::showPatient(PatientData data)
 {
-  patient_form_->clear();
-  exam_form_->clear();
+//  patient_form_->clear();
+ // exam_form_->clear();
   setCurrentIndex(0);
-  patient_form_->fill(data);
+ // patient_form_->fill(data);
 }
 
 void FormViewer::showExamination(ExaminationData data)
 {
-  patient_form_->clear();
-  exam_form_->clear();
+  //patient_form_->clear();
+ // exam_form_->clear();
   setCurrentIndex(1);
-  exam_form_->fill(data);
+ // exam_form_->fill(data);
 }
 
 void FormViewer::newPatient()
 {
-  patient_form_->clear();
+  //patient_form_->clear();
   setCurrentIndex(0);
 }
 
 void FormViewer::newExamination()
 {
-  exam_form_->clear();
+  //exam_form_->clear();
   setCurrentIndex(1);
 }

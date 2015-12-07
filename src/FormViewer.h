@@ -6,14 +6,17 @@
 #include "ExaminationData.h"
 #include <QStackedWidget>
 
+#include "PForm.h"
+#include "EForm.h"
+
 class FormViewer : public QStackedWidget
 {
 public:
   FormViewer(QWidget* parent = nullptr);
   ~FormViewer();
 
-  PatientForm* patient_form() { return patient_form_; }
-  ExaminationForm* examination_form() { return exam_form_; }
+  /*PatientForm* patient_form() { return patient_form_; }
+  ExaminationForm* examination_form() { return exam_form_; }*/
 
 public slots:
   void showPatient(PatientData data);
@@ -22,7 +25,7 @@ public slots:
   void newExamination();
 
 private:
-  PatientForm* patient_form_;
-  ExaminationForm* exam_form_;
+  PForm* patient_form_;
+  EForm* exam_form_;
 
 };

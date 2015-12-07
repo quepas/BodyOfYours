@@ -13,7 +13,8 @@
 #include "ScannerToolbar.h"
 #include "ScannerViewer.h"
 #include "ViewerToolbar.h"
-#include "PForm.h"
+//#include "PForm.h"
+#include "StackedFormWidget.h"
 
 MainWindow::MainWindow() :
   scanner_(nullptr)
@@ -22,10 +23,12 @@ MainWindow::MainWindow() :
   viewer_(new MeshViewer())
 #endif
 {
+  main_form_ = nullptr;
   Database db("database.db");
   db.createScheme();
   form_viewer_ = new FormViewer(this);
-  patient_widget_ = new PatientTreeWidget(form_viewer_, Database::selectPatient());
+  StackedFormWidget* stack = new StackedFormWidget;
+  patient_widget_ = new PatientTreeWidget(stack, Database::selectPatient());
   connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(openScan(QString)));
   QGridLayout* grid = new QGridLayout;
   grid->addWidget(patient_widget_, 0, 0, 2, 1);
@@ -35,8 +38,9 @@ MainWindow::MainWindow() :
   ScannerViewer* scanner_viewer = new ScannerViewer(scanner_, this);
   viewport_tabs_ = new QTabWidget(this);
   //viewport_tabs_->addTab(form_viewer_, tr("Formatki"));
-  PForm* pform = new PForm(this);
-  viewport_tabs_->addTab(pform, tr("Formatki"));
+  main_form_ = nullptr;
+  //PForm* pform = new PForm(this);
+  viewport_tabs_->addTab(stack, tr("Formatki"));
 #ifndef _DEBUG
   viewport_tabs_->addTab(viewer_, tr("Wizualizacja"));
 #else
@@ -67,7 +71,7 @@ MainWindow::MainWindow() :
   connect(patient_widget_toolbar, SIGNAL(calculateDiff()), this, SLOT(calculateDiff()));
   connect(patient_widget_toolbar, SIGNAL(calculateMirror()), this, SLOT(calculateMirror()));
 
-  ActionHub::addAction(new ActionAddNewPatient(this, form_viewer_));
+  ActionHub::addAction(new ActionAddNewPatient(this, stack));
   ActionHub::addAction(new ActionAddNewExamination(this, form_viewer_));
   ActionHub::addAction(new ActionDeleteCurrentItem(this, patient_widget_));
   ActionHub::addAction(new ActionStartReconstruction(this, scanner_));

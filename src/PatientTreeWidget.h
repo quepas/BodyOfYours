@@ -1,9 +1,10 @@
 #pragma once
 
-#include "FormViewer.h"
+#include "FormWidget.h"
 #include "PatientData.h"
 #include "ExaminationData.h"
 #include "PatientTreeItem.h"
+#include "StackedFormWidget.h"
 
 #include <QTreeWidget>
 #include <QList>
@@ -13,7 +14,7 @@ class PatientTreeWidget : public QTreeWidget
   Q_OBJECT
 
 public:
-  PatientTreeWidget(FormViewer* form_viewer, const QList<PatientData>& patients, QWidget* parent = 0);
+  PatientTreeWidget(StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent = 0);
   ~PatientTreeWidget();
 
 private:
@@ -23,7 +24,7 @@ private:
   QTreeWidgetItem* modifyPatient(PatientData data);
   QTreeWidgetItem* addExamination(QTreeWidgetItem* parent, ExaminationData data);
 
-  FormViewer* form_viewer_;
+  StackedFormWidget* form_widget_;
 
 public slots:
   void removeCurrentItem();

@@ -1,6 +1,8 @@
 #include "PatientTreeWidget.h"
 #include "Database.h"
 #include "PatientTreeItem.h"
+#include "PForm.h"
+#include "EForm.h"
 
 #include <QTreeWidgetItem>
 
@@ -9,16 +11,16 @@
 #include <QAction>
 #include <QPushButton>
 
-PatientTreeWidget::PatientTreeWidget(FormViewer* form_viewer, const QList<PatientData>& patients, QWidget* parent /*= 0*/)
-  : QTreeWidget(parent), form_viewer_(form_viewer)
+PatientTreeWidget::PatientTreeWidget(StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent /*= 0*/)
+  : QTreeWidget(parent), form_widget_(form_widget)
 {
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
   setHeaderLabels(QStringList(("Pacjent")));
   buildTree(patients);
 
-  connect(form_viewer->patient_form(), SIGNAL(savePatient(PatientData)), this, SLOT(onSavePatient(PatientData)));
+  /*connect(form_viewer->patient_form(), SIGNAL(savePatient(PatientData)), this, SLOT(onSavePatient(PatientData)));
   connect(form_viewer->patient_form(), SIGNAL(modifyPatient(PatientData)), this, SLOT(onModifyPatient(PatientData)));
-  connect(form_viewer->examination_form(), SIGNAL(saveExam(ExaminationData)), this, SLOT(onSaveExamination(ExaminationData)));
+  connect(form_viewer->examination_form(), SIGNAL(saveExam(ExaminationData)), this, SLOT(onSaveExamination(ExaminationData)));*/
   // init signal/slots
   connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
   connect(this, &PatientTreeWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
@@ -30,12 +32,18 @@ PatientTreeWidget::PatientTreeWidget(FormViewer* form_viewer, const QList<Patien
       if (PatientTreeItem::isPatient(current)) {
         PatientData patient;
         Database::selectPatient(id, patient);
-        form_viewer_->showPatient(patient);
+//        form_widget_->switchToForm(FormWidgetStack::PATIENT_FORM);
+        //form_viewer_->showPatient(patient);
+        form_widget->switchTo(StackedFormWidget::PATIENT_FORM, id);
+        //form_widget->switchTo(StackedFormWidget::PATIENT_FORM);
       }
       else if (PatientTreeItem::isExamination(current)) {
         ExaminationData exam;
         Database::selectExamination(id, exam);
-        form_viewer_->showExamination(exam);
+  //      form_widget_->switchToForm(FormWidgetStack::EXAMINATION_FORM);
+        //form_viewer_->showExamination(exam);
+        form_widget->switchTo(StackedFormWidget::EXAMINATION_FORM, id);
+        //form_widget->switchTo(StackedFormWidget::EXAMINATION_FORM);
       }
       emit showTabWithIndex(0);
     }

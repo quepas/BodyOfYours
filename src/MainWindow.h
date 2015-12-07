@@ -10,6 +10,7 @@
 #include "PatientTreeWidget.h"
 #include "Scanner.h"
 #include "FormViewer.h"
+#include "FormWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -32,4 +33,5 @@ private:
   QTabWidget* viewport_tabs_;
   FormViewer* form_viewer_;
   ActionHub* action_hub_;
+  FormWidget* main_form_;
 };

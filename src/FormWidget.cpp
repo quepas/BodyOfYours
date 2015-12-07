@@ -1,25 +1,18 @@
 #include "FormWidget.h"
 
-//FormWidget::FormWidget(QString table, QWidget* parent /*= nullptr*/)
-//  : QWidget(parent)
-//{
-//  initLayouts();
-//  initButtons();
-//  initModel(table);
-//  initMapper();
-//  lockButton_->setVisible(false);
-//  unlockButton_->setVisible(false);
-//}
+#include <QDebug>
+#include <QSqlError>
+#include <QSqlRecord>
 
 FormWidget::FormWidget(QString table, QWidget* parent /*= nullptr*/)
-  : QWidget(parent), currentRowIndex_(-1)
+  : QWidget(parent)
 {
   initLayouts();
   initButtons();
   initModel(table);
   initMapper();
-  lockButton_->setVisible(false);
-  formWidget_->setEnabled(false);
+  lock(true);
+  saveButton_->setVisible(false);
 }
 
 FormWidget::~FormWidget()
@@ -28,8 +21,9 @@ FormWidget::~FormWidget()
   delete model_;
   delete unlockButton_;
   delete lockButton_;
-  delete formWidget_;
+  delete saveButton_;
   delete formLayout_;
+  delete formWidget_;
   delete buttonLayout_;
   delete mainLayout_;
 }
@@ -52,21 +46,20 @@ void FormWidget::initButtons()
 {
   lockButton_ = new QPushButton(QIcon(tr("icon/locked59.png")), tr("Zablokuj"), this);
   unlockButton_ = new QPushButton(QIcon(tr("icon/tool683.png")), tr("Odblokuj"), this);
+  saveButton_ = new QPushButton(QIcon(tr("icon/save29.png")), tr("Zapisz"), this);
 
+  buttonLayout_->addWidget(saveButton_);
   buttonLayout_->addWidget(lockButton_);
   buttonLayout_->addWidget(unlockButton_);
 
   connect(lockButton_, &QPushButton::clicked, [=]{
-    formWidget_->setEnabled(false);
-    lockButton_->setVisible(false);
-    unlockButton_->setVisible(true);
-    emit locked(true);
+    lock(true);
   });
   connect(unlockButton_, &QPushButton::clicked, [=]{
-    formWidget_->setEnabled(true);
-    lockButton_->setVisible(true);
-    unlockButton_->setVisible(false);
-    emit locked(false);
+    lock(false);
+  });
+  connect(saveButton_, &QPushButton::clicked, [=]{
+    mapper_->submit();
   });
 }
 
@@ -75,7 +68,6 @@ void FormWidget::initModel(QString table)
   model_ = new QSqlTableModel(this);
   model_->setEditStrategy(QSqlTableModel::OnFieldChange);
   model_->setTable(table);
-  //model_->setFilter("id = 3");
   model_->select();
 }
 
@@ -87,12 +79,42 @@ void FormWidget::initMapper()
 
 void FormWidget::setCurrentRowIndex(int rowIndex)
 {
-  currentRowIndex_ = rowIndex;
-  mapper_->setCurrentIndex(currentRowIndex_);
+  mapper_->setCurrentIndex(rowIndex);
+  lock(true);
+  saveButton_->setVisible(false);
 }
 
 void FormWidget::setCurrentRowWithId(int rowId)
 {
-  model_->setFilter("id = " + rowId);
-  model_->select();
+  for (int i = 0; i < model_->rowCount(); ++i) {
+    QSqlRecord record = model_->record(i);
+    if (record.value("id") == rowId) {
+      mapper_->setCurrentIndex(i);
+      lock(true);
+      saveButton_->setVisible(false);
+      return;
+    }
+  }
+}
+
+void FormWidget::addRow()
+{
+  int rowCount = model_->rowCount();
+  qDebug() << "RowCOunt: " << rowCount;
+  if (!model_->insertRow(rowCount)) {
+    qDebug() << "[ERROR] Couldn't insert new row: " << model_->lastError().text();
+    --rowCount;
+  }
+  mapper_->setCurrentIndex(rowCount);
+  lock(false);
+  lockButton_->setVisible(false);
+  saveButton_->setVisible(true);
+}
+
+void FormWidget::lock(bool lock)
+{
+  formWidget_->setEnabled(!lock);
+  lockButton_->setVisible(!lock);
+  unlockButton_->setVisible(lock);
+  emit locked(lock);
 }
