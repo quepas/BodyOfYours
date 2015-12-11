@@ -1,7 +1,5 @@
 #pragma once
 
-#include "PatientForm.h"
-#include "examinationform.h"
 #include "PatientData.h"
 #include "ExaminationData.h"
 #include <QStackedWidget>
