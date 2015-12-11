@@ -3,12 +3,12 @@
 #include <QLineEdit>
 #include "FormWidget.h"
 
-class PForm : public FormWidget
+class PatientForm : public FormWidget
 {
   Q_OBJECT
 public:
-  PForm(QWidget* parent);
-  ~PForm();
+  PatientForm(QWidget* parent);
+  ~PatientForm();
 
 private:
   QLineEdit* name_;

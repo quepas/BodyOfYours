@@ -1,8 +1,8 @@
 #include "PatientTreeWidget.h"
 #include "Database.h"
 #include "PatientTreeItem.h"
-#include "PForm.h"
-#include "EForm.h"
+#include "PatientForm.h"
+#include "ExaminationForm.h"
 
 #include <QTreeWidgetItem>
 

@@ -1,6 +1,6 @@
-#include "PForm.h"
+#include "PatientForm.h"
 
-PForm::PForm(QWidget* parent)
+PatientForm::PatientForm(QWidget* parent)
   : FormWidget("patient", parent)
 {
   name_ = new QLineEdit(this);
@@ -16,7 +16,7 @@ PForm::PForm(QWidget* parent)
   setCurrentRowIndex(0);
 }
 
-PForm::~PForm()
+PatientForm::~PatientForm()
 {
   delete name_;
   delete surname_;

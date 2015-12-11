@@ -1,6 +1,6 @@
-#include "EForm.h"
+#include "ExaminationForm.h"
 
-EForm::EForm(QWidget* parent)
+ExaminationForm::ExaminationForm(QWidget* parent)
   : FormWidget("examination", parent)
 {
   examName_ = new QLineEdit(this);
@@ -13,7 +13,7 @@ EForm::EForm(QWidget* parent)
   setCurrentRowIndex(0);
 }
 
-EForm::~EForm()
+ExaminationForm::~ExaminationForm()
 {
   delete examName_;
   delete scanName_;

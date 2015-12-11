@@ -3,12 +3,12 @@
 #include "FormWidget.h"
 #include <QLineEdit>
 
-class EForm : public FormWidget
+class ExaminationForm : public FormWidget
 {
   Q_OBJECT
 public:
-  EForm(QWidget* parent);
-  ~EForm();
+  ExaminationForm(QWidget* parent);
+  ~ExaminationForm();
 
 private:
   QLineEdit* examName_;

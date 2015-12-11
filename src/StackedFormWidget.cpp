@@ -1,13 +1,13 @@
 #include "StackedFormWidget.h"
 
-#include "PForm.h"
-#include "EForm.h"
+#include "PatientForm.h"
+#include "ExaminationForm.h"
 
 StackedFormWidget::StackedFormWidget(QWidget* parent /*= nullptr*/)
   : QStackedWidget(parent)
 {
-  widgets_.append(new PForm(this));
-  widgets_.append(new EForm(this));
+  widgets_.append(new PatientForm(this));
+  widgets_.append(new ExaminationForm(this));
   addWidget(widgets_[0]);
   addWidget(widgets_[1]);
 }

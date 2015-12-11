@@ -4,8 +4,8 @@
 #include "ExaminationData.h"
 #include <QStackedWidget>
 
-#include "PForm.h"
-#include "EForm.h"
+#include "PatientForm.h"
+#include "ExaminationForm.h"
 
 class FormViewer : public QStackedWidget
 {
@@ -20,7 +20,7 @@ public slots:
   void newExamination();
 
 private:
-  PForm* patient_form_;
-  EForm* exam_form_;
+  PatientForm* patient_form_;
+  ExaminationForm* exam_form_;
 
 };
