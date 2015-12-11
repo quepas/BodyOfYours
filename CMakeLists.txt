@@ -18,6 +18,7 @@ set (ASSIMP_LIB "D:/Programowanie/Biblioteki/assimp/lib")
 set (VCG_INC "D:/Programowanie/Biblioteki/vcglib")
 #set (CMAKE_PREFIX_PATH "D:/Programy/Qt5.5A/5.5/msvc2013_64")
 
+add_definitions("/wd4996 /wd4522 /wd4267")
 # set libraries
 include_directories(${RECFUSION_INC} ${QOGLVIEWER_INC} ${ASSIMP_INC} ${VCG_INC})
 link_directories(${RECFUSION_LIB} ${QOGLVIEWER_LIB} ${ASSIMP_LIB})
