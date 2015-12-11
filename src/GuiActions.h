@@ -4,7 +4,6 @@
 #include "Action.h"
 
 #include "StackedFormWidget.h"
-#include "FormViewer.h"
 #include "MeshViewer.h"
 #include "PatientTreeWidget.h"
 #include "Scanner.h"
@@ -14,8 +13,8 @@ CREATE_ACTION(ActionAddNewPatient, {
 }, StackedFormWidget* widget_)
 
 CREATE_ACTION(ActionAddNewExamination, {
-  form_viewer->newExamination();
-}, FormViewer* form_viewer)
+  widget_->switchTo(StackedFormWidget::EXAMINATION_FORM);
+}, StackedFormWidget* widget_)
 
 CREATE_ACTION(ActionDeleteCurrentItem, {
   widget->removeCurrentItem();

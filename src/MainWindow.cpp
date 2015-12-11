@@ -13,7 +13,6 @@
 #include "ScannerToolbar.h"
 #include "ScannerViewer.h"
 #include "ViewerToolbar.h"
-//#include "PForm.h"
 #include "StackedFormWidget.h"
 
 MainWindow::MainWindow() :
@@ -26,7 +25,6 @@ MainWindow::MainWindow() :
   main_form_ = nullptr;
   Database db("database.db");
   db.createScheme();
-  form_viewer_ = new FormViewer(this);
   StackedFormWidget* stack = new StackedFormWidget;
   patient_widget_ = new PatientTreeWidget(stack, Database::selectPatient());
   connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(openScan(QString)));
@@ -37,9 +35,7 @@ MainWindow::MainWindow() :
   QWidget* viewport = new QWidget;
   ScannerViewer* scanner_viewer = new ScannerViewer(scanner_, this);
   viewport_tabs_ = new QTabWidget(this);
-  //viewport_tabs_->addTab(form_viewer_, tr("Formatki"));
   main_form_ = nullptr;
-  //PForm* pform = new PForm(this);
   viewport_tabs_->addTab(stack, tr("Formatki"));
 #ifndef _DEBUG
   viewport_tabs_->addTab(viewer_, tr("Wizualizacja"));
@@ -72,7 +68,6 @@ MainWindow::MainWindow() :
   connect(patient_widget_toolbar, SIGNAL(calculateMirror()), this, SLOT(calculateMirror()));
 
   ActionHub::addAction(new ActionAddNewPatient(this, stack));
-  ActionHub::addAction(new ActionAddNewExamination(this, form_viewer_));
   ActionHub::addAction(new ActionDeleteCurrentItem(this, patient_widget_));
   ActionHub::addAction(new ActionStartReconstruction(this, scanner_));
   ActionHub::addAction(new ActionStopReconstruction(this, scanner_));
