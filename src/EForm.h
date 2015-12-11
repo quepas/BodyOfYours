@@ -1,8 +1,6 @@
 #pragma once
 
-#include <QWidget>
 #include "FormWidget.h"
-
 #include <QLineEdit>
 
 class EForm : public FormWidget

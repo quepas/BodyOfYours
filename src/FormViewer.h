@@ -13,9 +13,6 @@ public:
   FormViewer(QWidget* parent = nullptr);
   ~FormViewer();
 
-  /*PatientForm* patient_form() { return patient_form_; }
-  ExaminationForm* examination_form() { return exam_form_; }*/
-
 public slots:
   void showPatient(PatientData data);
   void showExamination(ExaminationData data);
