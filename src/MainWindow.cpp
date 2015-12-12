@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QAction>
 #include <QToolBar>
+#include <QAbstractItemModel>
 
 #include "GuiActions.h"
 #include "Database.h"
@@ -27,7 +28,7 @@ MainWindow::MainWindow() :
   db.createScheme();
   initModels();
   StackedFormWidget* stack = new StackedFormWidget(patient_model_, exam_model_);
-  patient_widget_ = new PatientTreeWidget(stack, Database::selectPatient());
+  patient_widget_ = new PatientTreeWidget(patient_model_, exam_model_, stack, Database::selectPatient());
   connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(openScan(QString)));
   QGridLayout* grid = new QGridLayout;
   grid->addWidget(patient_widget_, 0, 0, 2, 1);

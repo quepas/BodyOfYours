@@ -11,12 +11,13 @@
 #include <QAction>
 #include <QPushButton>
 
-PatientTreeWidget::PatientTreeWidget(StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent /*= 0*/)
-  : QTreeWidget(parent), form_widget_(form_widget)
+PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent /*= 0*/) : QTreeWidget(parent), form_widget_(form_widget), patient_model_(patient_model), exam_model_(exam_model)
 {
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
   setHeaderLabels(QStringList(("Pacjent")));
-  buildTree(patients);
+  connect(patient_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
+  connect(exam_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
+  buildTreeFromModel(patient_model_, exam_model_);
   // init signal/slots
   connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
   connect(this, &PatientTreeWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
@@ -56,6 +57,29 @@ void PatientTreeWidget::onModifyPatient(PatientData data)
 {
   Database::updatePatientOnly(data);
   modifyPatient(data);
+}
+
+void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTableModel* exam_model)
+{
+  for (int i = 0; i < patient_model->rowCount(); ++i) {
+    QSqlRecord record = patient_model->record(i);
+    int id = record.value("id").toInt();
+    auto item = PatientTreeItem::createPatientItem(id,
+      record.value("name").toString() + " " + record.value("surname").toString() +
+      "(" + record.value("pesel").toString() + ")");
+    item->setIcon(0, QIcon("icon/broken8.png"));
+    addTopLevelItem(item);
+    // insert patient's examinations
+    for (int j = 0; j < exam_model->rowCount(); ++j) {
+      QSqlRecord exam = exam_model->record(j);
+      int exam_fk_id = exam.value("patient_id").toInt();
+      if (exam_fk_id == id) {
+        auto exam_item = PatientTreeItem::createExamItem(exam.value("id").toInt(), exam.value("name").toString());
+        exam_item->setIcon(0, QIcon("icon/stethoscope1.png"));
+        item->addChild(exam_item);
+      }
+    }
+  }
 }
 
 void PatientTreeWidget::buildTree(const QList<PatientData>& patients)
@@ -167,4 +191,11 @@ void PatientTreeWidget::removeCurrentItem()
       qDebug() << "[WARNING] Wrong type of item in PatientWidget with name: " << item->text(0);
     }
   }
+}
+
+void PatientTreeWidget::onDataChanged()
+{
+  qDebug() << "onDataChanged()";
+  clear();
+  buildTreeFromModel(patient_model_, exam_model_);
 }
