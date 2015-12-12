@@ -7,7 +7,7 @@ class StackedFormWidget : public QStackedWidget
 {
   Q_OBJECT
 public:
-  StackedFormWidget(QWidget* parent = nullptr);
+  StackedFormWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QWidget* parent = nullptr);
   ~StackedFormWidget();
 
   enum FormID{

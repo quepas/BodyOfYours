@@ -15,6 +15,17 @@ FormWidget::FormWidget(QString table, QWidget* parent /*= nullptr*/)
   saveButton_->setVisible(false);
 }
 
+FormWidget::FormWidget(QSqlTableModel* model, QWidget* parent /*= nullptr*/)
+  : QWidget(parent), model_(model)
+{
+  initLayouts();
+  initButtons();
+  model_->setEditStrategy(QSqlTableModel::OnFieldChange);
+  initMapper();
+  lock(true);
+  saveButton_->setVisible(false);
+}
+
 FormWidget::~FormWidget()
 {
   delete mapper_;

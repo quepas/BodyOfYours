@@ -7,7 +7,7 @@ class PatientForm : public FormWidget
 {
   Q_OBJECT
 public:
-  PatientForm(QWidget* parent);
+  PatientForm(QSqlTableModel* model, QWidget* parent);
   ~PatientForm();
 
 private:

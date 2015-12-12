@@ -4,6 +4,7 @@
 #include <QStackedLayout>
 #include <QGridLayout>
 #include <QTabWidget>
+#include <QSqlTableModel>
 
 #include "ActionHub.h"
 #include "MeshViewer.h"
@@ -32,4 +33,9 @@ private:
   QTabWidget* viewport_tabs_;
   ActionHub* action_hub_;
   FormWidget* main_form_;
+  // SQL models
+  QSqlTableModel* patient_model_;
+  QSqlTableModel* exam_model_;
+
+  void initModels();
 };

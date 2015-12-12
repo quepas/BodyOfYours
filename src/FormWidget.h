@@ -13,8 +13,8 @@ class FormWidget : public QWidget
 {
   Q_OBJECT
 public:
+  FormWidget(QSqlTableModel* model, QWidget* parent = nullptr);
   FormWidget(QString table, QWidget* parent = nullptr);
-  //FormWidget(QString table, int rowIndex, QWidget* parent = nullptr);
   virtual ~FormWidget();
 
 public slots:

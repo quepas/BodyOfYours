@@ -7,7 +7,7 @@ class ExaminationForm : public FormWidget
 {
   Q_OBJECT
 public:
-  ExaminationForm(QWidget* parent);
+  ExaminationForm(QSqlTableModel* model, QWidget* parent);
   ~ExaminationForm();
 
 private:

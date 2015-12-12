@@ -1,7 +1,6 @@
 #include "PatientForm.h"
 
-PatientForm::PatientForm(QWidget* parent)
-  : FormWidget("patient", parent)
+PatientForm::PatientForm(QSqlTableModel* model, QWidget* parent) : FormWidget(model, parent)
 {
   name_ = new QLineEdit(this);
   surname_ = new QLineEdit(this);

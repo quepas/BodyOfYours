@@ -1,7 +1,6 @@
 #include "ExaminationForm.h"
 
-ExaminationForm::ExaminationForm(QWidget* parent)
-  : FormWidget("examination", parent)
+ExaminationForm::ExaminationForm(QSqlTableModel* model, QWidget* parent) : FormWidget(model, parent)
 {
   examName_ = new QLineEdit(this);
   scanName_ = new QLineEdit(this);

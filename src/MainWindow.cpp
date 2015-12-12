@@ -25,7 +25,8 @@ MainWindow::MainWindow() :
   main_form_ = nullptr;
   Database db("database.db");
   db.createScheme();
-  StackedFormWidget* stack = new StackedFormWidget;
+  initModels();
+  StackedFormWidget* stack = new StackedFormWidget(patient_model_, exam_model_);
   patient_widget_ = new PatientTreeWidget(stack, Database::selectPatient());
   connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(openScan(QString)));
   QGridLayout* grid = new QGridLayout;
@@ -137,4 +138,14 @@ void MainWindow::calculateMirror()
     flipMeshXAxis(*mesh);
     viewer_->update();
   }
+}
+
+void MainWindow::initModels()
+{
+  patient_model_ = new QSqlTableModel;
+  patient_model_->setTable("patient");
+  patient_model_->select();
+  exam_model_ = new QSqlTableModel;
+  exam_model_->setTable("examination");
+  exam_model_->select();
 }
