@@ -29,6 +29,7 @@ private:
   StackedFormWidget* form_widget_;
   QSqlTableModel* patient_model_;
   QSqlTableModel* exam_model_;
+  QSqlTableModel* scan_model_;
 
 public slots:
   void removeCurrentItem();

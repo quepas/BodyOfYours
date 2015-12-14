@@ -5,7 +5,8 @@
 enum PatientWidgetItemType
 {
   PATIENT = QTreeWidgetItem::UserType + 1,
-  EXAM = QTreeWidgetItem::UserType + 2
+  EXAM = QTreeWidgetItem::UserType + 2,
+  SCAN = QTreeWidgetItem::UserType + 3
 };
 
 enum PatientTreeItemData
@@ -16,11 +17,13 @@ enum PatientTreeItemData
 class PatientTreeItem : public QTreeWidgetItem
 {
 public:
-  static PatientTreeItem* createPatientItem(int id, QString label, QWidget* patient = nullptr);
-  static PatientTreeItem* createExamItem(int id, QString label, QWidget* patient = nullptr);
+  static PatientTreeItem* createPatientItem(int id, QString label, QWidget* parent = nullptr);
+  static PatientTreeItem* createExamItem(int id, QString label, QWidget* parent = nullptr);
+  static PatientTreeItem* createScanItem(int id, QString label, QWidget* parent = nullptr);
 
   static bool isPatient(QTreeWidgetItem* item);
   static bool isExamination(QTreeWidgetItem* item);
+  static bool isScan(QTreeWidgetItem* item);
   static int getId(QTreeWidgetItem* item);
   static void setId(QTreeWidgetItem* item, int id);
 private:

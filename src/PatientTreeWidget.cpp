@@ -13,10 +13,16 @@
 
 PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent /*= 0*/) : QTreeWidget(parent), form_widget_(form_widget), patient_model_(patient_model), exam_model_(exam_model)
 {
+  // setup Scan model
+  scan_model_ = new QSqlTableModel();
+  scan_model_->setTable("scan");
+  scan_model_->select();
+
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
   setHeaderLabels(QStringList(("Pacjent")));
   connect(patient_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
   connect(exam_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
+  connect(scan_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
   buildTreeFromModel(patient_model_, exam_model_);
   // init signal/slots
   connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
@@ -73,10 +79,21 @@ void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTa
     for (int j = 0; j < exam_model->rowCount(); ++j) {
       QSqlRecord exam = exam_model->record(j);
       int exam_fk_id = exam.value("patient_id").toInt();
+      int exam_id = exam.value("id").toInt();
       if (exam_fk_id == id) {
-        auto exam_item = PatientTreeItem::createExamItem(exam.value("id").toInt(), exam.value("name").toString());
+        auto exam_item = PatientTreeItem::createExamItem(exam_id, exam.value("name").toString());
         exam_item->setIcon(0, QIcon("icon/stethoscope1.png"));
         item->addChild(exam_item);
+        // insert exam's scans
+        for (int k = 0; k < scan_model_->rowCount(); ++k) {
+          QSqlRecord scan = scan_model_->record(k);
+          int scan_exam_fk_id = scan.value("exam_id").toInt();
+          if (scan_exam_fk_id == exam_id) {
+            auto scan_item = PatientTreeItem::createScanItem(scan.value("id").toInt(), scan.value("filename").toString());
+            scan_item->setIcon(0, QIcon("icon/radiography.png"));
+            exam_item->addChild(scan_item);
+          }
+        }
       }
     }
   }

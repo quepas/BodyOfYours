@@ -30,6 +30,19 @@ void Database::createScheme()
     "scan_name varchar(100),"
     "patient_id INTEGER,"
     "FOREIGN KEY(patient_id) REFERENCES patient(id))");
+  query.exec("CREATE TABLE scan ("
+    "id INTEGER PRIMARY KEY,"
+    "exam_id INTEGER,"
+    "name varchar(500),"
+    "filename varchar(100),"
+    "FOREIGN KEY(exam_id) REFERENCES examination(id))");
+  query.exec("CREATE TABLE scan_diff ("
+    "id INTEGER PRIMARY KEY,"
+    "ref_id INTEGER,"
+    "comp_id INTEGER,"
+    "filename varchar(100),"
+    "FOREIGN KEY(ref_id) REFERENCES scan(id),"
+    "FOREIGN KEY(comp_id) REFERENCES scan(id))");
 }
 
 bool Database::insertPatient(PatientData data)

@@ -16,6 +16,11 @@ PatientTreeItem* PatientTreeItem::createExamItem(int id, QString label, QWidget*
   return new PatientTreeItem(EXAM, id, label, parent);
 }
 
+PatientTreeItem* PatientTreeItem::createScanItem(int id, QString label, QWidget* parent /*= nullptr*/)
+{
+  return new PatientTreeItem(SCAN, id, label, parent);
+}
+
 bool PatientTreeItem::isPatient(QTreeWidgetItem* item)
 {
   return item->type() == PATIENT;
@@ -24,6 +29,11 @@ bool PatientTreeItem::isPatient(QTreeWidgetItem* item)
 bool PatientTreeItem::isExamination(QTreeWidgetItem* item)
 {
   return item->type() == EXAM;
+}
+
+bool PatientTreeItem::isScan(QTreeWidgetItem* item)
+{
+  return item->type() == SCAN;
 }
 
 int PatientTreeItem::getId(QTreeWidgetItem* item)
