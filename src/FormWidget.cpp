@@ -4,6 +4,12 @@
 #include <QSqlError>
 #include <QSqlRecord>
 
+FormWidget::FormWidget(QWidget* parent /*= nullptr*/)
+  : QWidget(parent)
+{
+  initLayouts();
+}
+
 FormWidget::FormWidget(QString table, QWidget* parent /*= nullptr*/)
   : QWidget(parent)
 {
@@ -58,8 +64,10 @@ void FormWidget::initButtons()
   lockButton_ = new QPushButton(QIcon(tr("icon/locked59.png")), tr("Zablokuj"), this);
   unlockButton_ = new QPushButton(QIcon(tr("icon/tool683.png")), tr("Odblokuj"), this);
   saveButton_ = new QPushButton(QIcon(tr("icon/save29.png")), tr("Zapisz"), this);
+  cancelButton_ = new QPushButton(QIcon(tr("icon/delete85.png")), tr("Anuluj"), this);
 
   buttonLayout_->addWidget(saveButton_);
+  buttonLayout_->addWidget(cancelButton_);
   buttonLayout_->addWidget(lockButton_);
   buttonLayout_->addWidget(unlockButton_);
 
@@ -71,6 +79,10 @@ void FormWidget::initButtons()
   });
   connect(saveButton_, &QPushButton::clicked, [=]{
     mapper_->submit();
+  });
+  connect(cancelButton_, &QPushButton::clicked, [=]{
+    mapper_->revert();
+    emit canceled();
   });
 }
 
@@ -128,4 +140,10 @@ void FormWidget::lock(bool lock)
   lockButton_->setVisible(!lock);
   unlockButton_->setVisible(lock);
   emit locked(lock);
+}
+
+void FormWidget::resetModel()
+{
+  model_->revertAll();
+  emit model_->dataChanged(QModelIndex(), QModelIndex());
 }

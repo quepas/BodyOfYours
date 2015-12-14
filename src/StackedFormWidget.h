@@ -10,9 +10,10 @@ public:
   StackedFormWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QWidget* parent = nullptr);
   ~StackedFormWidget();
 
-  enum FormID{
+  enum FormID {
     PATIENT_FORM = 0,
-    EXAMINATION_FORM = 1
+    EXAMINATION_FORM = 1,
+    EMPTY_FORM = 2
   };
 
   void switchTo(FormID id);

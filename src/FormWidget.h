@@ -13,6 +13,7 @@ class FormWidget : public QWidget
 {
   Q_OBJECT
 public:
+  explicit FormWidget(QWidget* parent = nullptr);
   FormWidget(QSqlTableModel* model, QWidget* parent = nullptr);
   FormWidget(QString table, QWidget* parent = nullptr);
   virtual ~FormWidget();
@@ -21,9 +22,11 @@ public slots:
   void setCurrentRowIndex(int rowIndex);
   void setCurrentRowWithId(int rowId);
   void addRow();
+  void resetModel();
 
 signals:
   void locked(bool locked);
+  void canceled();
 
 protected:
   QWidget* formWidget_;
@@ -38,6 +41,7 @@ private:
   QPushButton* lockButton_;
   QPushButton* unlockButton_;
   QPushButton* saveButton_;
+  QPushButton* cancelButton_;
 
   void initLayouts();
   void initButtons();

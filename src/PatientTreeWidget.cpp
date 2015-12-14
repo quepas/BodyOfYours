@@ -212,7 +212,6 @@ void PatientTreeWidget::removeCurrentItem()
 
 void PatientTreeWidget::onDataChanged()
 {
-  qDebug() << "onDataChanged()";
   clear();
   buildTreeFromModel(patient_model_, exam_model_);
 }
