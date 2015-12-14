@@ -27,6 +27,7 @@ public slots:
 signals:
   void locked(bool locked);
   void canceled();
+  void saved();
 
 protected:
   QWidget* formWidget_;

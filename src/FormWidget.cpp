@@ -19,6 +19,7 @@ FormWidget::FormWidget(QString table, QWidget* parent /*= nullptr*/)
   initMapper();
   lock(true);
   saveButton_->setVisible(false);
+  cancelButton_->setVisible(false);
 }
 
 FormWidget::FormWidget(QSqlTableModel* model, QWidget* parent /*= nullptr*/)
@@ -30,6 +31,7 @@ FormWidget::FormWidget(QSqlTableModel* model, QWidget* parent /*= nullptr*/)
   initMapper();
   lock(true);
   saveButton_->setVisible(false);
+  cancelButton_->setVisible(false);
 }
 
 FormWidget::~FormWidget()
@@ -79,6 +81,7 @@ void FormWidget::initButtons()
   });
   connect(saveButton_, &QPushButton::clicked, [=]{
     mapper_->submit();
+    emit saved();
   });
   connect(cancelButton_, &QPushButton::clicked, [=]{
     mapper_->revert();
@@ -105,6 +108,7 @@ void FormWidget::setCurrentRowIndex(int rowIndex)
   mapper_->setCurrentIndex(rowIndex);
   lock(true);
   saveButton_->setVisible(false);
+  cancelButton_->setVisible(false);
 }
 
 void FormWidget::setCurrentRowWithId(int rowId)
@@ -115,6 +119,7 @@ void FormWidget::setCurrentRowWithId(int rowId)
       mapper_->setCurrentIndex(i);
       lock(true);
       saveButton_->setVisible(false);
+      cancelButton_->setVisible(false);
       return;
     }
   }
@@ -132,6 +137,7 @@ void FormWidget::addRow()
   lock(false);
   lockButton_->setVisible(false);
   saveButton_->setVisible(true);
+  cancelButton_->setVisible(true);
 }
 
 void FormWidget::lock(bool lock)
