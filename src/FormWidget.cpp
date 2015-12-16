@@ -85,7 +85,7 @@ void FormWidget::initButtons()
   });
   connect(saveButton_, &QPushButton::clicked, [=]{
     mapper_->submit();
-    emit saved();
+    emit saved(mapper_->currentIndex());
   });
   connect(cancelButton_, &QPushButton::clicked, [=]{
     revertModel();

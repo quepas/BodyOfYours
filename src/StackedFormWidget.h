@@ -20,4 +20,5 @@ public:
   void switchTo(FormID id, int dataRowId);
 private:
   QList<FormWidget*> widgets_;
+  int currentRowID_;
 };

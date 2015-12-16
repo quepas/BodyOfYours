@@ -27,7 +27,7 @@ public slots:
 signals:
   void locked(bool locked);
   void canceled();
-  void saved();
+  void saved(int currentRowIndex);
   void deleted();
 
 protected:

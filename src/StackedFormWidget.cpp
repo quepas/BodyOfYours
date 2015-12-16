@@ -1,9 +1,11 @@
 #include "StackedFormWidget.h"
 
+#include <QDebug>
+#include <QSqlError>
 #include "PatientForm.h"
 #include "ExaminationForm.h"
 
-StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QWidget* parent /*= nullptr*/) : QStackedWidget(parent)
+StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QWidget* parent /*= nullptr*/) : QStackedWidget(parent), currentRowID_(-1)
 {
   widgets_.append(new PatientForm(patient_model, this));
   widgets_.append(new ExaminationForm(exam_model, this));
@@ -12,13 +14,22 @@ StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableMod
     connect(widgets_[i], &FormWidget::canceled, [=]{
       switchTo(EMPTY_FORM);
     });
-    connect(widgets_[i], &FormWidget::saved, [=]{
-      switchTo(EMPTY_FORM);
-    });
     connect(widgets_[i], &FormWidget::deleted, [=]{
       switchTo(EMPTY_FORM);
     });
   }
+
+  connect(widgets_[0], &FormWidget::saved, [=](int currentRowIndex) {
+    switchTo(EMPTY_FORM);
+  });
+  connect(widgets_[1], &FormWidget::saved, [=](int currentRowIndex) {
+    if (currentIndex() == EXAMINATION_FORM && currentRowID_ != -1) {
+      auto idx = exam_model->index(currentRowIndex, exam_model->fieldIndex("patient_id"));
+      exam_model->setData(idx, currentRowID_, Qt::EditRole);
+    }
+    switchTo(EMPTY_FORM);
+  });
+
   addWidget(widgets_[0]);
   addWidget(widgets_[1]);
   addWidget(widgets_[2]);
@@ -34,8 +45,9 @@ StackedFormWidget::~StackedFormWidget()
 
 void StackedFormWidget::switchTo(FormID id, int dataRowId)
 {
+  currentRowID_ = dataRowId;
   setCurrentIndex(id);
-  widgets_[id]->setCurrentRowWithId(dataRowId);
+  widgets_[id]->setCurrentRowWithId(currentRowID_);
 }
 
 void StackedFormWidget::switchTo(FormID id)
