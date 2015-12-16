@@ -65,7 +65,7 @@ void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTa
       int id = record.value("id").toInt();
       auto item = PatientTreeItem::createPatientItem(id,
         record.value("name").toString() + " " + record.value("surname").toString() +
-        "(" + record.value("pesel").toString() + ")");
+        " (" + record.value("pesel").toString() + ")");
       item->setIcon(0, QIcon("icon/broken8.png"));
       addTopLevelItem(item);
       // insert patient's examinations
