@@ -22,12 +22,13 @@ public slots:
   void setCurrentRowIndex(int rowIndex);
   void setCurrentRowWithId(int rowId);
   void addRow();
-  void resetModel();
+  void revertModel();
 
 signals:
   void locked(bool locked);
   void canceled();
   void saved();
+  void deleted();
 
 protected:
   QWidget* formWidget_;
@@ -43,6 +44,7 @@ private:
   QPushButton* unlockButton_;
   QPushButton* saveButton_;
   QPushButton* cancelButton_;
+  QPushButton* deleteButton_;
 
   void initLayouts();
   void initButtons();

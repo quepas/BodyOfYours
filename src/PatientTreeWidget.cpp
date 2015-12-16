@@ -69,29 +69,35 @@ void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTa
 {
   for (int i = 0; i < patient_model->rowCount(); ++i) {
     QSqlRecord record = patient_model->record(i);
-    int id = record.value("id").toInt();
-    auto item = PatientTreeItem::createPatientItem(id,
-      record.value("name").toString() + " " + record.value("surname").toString() +
-      "(" + record.value("pesel").toString() + ")");
-    item->setIcon(0, QIcon("icon/broken8.png"));
-    addTopLevelItem(item);
-    // insert patient's examinations
-    for (int j = 0; j < exam_model->rowCount(); ++j) {
-      QSqlRecord exam = exam_model->record(j);
-      int exam_fk_id = exam.value("patient_id").toInt();
-      int exam_id = exam.value("id").toInt();
-      if (exam_fk_id == id) {
-        auto exam_item = PatientTreeItem::createExamItem(exam_id, exam.value("name").toString());
-        exam_item->setIcon(0, QIcon("icon/stethoscope1.png"));
-        item->addChild(exam_item);
-        // insert exam's scans
-        for (int k = 0; k < scan_model_->rowCount(); ++k) {
-          QSqlRecord scan = scan_model_->record(k);
-          int scan_exam_fk_id = scan.value("exam_id").toInt();
-          if (scan_exam_fk_id == exam_id) {
-            auto scan_item = PatientTreeItem::createScanItem(scan.value("id").toInt(), scan.value("filename").toString());
-            scan_item->setIcon(0, QIcon("icon/radiography.png"));
-            exam_item->addChild(scan_item);
+    if (!record.isNull("id")) {
+      int id = record.value("id").toInt();
+      auto item = PatientTreeItem::createPatientItem(id,
+        record.value("name").toString() + " " + record.value("surname").toString() +
+        "(" + record.value("pesel").toString() + ")");
+      item->setIcon(0, QIcon("icon/broken8.png"));
+      addTopLevelItem(item);
+      // insert patient's examinations
+      for (int j = 0; j < exam_model->rowCount(); ++j) {
+        QSqlRecord exam = exam_model->record(j);
+        if (!exam.isNull("id")) {
+          int exam_fk_id = exam.value("patient_id").toInt();
+          int exam_id = exam.value("id").toInt();
+          if (exam_fk_id == id) {
+            auto exam_item = PatientTreeItem::createExamItem(exam_id, exam.value("name").toString());
+            exam_item->setIcon(0, QIcon("icon/stethoscope1.png"));
+            item->addChild(exam_item);
+            // insert exam's scans
+            for (int k = 0; k < scan_model_->rowCount(); ++k) {
+              QSqlRecord scan = scan_model_->record(k);
+              if (!scan.isNull("id")) {
+                int scan_exam_fk_id = scan.value("exam_id").toInt();
+                if (scan_exam_fk_id == exam_id) {
+                  auto scan_item = PatientTreeItem::createScanItem(scan.value("id").toInt(), scan.value("filename").toString());
+                  scan_item->setIcon(0, QIcon("icon/radiography.png"));
+                  exam_item->addChild(scan_item);
+                }
+              }
+            }
           }
         }
       }
@@ -212,6 +218,7 @@ void PatientTreeWidget::removeCurrentItem()
 
 void PatientTreeWidget::onDataChanged()
 {
+  qDebug() << "---> PatientTreeWidget::onDataChanged()";
   clear();
   buildTreeFromModel(patient_model_, exam_model_);
 }

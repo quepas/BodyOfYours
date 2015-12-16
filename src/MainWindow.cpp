@@ -50,8 +50,8 @@ MainWindow::MainWindow() :
   central_widget->setLayout(grid);
   setCentralWidget(central_widget);
 
-  resize(1366, 768);
-  showMaximized();
+  resize(800, 600);
+  //showMaximized();
 
   QToolBar* patient_toolbar = new QToolBar(this);
   addToolBar(patient_toolbar);
@@ -70,6 +70,7 @@ MainWindow::MainWindow() :
   connect(patient_widget_toolbar, SIGNAL(calculateMirror()), this, SLOT(calculateMirror()));
 
   ActionHub::addAction(new ActionAddNewPatient(this, stack));
+  ActionHub::addAction(new ActionAddNewExamination(this, stack));
   ActionHub::addAction(new ActionDeleteCurrentItem(this, patient_widget_));
   ActionHub::addAction(new ActionStartReconstruction(this, scanner_));
   ActionHub::addAction(new ActionStopReconstruction(this, scanner_));

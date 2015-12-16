@@ -41,6 +41,8 @@ FormWidget::~FormWidget()
   delete unlockButton_;
   delete lockButton_;
   delete saveButton_;
+  delete cancelButton_;
+  delete deleteButton_;
   delete formLayout_;
   delete formWidget_;
   delete buttonLayout_;
@@ -67,7 +69,9 @@ void FormWidget::initButtons()
   unlockButton_ = new QPushButton(QIcon(tr("icon/tool683.png")), tr("Odblokuj"), this);
   saveButton_ = new QPushButton(QIcon(tr("icon/save29.png")), tr("Zapisz"), this);
   cancelButton_ = new QPushButton(QIcon(tr("icon/delete85.png")), tr("Anuluj"), this);
+  deleteButton_ = new QPushButton(QIcon(tr("icon/delete81.png")), tr("Usun"), this);
 
+  buttonLayout_->addWidget(deleteButton_);
   buttonLayout_->addWidget(saveButton_);
   buttonLayout_->addWidget(cancelButton_);
   buttonLayout_->addWidget(lockButton_);
@@ -84,8 +88,13 @@ void FormWidget::initButtons()
     emit saved();
   });
   connect(cancelButton_, &QPushButton::clicked, [=]{
-    mapper_->revert();
+    revertModel();
     emit canceled();
+  });
+  connect(deleteButton_, &QPushButton::clicked, [=]{
+    int index = mapper_->currentIndex();
+    model_->removeRow(index);
+    emit deleted();
   });
 }
 
@@ -148,7 +157,7 @@ void FormWidget::lock(bool lock)
   emit locked(lock);
 }
 
-void FormWidget::resetModel()
+void FormWidget::revertModel()
 {
   model_->revertAll();
   emit model_->dataChanged(QModelIndex(), QModelIndex());

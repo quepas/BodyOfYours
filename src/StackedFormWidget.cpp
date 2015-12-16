@@ -10,10 +10,12 @@ StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableMod
   widgets_.append(new FormWidget(this));
   for (int i = 0; i < 2; ++i) {
     connect(widgets_[i], &FormWidget::canceled, [=]{
-      widgets_[i]->resetModel();
       switchTo(EMPTY_FORM);
     });
     connect(widgets_[i], &FormWidget::saved, [=]{
+      switchTo(EMPTY_FORM);
+    });
+    connect(widgets_[i], &FormWidget::deleted, [=]{
       switchTo(EMPTY_FORM);
     });
   }
