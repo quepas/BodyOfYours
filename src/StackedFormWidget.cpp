@@ -4,6 +4,7 @@
 #include <QSqlError>
 #include "PatientForm.h"
 #include "ExaminationForm.h"
+#include "ModelHelper.h"
 
 StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QWidget* parent /*= nullptr*/) : QStackedWidget(parent), currentRowID_(-1)
 {
@@ -14,11 +15,15 @@ StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableMod
     connect(widgets_[i], &FormWidget::canceled, [=]{
       switchTo(EMPTY_FORM);
     });
-    connect(widgets_[i], &FormWidget::deleted, [=]{
-      switchTo(EMPTY_FORM);
-    });
   }
 
+  connect(widgets_[0], &FormWidget::deleted, [=](int deletedItemId) {
+    ModelHelper::deletePatientRemains(deletedItemId, exam_model);
+    switchTo(EMPTY_FORM);
+  });
+  connect(widgets_[1], &FormWidget::deleted, [=]{
+    switchTo(EMPTY_FORM);
+  });
   connect(widgets_[0], &FormWidget::saved, [=](int currentRowIndex) {
     switchTo(EMPTY_FORM);
   });

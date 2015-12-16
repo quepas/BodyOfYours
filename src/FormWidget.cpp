@@ -93,8 +93,9 @@ void FormWidget::initButtons()
   });
   connect(deleteButton_, &QPushButton::clicked, [=]{
     int index = mapper_->currentIndex();
+    int id = model_->record(index).value("id").toInt();
     model_->removeRow(index);
-    emit deleted();
+    emit deleted(id);
   });
 }
 

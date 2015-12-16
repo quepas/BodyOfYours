@@ -28,7 +28,7 @@ signals:
   void locked(bool locked);
   void canceled();
   void saved(int currentRowIndex);
-  void deleted();
+  void deleted(int deletedItemId);
 
 protected:
   QWidget* formWidget_;
