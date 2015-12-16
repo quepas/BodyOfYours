@@ -26,24 +26,16 @@ PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableMod
   buildTreeFromModel(patient_model_, exam_model_);
   // init signal/slots
   connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
-  connect(this, &PatientTreeWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
-    qDebug() << "PatientWidget::currentItemChanged()";
-    if (current) {
-      QString text = current->text(0);
-      int id = PatientTreeItem::getId(current);
-      qDebug() << "Currently seleted ID: " << id;
-      if (PatientTreeItem::isPatient(current)) {
-        PatientData patient;
-        Database::selectPatient(id, patient);
-        form_widget->switchTo(StackedFormWidget::PATIENT_FORM, id);
-      }
-      else if (PatientTreeItem::isExamination(current)) {
-        ExaminationData exam;
-        Database::selectExamination(id, exam);
-        form_widget->switchTo(StackedFormWidget::EXAMINATION_FORM, id);
-      }
-      emit showTabWithIndex(0);
+  connect(this, &PatientTreeWidget::itemClicked, [=](QTreeWidgetItem * item, int column){
+    qDebug() << "---> PatientTreeWidget::itemClicked";
+    int itemID = PatientTreeItem::getId(item);
+    if (PatientTreeItem::isPatient(item)) {
+      form_widget->switchTo(StackedFormWidget::PATIENT_FORM, itemID);
     }
+    else if (PatientTreeItem::isExamination(item)) {
+      form_widget->switchTo(StackedFormWidget::EXAMINATION_FORM, itemID);
+    }
+    emit showTabWithIndex(0);
   });
 }
 

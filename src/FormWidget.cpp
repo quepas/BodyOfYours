@@ -18,8 +18,6 @@ FormWidget::FormWidget(QString table, QWidget* parent /*= nullptr*/)
   initModel(table);
   initMapper();
   lock(true);
-  saveButton_->setVisible(false);
-  cancelButton_->setVisible(false);
 }
 
 FormWidget::FormWidget(QSqlTableModel* model, QWidget* parent /*= nullptr*/)
@@ -30,8 +28,6 @@ FormWidget::FormWidget(QSqlTableModel* model, QWidget* parent /*= nullptr*/)
   model_->setEditStrategy(QSqlTableModel::OnFieldChange);
   initMapper();
   lock(true);
-  saveButton_->setVisible(false);
-  cancelButton_->setVisible(false);
 }
 
 FormWidget::~FormWidget()
@@ -76,6 +72,10 @@ void FormWidget::initButtons()
   buttonLayout_->addWidget(cancelButton_);
   buttonLayout_->addWidget(lockButton_);
   buttonLayout_->addWidget(unlockButton_);
+
+  saveButton_->setVisible(false);
+  cancelButton_->setVisible(false);
+  deleteButton_->setVisible(false);
 
   connect(lockButton_, &QPushButton::clicked, [=]{
     lock(true);
@@ -147,6 +147,7 @@ void FormWidget::addRow()
   lockButton_->setVisible(false);
   saveButton_->setVisible(true);
   cancelButton_->setVisible(true);
+  deleteButton_->setVisible(false);
 }
 
 void FormWidget::lock(bool lock)
@@ -154,6 +155,7 @@ void FormWidget::lock(bool lock)
   formWidget_->setEnabled(!lock);
   lockButton_->setVisible(!lock);
   unlockButton_->setVisible(lock);
+  deleteButton_->setVisible(!lock);
   emit locked(lock);
 }
 
