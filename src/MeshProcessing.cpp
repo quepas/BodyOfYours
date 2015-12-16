@@ -1,6 +1,7 @@
 #include "MeshProcessing.h"
 
 #include <QDebug>
+#include <QFile>
 #include <wrap/io_trimesh/import.h>
 #include <vcg/complex/algorithms/update/component_ep.h>
 #include <vcg/complex/algorithms/update/bounding.h>
@@ -183,4 +184,14 @@ void applyQualityToMesh(CMesh& mesh, float* quality)
     vi->Q() = std::generate_canonical<float, 10>(gen);
   }
   vcg::tri::UpdateColor<CMesh>::PerVertexQualityRamp(mesh);
+}
+
+void createDummyFile(QString filePath)
+{
+  QFile file(filePath);
+  if (file.open(QIODevice::ReadWrite))
+  {
+    QTextStream stream(&file);
+    stream << "dummy" << endl;
+  }
 }

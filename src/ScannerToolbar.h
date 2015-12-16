@@ -1,5 +1,6 @@
 #pragma once
 
+#include "PatientTreeWidget.h"
 #include <QAction>
 #include <QToolBar>
 
@@ -7,8 +8,10 @@ class ScannerToolbar : public QToolBar
 {
   Q_OBJECT
 public:
-  ScannerToolbar(QWidget* parent = nullptr);
+  ScannerToolbar(PatientTreeWidget* patient_tree, QWidget* parent = nullptr);
   ~ScannerToolbar();
+
+  void setEnabled(bool enabled);
 
 private:
   QAction* start_recon_;

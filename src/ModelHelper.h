@@ -11,6 +11,7 @@ public:
       QSqlRecord record = exam_model->record(i);
       if (record.value("patient_id") == id) {
         exam_model->removeRow(i);
+        // TODO: delete exam's scans
       }
     }
   }

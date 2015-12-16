@@ -59,7 +59,7 @@ MainWindow::MainWindow() :
   auto* patient_widget_toolbar = new PatientTreeToolbar(patient_widget_, this);
   addToolBar(patient_widget_toolbar);
 
-  auto scanner_toolbar = new ScannerToolbar(this);
+  auto scanner_toolbar = new ScannerToolbar(patient_widget_, this);
   addToolBar(scanner_toolbar);
 
   ViewerToolbar* viewer_toolbar = new ViewerToolbar(viewer_, this);

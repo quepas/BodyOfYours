@@ -20,3 +20,5 @@ void flipMeshXAxis(CMesh& mesh);
 void flipMeshXAxis(CMesh& base, CMesh& out);
 void retriveQualityFromMesh(CMesh& mesh, float*& quality);
 void applyQualityToMesh(CMesh& mesh, float* quality);
+
+void createDummyFile(QString filePath);
