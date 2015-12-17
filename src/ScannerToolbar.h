@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QAction>
+#include <QLabel>
 #include <QToolBar>
 
 class ScannerToolbar : public QToolBar
@@ -16,9 +17,11 @@ signals:
 
 public slots:
   void setEnabled(bool enabled);
+  void showNumSensor(int numSensor);
 
 private:
   QAction* start_recon_;
   QAction* stop_recon_;
   QAction* addExternalMesh_;
+  QLabel* numSensorLabel_;
 };

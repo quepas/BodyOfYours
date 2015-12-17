@@ -15,11 +15,11 @@ public:
   Scanner(QWidget* parent);
   ~Scanner();
 
-  int num_sensors() { return num_sensors_; }
+  int numSensor() { return numSensor_; }
 
 private:
   static const int MAX_NUM_SENSORS = 3;
-  int num_sensors_;
+  int numSensor_;
   RecFusion::Sensor* sensors_[MAX_NUM_SENSORS];
   RecFusion::Reconstruction* reconstruction_;
   SensorData* sensors_data_[MAX_NUM_SENSORS];
@@ -39,6 +39,5 @@ public slots:
   void processFrames();
 
 signals:
-  void foundSensor(int num, QStringList names);
   void sendImages(QList<ImageData> image_rgb, QList<ImageData> image_recon);
 };

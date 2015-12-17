@@ -8,13 +8,15 @@
 
 ScannerToolbar::ScannerToolbar(QWidget* parent /*= nullptr*/) : QToolBar(parent)
 {
+  numSensorLabel_ = new QLabel(tr("Brak sensorow"));
+  addWidget(numSensorLabel_);
+  addSeparator();
   start_recon_ = addAction(QIcon("icon/player2.png"), tr("Rozpocznij rekonstrukcje"));
   start_recon_->setToolTip(tr("Rozpocznij rekonstrukcje"));
   stop_recon_ = addAction(QIcon("icon/stop48.png"), tr("Zatrzymaj rekonstrukcje"));
   stop_recon_->setToolTip(tr("Zatrzymaj rekonstrukcje"));
   addExternalMesh_ = addAction(QIcon("icon/film63.png"), tr("Dodaj zewnetrzny skan"));
   addExternalMesh_->setToolTip(tr("Dodaj zewnetrzny skan"));
-
   setEnabled(false);
   connect(start_recon_, &QAction::triggered, [=]{
     emit startReconstruction();
@@ -42,6 +44,7 @@ ScannerToolbar::~ScannerToolbar()
 {
   delete stop_recon_;
   delete start_recon_;
+  delete numSensorLabel_;
 }
 
 void ScannerToolbar::setEnabled(bool enabled)
@@ -49,4 +52,10 @@ void ScannerToolbar::setEnabled(bool enabled)
   start_recon_->setEnabled(enabled);
   stop_recon_->setEnabled(enabled);
   addExternalMesh_->setEnabled(enabled);
+}
+
+void ScannerToolbar::showNumSensor(int numSensor)
+{
+  if (numSensor > 0)
+    numSensorLabel_->setText(QString("Sensory: %1").arg(numSensor));
 }

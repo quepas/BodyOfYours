@@ -35,10 +35,10 @@ Scanner::Scanner(QWidget* parent)
     sensors_[i] = new Sensor();
     sensors_data_[i] = nullptr;
   }
-  num_sensors_ = sensors_[0]->deviceCount();
-  qDebug() << "[INFO] Num. of sensor devices connected: " << num_sensors_;
+  numSensor_ = sensors_[0]->deviceCount();
+  qDebug() << "[INFO] Num. of sensor devices connected: " << numSensor_;
 
-  for (int i = 0; i < num_sensors_; ++i) {
+  for (int i = 0; i < numSensor_; ++i) {
     bool is_ok = sensors_[i]->open(i);
     if (!is_ok) {
       qDebug() << "[ERROR] Couldn't open sensor with num.: " << i;
@@ -50,8 +50,6 @@ Scanner::Scanner(QWidget* parent)
       m_imgLabel[i]->resize(w, h);*/
     }
   }
-
-  // emit foundSensor signal
   timer_ = new QTimer();
   connect(timer_, SIGNAL(timeout()), this, SLOT(processFrames()));
   timer_->start(50);
@@ -84,8 +82,8 @@ void Scanner::startReconstruction()
   }
   rec_in_progress_ = false;
   delete reconstruction_;
-  ReconstructionParams parameters(num_sensors_);
-  for (int i = 0; i < num_sensors_; ++i) {
+  ReconstructionParams parameters(numSensor_);
+  for (int i = 0; i < numSensor_; ++i) {
     SensorData* data = sensors_data_[i];
     auto depth_image = data->depth_image;
     auto color_image = data->color_image;
@@ -128,19 +126,19 @@ void Scanner::stopReconstruction()
 
 void Scanner::processFrames()
 {
-  for (int i = 0; i < num_sensors_; ++i) {
+  for (int i = 0; i < numSensor_; ++i) {
     if (!sensors_data_[i]->HasRegularImages())
       return;
   }
   // Grab images from sensor
   bool is_data_ok[3];
-  for (int i = 0; i < num_sensors_; ++i) {
+  for (int i = 0; i < numSensor_; ++i) {
     is_data_ok[i] = sensors_[i]->readImage(*(sensors_data_[i]->depth_image), *(sensors_data_[i]->color_image), 40);
   }
   QList<ImageData> img_camera;
   QList<ImageData> img_scene;
   // Process images
-  for (int i = 0; i < num_sensors_; ++i)
+  for (int i = 0; i < numSensor_; ++i)
   {
     if (!is_data_ok[i]) continue;
     auto data = sensors_data_[i];
@@ -189,12 +187,12 @@ void Scanner::processFrames()
 
 void Scanner::performCalibration()
 {
-  for (int i = 0; i < num_sensors_; ++i) {
+  for (int i = 0; i < numSensor_; ++i) {
     sensors_data_[i]->ResetT();
   }
   // Create calibration object for two sensors
   Calibration calib;
-  calib.init(num_sensors_);
+  calib.init(numSensor_);
   // Single-sided calibration
   calib.setMarker(100, 190);
   bool ok = false;
@@ -202,7 +200,7 @@ void Scanner::performCalibration()
   for (int i = 0; i < 10; ++i)
   {
     // Reset valid flag for capturing calibration images
-    for (int j = 0; j < num_sensors_; ++j) {
+    for (int j = 0; j < numSensor_; ++j) {
       sensors_data_[j]->calib_image_valid = false;
     }
     // Setting m_calibrate to true, instructs the capture loop to capture calibration images
@@ -210,7 +208,7 @@ void Scanner::performCalibration()
     // Wait until calibration images for both sensors have been captured
     bool waiting = true;
     while (waiting) {
-      for (int i = 0; i < num_sensors_; ++i) {
+      for (int i = 0; i < numSensor_; ++i) {
         waiting = waiting && !(sensors_data_[i]->IsCalibrated());
       }
       QCoreApplication::processEvents();
@@ -220,7 +218,7 @@ void Scanner::performCalibration()
     calib_in_progress_ = false;
 
     // Pass captured images to calibration
-    for (int i = 0; i < num_sensors_; ++i) {
+    for (int i = 0; i < numSensor_; ++i) {
       auto data = sensors_data_[i];
       calib.setImage(i, *(data->calib_depth_image), *(data->calib_color_image), data->K, data->K);
     }
@@ -232,7 +230,7 @@ void Scanner::performCalibration()
   if (ok)
   {
     // Retrieve sensor transformation if calibration succeeded
-    for (int i = 0; i < num_sensors_; ++i) {
+    for (int i = 0; i < numSensor_; ++i) {
       auto data = sensors_data_[i];
       calib.getTransformation(i, data->T);
       qDebug() << mat4ToString(data->T);
@@ -259,7 +257,7 @@ void Scanner::saveCalibration()
   if (filename.isEmpty()) return;
   // Save calibrations to file as 4x4 matrices in row-major order
   std::ofstream out(filename.toStdString());
-  for (int i = 0; i < num_sensors_; ++i)
+  for (int i = 0; i < numSensor_; ++i)
   {
     for (int row = 0; row < 4; ++row)
     {
@@ -283,7 +281,7 @@ void Scanner::loadCalibration()
   }
   // Load calibration from file
   double temp[2][16];
-  for (int i = 0; i < num_sensors_; ++i)
+  for (int i = 0; i < numSensor_; ++i)
   {
     for (int row = 0; row < 4; ++row)
       for (int col = 0; col < 4; ++col)
@@ -296,7 +294,7 @@ void Scanner::loadCalibration()
   }
   in.close();
 
-  for (int i = 0; i < num_sensors_; ++i)
+  for (int i = 0; i < numSensor_; ++i)
     for (int row = 0; row < 4; ++row)
       for (int col = 0; col < 4; ++col)
         sensors_data_[i]->T(row, col) = temp[i][col * 4 + row];

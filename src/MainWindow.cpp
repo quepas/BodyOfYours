@@ -37,7 +37,7 @@ MainWindow::MainWindow() :
   patient_widget_->setMaximumWidth(300);
   scanner_ = new Scanner(this);
   QWidget* viewport = new QWidget;
-  ScannerViewer* scanner_viewer = new ScannerViewer(scanner_->num_sensors(), this);
+  ScannerViewer* scanner_viewer = new ScannerViewer(scanner_->numSensor(), this);
   viewport_tabs_ = new QTabWidget(this);
   main_form_ = nullptr;
   viewport_tabs_->addTab(stack, tr("Formatki"));
@@ -57,9 +57,9 @@ MainWindow::MainWindow() :
 
   auto* patient_widget_toolbar = new PatientTreeToolbar(patient_widget_, this);
   addToolBar(patient_widget_toolbar);
-
   auto scanner_toolbar = new ScannerToolbar(this);
   addToolBar(scanner_toolbar);
+  scanner_toolbar->showNumSensor(scanner_->numSensor());
 
   ViewerToolbar* viewer_toolbar = new ViewerToolbar(viewer_, this);
   addToolBar(viewer_toolbar);
@@ -101,6 +101,8 @@ MainWindow::MainWindow() :
 
   // Scanner -> ScannerViewer
   connect(scanner_, SIGNAL(sendImages(QList<ImageData>, QList<ImageData>)), scanner_viewer, SLOT(displayImages(QList<ImageData>, QList<ImageData>)));
+  // Scanner -> ScannerToolbar
+  
 
   // StackedFormWidget -> ...
   connect(stack, &StackedFormWidget::showRefMeshWithQualityMap, [=](QString refScanFilename, QString qualityMapFilename) {
