@@ -12,5 +12,4 @@ public:
 
 private:
   QLineEdit* examName_;
-  QLineEdit* scanName_;
 };

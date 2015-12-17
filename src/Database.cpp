@@ -27,7 +27,6 @@ void Database::createScheme()
   query.exec("CREATE TABLE examination ("
     "id INTEGER PRIMARY KEY, "
     "name varchar(100),"
-    "scan_name varchar(100),"
     "patient_id INTEGER,"
     "FOREIGN KEY(patient_id) REFERENCES patient(id))");
   query.exec("CREATE TABLE scan ("
