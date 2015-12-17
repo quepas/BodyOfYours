@@ -27,7 +27,7 @@ MainWindow::MainWindow() :
   Database db("database.db");
   db.createScheme();
   initModels();
-  StackedFormWidget* stack = new StackedFormWidget(patient_model_, exam_model_);
+  StackedFormWidget* stack = new StackedFormWidget(patient_model_, exam_model_, scan_model_);
   patient_widget_ = new PatientTreeWidget(patient_model_, exam_model_, stack, Database::selectPatient());
   connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(openScan(QString)));
   QGridLayout* grid = new QGridLayout;
@@ -71,6 +71,7 @@ MainWindow::MainWindow() :
 
   ActionHub::addAction(new ActionAddNewPatient(this, stack));
   ActionHub::addAction(new ActionAddNewExamination(this, stack));
+  ActionHub::addAction(new ActionAddNewScan(this, stack));
   ActionHub::addAction(new ActionDeleteCurrentItem(this, patient_widget_));
   ActionHub::addAction(new ActionStartReconstruction(this, scanner_));
   ActionHub::addAction(new ActionStopReconstruction(this, scanner_));
@@ -150,4 +151,7 @@ void MainWindow::initModels()
   exam_model_ = new QSqlTableModel;
   exam_model_->setTable("examination");
   exam_model_->select();
+  scan_model_ = new QSqlTableModel;
+  scan_model_->setTable("scan");
+  scan_model_->select();
 }

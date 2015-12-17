@@ -16,6 +16,10 @@ CREATE_ACTION(ActionAddNewExamination, {
   widget_->switchTo(StackedFormWidget::EXAMINATION_FORM);
 }, StackedFormWidget* widget_)
 
+CREATE_ACTION(ActionAddNewScan, {
+  widget_->switchTo(StackedFormWidget::SCAN_FORM);
+} , StackedFormWidget* widget_)
+
 CREATE_ACTION(ActionDeleteCurrentItem, {
   widget->removeCurrentItem();
 }, PatientTreeWidget* widget)

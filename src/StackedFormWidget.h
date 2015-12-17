@@ -7,13 +7,14 @@ class StackedFormWidget : public QStackedWidget
 {
   Q_OBJECT
 public:
-  StackedFormWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QWidget* parent = nullptr);
+  StackedFormWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, QWidget* parent = nullptr);
   ~StackedFormWidget();
 
   enum FormID {
     PATIENT_FORM = 0,
     EXAMINATION_FORM = 1,
-    EMPTY_FORM = 2
+    EMPTY_FORM = 2,
+    SCAN_FORM = 3
   };
 
   void switchTo(FormID id);

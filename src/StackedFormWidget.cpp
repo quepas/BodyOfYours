@@ -4,13 +4,15 @@
 #include <QSqlError>
 #include "PatientForm.h"
 #include "ExaminationForm.h"
+#include "ScanForm.h"
 #include "ModelHelper.h"
 
-StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QWidget* parent /*= nullptr*/) : QStackedWidget(parent), currentRowID_(-1)
+StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, QWidget* parent /*= nullptr*/) : QStackedWidget(parent), currentRowID_(-1)
 {
   widgets_.append(new PatientForm(patient_model, this));
   widgets_.append(new ExaminationForm(exam_model, this));
   widgets_.append(new FormWidget(this));
+  widgets_.append(new ScanForm(scan_model, this));
   for (int i = 0; i < 2; ++i) {
     connect(widgets_[i], &FormWidget::canceled, [=]{
       switchTo(EMPTY_FORM);
@@ -38,6 +40,7 @@ StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableMod
   addWidget(widgets_[0]);
   addWidget(widgets_[1]);
   addWidget(widgets_[2]);
+  addWidget(widgets_[3]);
   switchTo(EMPTY_FORM);
 }
 

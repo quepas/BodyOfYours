@@ -26,6 +26,7 @@ ScannerToolbar::ScannerToolbar(PatientTreeWidget* patient_tree, QWidget* parent 
     QByteArray time = QTime::currentTime().toString().toLocal8Bit();
     QString filePath = QString(QCryptographicHash::hash(time, QCryptographicHash::Md5).toHex());
     createDummyFile("data/" + filePath);
+    ActionHub::trigger(ActionAddNewScan::TYPE());
   });
 }
 
