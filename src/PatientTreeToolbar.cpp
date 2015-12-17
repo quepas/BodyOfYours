@@ -41,9 +41,10 @@ PatientTreeToolbar::PatientTreeToolbar(PatientTreeWidget* patient_widget, QWidge
     if (current) {
       bool is_patient = PatientTreeItem::isPatient(current);
       add_examination_->setEnabled(is_patient);
-      calculate_diff_->setEnabled(!is_patient);
-      calculate_mirror_->setEnabled(!is_patient);
-      showScan_->setEnabled(PatientTreeItem::isScan(current));
+      bool isScan = PatientTreeItem::isScan(current);
+      calculate_diff_->setEnabled(isScan);
+      calculate_mirror_->setEnabled(isScan);
+      showScan_->setEnabled(isScan);
     }
   });
 }

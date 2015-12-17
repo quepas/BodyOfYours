@@ -9,11 +9,15 @@ class MeshDifferenceDlg : public QDialog
 {
   Q_OBJECT
 public:
-  MeshDifferenceDlg(QWidget* parent, QStringList data);
+  MeshDifferenceDlg(QWidget* parent, QMap<int, QString> data, int refScanID);
   ~MeshDifferenceDlg();
 
+signals:
+  void calculateDiff(int refScanID, int compScanID);
+
 private:
-  QComboBox* additional_mesh_;
-  QPushButton* close_button_;
-  QPushButton* calculate_button_;
+  QComboBox* refScanComboBox_;
+  QComboBox* compScanComboBox_;
+  QPushButton* closeButton_;
+  QPushButton* calculateButton_;
 };

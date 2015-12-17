@@ -8,6 +8,7 @@
 
 #include "ActionHub.h"
 #include "MeshViewer.h"
+#include "MeshDifferenceDlg.h"
 #include "PatientTreeWidget.h"
 #include "Scanner.h"
 #include "FormWidget.h"
@@ -33,6 +34,7 @@ private:
   QTabWidget* viewport_tabs_;
   ActionHub* action_hub_;
   FormWidget* main_form_;
+  MeshDifferenceDlg* meshDiffDlg_;
   // SQL models
   QSqlTableModel* patient_model_;
   QSqlTableModel* exam_model_;

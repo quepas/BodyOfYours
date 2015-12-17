@@ -8,7 +8,6 @@
 
 #include "GuiActions.h"
 #include "Database.h"
-#include "MeshDifferenceDlg.h"
 #include "MeshProcessing.h"
 #include "PatientTreeItem.h"
 #include "PatientTreeToolbar.h"
@@ -18,7 +17,8 @@
 #include "StackedFormWidget.h"
 
 MainWindow::MainWindow() :
-  scanner_(nullptr)
+  scanner_(nullptr),
+  meshDiffDlg_(nullptr)
 #ifndef _DEBUG
   ,
   viewer_(new MeshViewer())
@@ -135,21 +135,21 @@ void MainWindow::openScan(QString filename)
 
 void MainWindow::calculateDiff()
 {
+  delete meshDiffDlg_;
   auto item = patient_widget_->currentItem();
-  if (item && PatientTreeItem::isExamination(item)) {
-    qDebug() << item->text(0);
+  if (item && PatientTreeItem::isScan(item)) {
     auto parent = item->parent();
-    qDebug() << "\tparent: " << parent->text(0);
-    QStringList options;
+    QMap<int, QString> options;
     for (int i = 0; i < parent->childCount(); ++i) {
       auto child = parent->child(i);
-      if (child != item) {
-        QString entry = parent->child(i)->text(0);
-        qDebug() << "\t\tchild: " << entry;
-        options.append(entry);
-      }
+      QString entry = child->text(0);
+      options.insert(PatientTreeItem::getId(child), child->text(0));
     }
-    (new MeshDifferenceDlg(this, options))->show();
+    meshDiffDlg_ = new MeshDifferenceDlg(this, options, PatientTreeItem::getId(item));
+    connect(meshDiffDlg_, &MeshDifferenceDlg::calculateDiff, [=](int refScanID, int compScanID) {
+      qDebug() << "RefScanID: " << refScanID << "; compScanID: " << compScanID;
+    });
+    meshDiffDlg_->show();
   }
   /*
   auto items = patient_widget_->selectedItems();
