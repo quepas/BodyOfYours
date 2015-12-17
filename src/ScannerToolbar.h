@@ -20,4 +20,5 @@ public slots:
 private:
   QAction* start_recon_;
   QAction* stop_recon_;
+  QAction* addExternalMesh_;
 };
