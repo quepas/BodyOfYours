@@ -8,9 +8,14 @@ class ScannerToolbar : public QToolBar
 {
   Q_OBJECT
 public:
-  ScannerToolbar(PatientTreeWidget* patient_tree, QWidget* parent = nullptr);
+  ScannerToolbar(QWidget* parent = nullptr);
   ~ScannerToolbar();
 
+signals:
+  void startReconstruction();
+  void stopReconstruction(QString meshFilePath);
+
+public slots:
   void setEnabled(bool enabled);
 
 private:

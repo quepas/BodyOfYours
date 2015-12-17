@@ -59,7 +59,7 @@ MainWindow::MainWindow() :
   auto* patient_widget_toolbar = new PatientTreeToolbar(patient_widget_, this);
   addToolBar(patient_widget_toolbar);
 
-  auto scanner_toolbar = new ScannerToolbar(patient_widget_, this);
+  auto scanner_toolbar = new ScannerToolbar(this);
   addToolBar(scanner_toolbar);
 
   ViewerToolbar* viewer_toolbar = new ViewerToolbar(viewer_, this);
@@ -76,6 +76,21 @@ MainWindow::MainWindow() :
   ActionHub::addAction(new ActionStartReconstruction(this, scanner_));
   ActionHub::addAction(new ActionStopReconstruction(this, scanner_));
   ActionHub::addAction(new ActionMeshViewerClear(this, viewer_));
+
+  // ScannerToolbar -> Scanner
+  connect(scanner_toolbar, SIGNAL(startReconstruction()), scanner_, SLOT(startReconstruction()));
+  connect(scanner_toolbar, SIGNAL(stopReconstruction(QString)), scanner_, SLOT(stopReconstruction()));
+
+  // ScannerToolbar -> StackedFormWidget
+  connect(scanner_toolbar, &ScannerToolbar::stopReconstruction, [=](QString meshFilePath) {
+    qDebug() << "[Info] Reconstruction stoped. Mesh save in: " << meshFilePath;
+    stack->switchTo(StackedFormWidget::SCAN_FORM);
+  });
+
+  // PatientTreeWidget -> ScannerToolbar
+  connect(patient_widget_, &PatientTreeWidget::itemClicked, [=] (QTreeWidgetItem* item, int column) {
+    scanner_toolbar->setEnabled(PatientTreeItem::isExamination(item));
+  });
 }
 
 MainWindow::~MainWindow()
