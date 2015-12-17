@@ -210,7 +210,46 @@ void PatientTreeWidget::removeCurrentItem()
 
 void PatientTreeWidget::onDataChanged()
 {
+  saveExpanded();
   qDebug() << "---> PatientTreeWidget::onDataChanged()";
   clear();
   buildTreeFromModel(patient_model_, exam_model_);
+  restorExpanded();
+}
+
+void PatientTreeWidget::saveExpanded()
+{
+  patients_exp_.clear();
+  exam_exp_.clear();
+
+  for (int i = 0; i < topLevelItemCount(); ++i) {
+    auto topItem = topLevelItem(i);
+    if (PatientTreeItem::isPatient(topItem)) {
+      if (topItem->isExpanded()) patients_exp_.append(PatientTreeItem::getId(topItem));
+      for (int k = 0; k < topItem->childCount(); ++k) {
+        auto child = topItem->child(k);
+        if (PatientTreeItem::isExamination(child)) {
+          if (child->isExpanded()) exam_exp_.append(PatientTreeItem::getId(child));
+        }
+      }
+    }
+  }
+}
+
+void PatientTreeWidget::restorExpanded()
+{
+  for (int i = 0; i < topLevelItemCount(); ++i) {
+    auto topItem = topLevelItem(i);
+    if (PatientTreeItem::isPatient(topItem)) {
+      int id = PatientTreeItem::getId(topItem);
+      if (patients_exp_.contains(id)) topItem->setExpanded(true);
+      for (int k = 0; k < topItem->childCount(); ++k) {
+        auto child = topItem->child(k);
+        if (PatientTreeItem::isExamination(child)) {
+          int childID = PatientTreeItem::getId(child);
+          if (exam_exp_.contains(childID)) child->setExpanded(true);
+        }
+      }
+    }
+  }
 }

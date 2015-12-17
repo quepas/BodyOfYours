@@ -26,6 +26,12 @@ private:
   QTreeWidgetItem* modifyPatient(PatientData data);
   QTreeWidgetItem* addExamination(QTreeWidgetItem* parent, ExaminationData data);
 
+  void saveExpanded();
+  void restorExpanded();
+
+  QList<int> patients_exp_;
+  QList<int> exam_exp_;
+
   StackedFormWidget* form_widget_;
   QSqlTableModel* patient_model_;
   QSqlTableModel* exam_model_;
