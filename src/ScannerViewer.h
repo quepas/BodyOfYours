@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scanner.h"
+#include "ImageData.h"
 #include <QGridLayout>
 #include <QLabel>
 #include <QWidget>
@@ -9,7 +9,7 @@ class ScannerViewer : public QWidget
 {
   Q_OBJECT
 public:
-  ScannerViewer(Scanner* scanner, QWidget* parent = nullptr);
+  ScannerViewer(int numSensor, QWidget* parent = nullptr);
   ~ScannerViewer();
 
 public slots:
@@ -20,5 +20,5 @@ private:
   QLabel* image_camera_[MAX_NUM_SENSORS];
   QLabel* image_scene_[MAX_NUM_SENSORS];
   QGridLayout* viewport_;
-  int num_sensors_;
+  int numSensor_;
 };

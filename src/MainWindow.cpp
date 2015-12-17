@@ -37,7 +37,7 @@ MainWindow::MainWindow() :
   patient_widget_->setMaximumWidth(300);
   scanner_ = new Scanner(this);
   QWidget* viewport = new QWidget;
-  ScannerViewer* scanner_viewer = new ScannerViewer(scanner_, this);
+  ScannerViewer* scanner_viewer = new ScannerViewer(scanner_->num_sensors(), this);
   viewport_tabs_ = new QTabWidget(this);
   main_form_ = nullptr;
   viewport_tabs_->addTab(stack, tr("Formatki"));
@@ -98,6 +98,9 @@ MainWindow::MainWindow() :
       qDebug() << "[WARN] Trying to save scan when non-examination item is selected.";
     }
   });
+
+  // Scanner -> ScannerViewer
+  connect(scanner_, SIGNAL(sendImages(QList<ImageData>, QList<ImageData>)), scanner_viewer, SLOT(displayImages(QList<ImageData>, QList<ImageData>)));
 
   // StackedFormWidget -> ...
   connect(stack, &StackedFormWidget::showRefMeshWithQualityMap, [=](QString refScanFilename, QString qualityMapFilename) {

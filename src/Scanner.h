@@ -1,19 +1,12 @@
 #pragma once
 
+#include "ImageData.h"
 #include "SensorData.h"
 #include <QObject>
 #include <QImage>
 #include <QTimer>
 #include <QMessageBox>
 #include <RecFusion.h>
-
-struct ImageData
-{
-  ImageData(QImage img, int w, int h)
-    : image(img), width(w), height(h) {}
-  QImage image;
-  int width, height;
-};
 
 class Scanner : public QObject
 {
