@@ -30,7 +30,9 @@ ViewerToolbar::ViewerToolbar(MeshViewer* viewer, QWidget* parent) : QToolBar(par
     qDebug() << "Prev quality map";
     auto mesh = viewer_->getLastMesh();
     if (mesh) {
-      applyQualityToMesh(*mesh, nullptr);
+      QVector<float> quality;
+      generateRandomQualityForMesh(*mesh, quality);
+      applyQualityToMesh(*mesh, quality);
       viewer_->update();
     }
   });
@@ -38,7 +40,9 @@ ViewerToolbar::ViewerToolbar(MeshViewer* viewer, QWidget* parent) : QToolBar(par
     qDebug() << "Next quality map";
     auto mesh = viewer_->getLastMesh();
     if (mesh) {
-      applyQualityToMesh(*mesh, nullptr);
+      QVector<float> quality;
+      generateRandomQualityForMesh(*mesh, quality);
+      applyQualityToMesh(*mesh, quality);
       viewer_->update();
     }
   });

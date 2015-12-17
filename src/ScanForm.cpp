@@ -1,5 +1,7 @@
 #include "ScanForm.h"
 
+#include <QDebug>
+
 ScanForm::ScanForm(QSqlTableModel* model, QWidget* parent)
   : FormWidget(model, parent), scanDiffModel_(nullptr)
 {
@@ -17,6 +19,13 @@ ScanForm::ScanForm(QSqlTableModel* model, QWidget* parent)
   scanDiffTable_->setEditTriggers(QAbstractItemView::NoEditTriggers);
   scanDiffTable_->setSelectionBehavior(QAbstractItemView::SelectionBehavior::SelectRows);
   scanDiffTable_->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+  connect(scanDiffTable_, &QTableView::doubleClicked, [=]{
+    int scanDiffRow = scanDiffTable_->currentIndex().row();
+    auto record = scanDiffModel_->record(scanDiffRow);
+    int refScanID = record.value("ref_id").toInt();
+    QString qualityFilename = record.value("filename").toString();
+    emit showRefMeshWithQualityMap(refScanID, qualityFilename);
+  });
   formLayout_->addWidget(scanDiffTable_);
 }
 

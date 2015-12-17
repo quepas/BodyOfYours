@@ -99,6 +99,16 @@ MainWindow::MainWindow() :
     }
   });
 
+  // StackedFormWidget -> ...
+  connect(stack, &StackedFormWidget::showRefMeshWithQualityMap, [=](QString refScanFilename, QString qualityMapFilename) {
+    openScan(refScanFilename);
+    CMesh* mesh = viewer_->getLastMesh();
+    QVector<float> quality;
+    loadQualityFromFile(qualityMapFilename, quality);
+    applyQualityToMesh(*mesh, quality);
+    viewport_tabs_->setCurrentIndex(1);
+  });
+
   // PatientTreeWidget -> ScannerToolbar
   connect(patient_widget_, &PatientTreeWidget::itemClicked, [=] (QTreeWidgetItem* item, int column) {
     scanner_toolbar->setEnabled(PatientTreeItem::isExamination(item));
@@ -156,7 +166,23 @@ void MainWindow::calculateDiff()
       QByteArray time = QTime::currentTime().toString().toLocal8Bit();
       QString filePath = QString(QCryptographicHash::hash(time, QCryptographicHash::Md5).toHex());
       QString fullMeshFilePath = "data/diff_" + filePath;
-      createDummyFile(fullMeshFilePath);
+      // generate quality map and save it
+      int scansNum = scan_model_->rowCount();
+      QString fileName;
+      for (int i = 0; i < scansNum; ++i) {
+        auto record = scan_model_->record(i);
+        if (record.value("id").toInt() == refScanID) {
+          fileName = record.value("filename").toString();
+          break;
+        }
+      }
+      // load mesh for it
+      CMesh mesh;
+      openMesh(fileName, mesh);
+      // save it
+      QVector<float> quality;
+      generateRandomQualityForMesh(mesh, quality);
+      saveQualityToFile(fullMeshFilePath, quality);
       scanDiffModel_->setData(scanDiffModel_->index(scanDiffRow, scanDiffModel_->fieldIndex("filename")), fullMeshFilePath);
       scanDiffModel_->submitAll();
     });

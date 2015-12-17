@@ -18,6 +18,18 @@ StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableMod
       switchTo(EMPTY_FORM);
     });
   }
+  connect(dynamic_cast<ScanForm*>(widgets_[3]), &ScanForm::showRefMeshWithQualityMap, [=] (int refScanID, QString qualityMapName) {
+    int scanNum = scan_model->rowCount();
+    for (int i = 0; i < scanNum; ++i) {
+      auto record = scan_model->record(i);
+      if (record.value("id").toInt() == refScanID) {
+        QString refScanFilename = record.value("filename").toString();
+        qDebug() << "Loading: " << refScanFilename << " with quality map " << qualityMapName;
+        emit showRefMeshWithQualityMap(refScanFilename, qualityMapName);
+        return;
+      }
+    }
+  });
 
   connect(widgets_[0], &FormWidget::deleted, [=](int deletedItemId) {
     ModelHelper::deletePatientRemains(deletedItemId, exam_model);

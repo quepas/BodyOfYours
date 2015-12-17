@@ -176,12 +176,12 @@ void retriveQualityFromMesh(CMesh& mesh, float*& quality)
   }
 }
 
-void applyQualityToMesh(CMesh& mesh, float* quality)
+void applyQualityToMesh(CMesh& mesh, const QVector<float>& quality)
 {
-  std::random_device rd;
-  std::mt19937 gen(rd());
+  assert(quality.size() == mesh.vert.size());
+  int counter = 0;
   for (CMesh::VertexIterator vi = mesh.vert.begin(); vi != mesh.vert.end(); ++vi) {
-    vi->Q() = std::generate_canonical<float, 10>(gen);
+    vi->Q() = quality[counter++];
   }
   vcg::tri::UpdateColor<CMesh>::PerVertexQualityRamp(mesh);
 }

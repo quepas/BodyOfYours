@@ -21,6 +21,10 @@ public:
   void switchTo(FormID id, int dataRowId);
 
   FormWidget* form(FormID id) { return widgets_[id]; }
+
+signals:
+  void showRefMeshWithQualityMap(QString refMeshFilename, QString qualityMapFilename);
+
 private:
   QList<FormWidget*> widgets_;
   int currentRowID_;
