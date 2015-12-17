@@ -19,6 +19,8 @@ public:
 
   void switchTo(FormID id);
   void switchTo(FormID id, int dataRowId);
+
+  FormWidget* form(FormID id) { return widgets_[id]; }
 private:
   QList<FormWidget*> widgets_;
   int currentRowID_;

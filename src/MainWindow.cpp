@@ -4,6 +4,7 @@
 #include <QAction>
 #include <QToolBar>
 #include <QAbstractItemModel>
+#include <QSqlError>
 
 #include "GuiActions.h"
 #include "Database.h"
@@ -84,7 +85,20 @@ MainWindow::MainWindow() :
   // ScannerToolbar -> StackedFormWidget
   connect(scanner_toolbar, &ScannerToolbar::stopReconstruction, [=](QString meshFilePath) {
     qDebug() << "[Info] Reconstruction stoped. Mesh save in: " << meshFilePath;
-    stack->switchTo(StackedFormWidget::SCAN_FORM);
+    auto item = patient_widget_->currentItem();
+    if (PatientTreeItem::isExamination(item)) {
+      int examID = PatientTreeItem::getId(item);
+      int scanRowNum = scan_model_->rowCount();
+      scan_model_->insertRow(scanRowNum);
+      scan_model_->setData(scan_model_->index(scanRowNum, scan_model_->fieldIndex("exam_id")), examID);
+      scan_model_->setData(scan_model_->index(scanRowNum, scan_model_->fieldIndex("filename")), meshFilePath);
+      scan_model_->submitAll();
+      int scanID = scan_model_->data(scan_model_->index(scanRowNum, 0)).toInt();
+      stack->switchTo(StackedFormWidget::SCAN_FORM, scanID);
+    }
+    else {
+      qDebug() << "[WARN] Trying to save scan when non-examination item is selected.";
+    }
   });
 
   // PatientTreeWidget -> ScannerToolbar

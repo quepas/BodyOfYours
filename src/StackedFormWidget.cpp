@@ -32,7 +32,7 @@ StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableMod
   connect(widgets_[1], &FormWidget::saved, [=](int currentRowIndex) {
     if (currentIndex() == EXAMINATION_FORM && currentRowID_ != -1) {
       auto idx = exam_model->index(currentRowIndex, exam_model->fieldIndex("patient_id"));
-      exam_model->setData(idx, currentRowID_, Qt::EditRole);
+      exam_model->setData(idx, currentRowID_);
     }
     switchTo(EMPTY_FORM);
   });

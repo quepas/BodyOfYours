@@ -1,6 +1,5 @@
 #pragma once
 
-#include "PatientTreeWidget.h"
 #include <QAction>
 #include <QToolBar>
 
