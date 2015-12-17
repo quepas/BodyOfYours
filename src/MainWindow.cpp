@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QAction>
 #include <QToolBar>
+#include <QCryptographicHash>
 #include <QAbstractItemModel>
 #include <QSqlError>
 
@@ -148,6 +149,16 @@ void MainWindow::calculateDiff()
     meshDiffDlg_ = new MeshDifferenceDlg(this, options, PatientTreeItem::getId(item));
     connect(meshDiffDlg_, &MeshDifferenceDlg::calculateDiff, [=](int refScanID, int compScanID) {
       qDebug() << "RefScanID: " << refScanID << "; compScanID: " << compScanID;
+      int scanDiffRow = scanDiffModel_->rowCount();
+      scanDiffModel_->insertRow(scanDiffRow);
+      scanDiffModel_->setData(scanDiffModel_->index(scanDiffRow, scanDiffModel_->fieldIndex("ref_id")), refScanID);
+      scanDiffModel_->setData(scanDiffModel_->index(scanDiffRow, scanDiffModel_->fieldIndex("comp_id")), compScanID);
+      QByteArray time = QTime::currentTime().toString().toLocal8Bit();
+      QString filePath = QString(QCryptographicHash::hash(time, QCryptographicHash::Md5).toHex());
+      QString fullMeshFilePath = "data/diff_" + filePath;
+      createDummyFile(fullMeshFilePath);
+      scanDiffModel_->setData(scanDiffModel_->index(scanDiffRow, scanDiffModel_->fieldIndex("filename")), fullMeshFilePath);
+      scanDiffModel_->submitAll();
     });
     meshDiffDlg_->show();
   }
@@ -197,4 +208,7 @@ void MainWindow::initModels()
   scan_model_->setEditStrategy(QSqlTableModel::OnFieldChange);
   scan_model_->setTable("scan");
   scan_model_->select();
+  scanDiffModel_ = new QSqlTableModel;
+  scanDiffModel_->setTable("scan_diff");
+  scanDiffModel_->select();
 }

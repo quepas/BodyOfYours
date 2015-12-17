@@ -20,7 +20,7 @@ public:
 
 public slots:
   void setCurrentRowIndex(int rowIndex);
-  void setCurrentRowWithId(int rowId);
+  virtual void setCurrentRowWithId(int rowId);
   void addRow();
   void revertModel();
 
@@ -37,18 +37,18 @@ protected:
   QSqlTableModel* model_;
   QDataWidgetMapper* mapper_;
 
-private:
-  QVBoxLayout* mainLayout_;
-
   QPushButton* lockButton_;
   QPushButton* unlockButton_;
   QPushButton* saveButton_;
   QPushButton* cancelButton_;
   QPushButton* deleteButton_;
 
+  void lock(bool lock);
+private:
+  QVBoxLayout* mainLayout_;
+
   void initLayouts();
   void initButtons();
   void initModel(QString table);
   void initMapper();
-  void lock(bool lock);
 };

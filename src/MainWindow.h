@@ -39,6 +39,7 @@ private:
   QSqlTableModel* patient_model_;
   QSqlTableModel* exam_model_;
   QSqlTableModel* scan_model_;
+  QSqlTableModel* scanDiffModel_;
 
   void initModels();
 };
