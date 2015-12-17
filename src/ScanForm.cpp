@@ -41,9 +41,15 @@ void ScanForm::setupScanDiffTable(int scanDiffID)
   scanDiffModel_->setTable("scan_diff");
   scanDiffModel_->setFilter(QString("ref_id == %1").arg(scanDiffID));
   scanDiffModel_->select();
-  scanDiffModel_->setHeaderData(2, Qt::Horizontal, QObject::tr("Porownanie"));
-  scanDiffModel_->setHeaderData(3, Qt::Horizontal, QObject::tr("Nazwa pliku"));
-  scanDiffTable_->setModel(scanDiffModel_);
-  scanDiffTable_->setColumnHidden(0, true);
-  scanDiffTable_->setColumnHidden(1, true);
+  if (scanDiffModel_->rowCount() > 0) {
+    scanDiffModel_->setHeaderData(2, Qt::Horizontal, QObject::tr("Roznica z"));
+    scanDiffModel_->setHeaderData(3, Qt::Horizontal, QObject::tr("Nazwa pliku"));
+    scanDiffTable_->setVisible(true);
+    scanDiffTable_->setModel(scanDiffModel_);
+    scanDiffTable_->setColumnHidden(0, true);
+    scanDiffTable_->setColumnHidden(1, true);
+  }
+  else {
+    scanDiffTable_->setVisible(false);
+  }
 }
