@@ -11,13 +11,8 @@
 #include <QAction>
 #include <QPushButton>
 
-PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent /*= 0*/) : QTreeWidget(parent), form_widget_(form_widget), patient_model_(patient_model), exam_model_(exam_model)
+PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent /*= 0*/) : QTreeWidget(parent), form_widget_(form_widget), patient_model_(patient_model), exam_model_(exam_model), scan_model_(scan_model)
 {
-  // setup Scan model
-  scan_model_ = new QSqlTableModel();
-  scan_model_->setTable("scan");
-  scan_model_->select();
-
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
   setHeaderLabels(QStringList(("Pacjent")));
   connect(patient_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
@@ -34,6 +29,9 @@ PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableMod
     }
     else if (PatientTreeItem::isExamination(item)) {
       form_widget->switchTo(StackedFormWidget::EXAMINATION_FORM, itemID);
+    }
+    else if (PatientTreeItem::isScan(item)) {
+      form_widget->switchTo(StackedFormWidget::SCAN_FORM, itemID);
     }
     emit showTabWithIndex(0);
   });
@@ -84,7 +82,9 @@ void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTa
               if (!scan.isNull("id")) {
                 int scan_exam_fk_id = scan.value("exam_id").toInt();
                 if (scan_exam_fk_id == exam_id) {
-                  auto scan_item = PatientTreeItem::createScanItem(scan.value("id").toInt(), scan.value("filename").toString());
+                  QString scanName = scan.value("name").toString();
+                  QString scanFileName = scan.value("filename").toString();
+                  auto scan_item = PatientTreeItem::createScanItem(scan.value("id").toInt(), !scanName.isEmpty() ? scanName : scanFileName);
                   scan_item->setIcon(0, QIcon("icon/radiography.png"));
                   exam_item->addChild(scan_item);
                 }

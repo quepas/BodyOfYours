@@ -15,7 +15,7 @@ class PatientTreeWidget : public QTreeWidget
   Q_OBJECT
 
 public:
-  PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent = 0);
+  PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent = 0);
   ~PatientTreeWidget();
 
 private:

@@ -29,7 +29,7 @@ MainWindow::MainWindow() :
   db.createScheme();
   initModels();
   StackedFormWidget* stack = new StackedFormWidget(patient_model_, exam_model_, scan_model_);
-  patient_widget_ = new PatientTreeWidget(patient_model_, exam_model_, stack, Database::selectPatient());
+  patient_widget_ = new PatientTreeWidget(patient_model_, exam_model_, scan_model_, stack, Database::selectPatient());
   connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(openScan(QString)));
   QGridLayout* grid = new QGridLayout;
   grid->addWidget(patient_widget_, 0, 0, 2, 1);
@@ -175,12 +175,15 @@ void MainWindow::calculateMirror()
 void MainWindow::initModels()
 {
   patient_model_ = new QSqlTableModel;
+  patient_model_->setEditStrategy(QSqlTableModel::OnFieldChange);
   patient_model_->setTable("patient");
   patient_model_->select();
   exam_model_ = new QSqlTableModel;
+  exam_model_->setEditStrategy(QSqlTableModel::OnFieldChange);
   exam_model_->setTable("examination");
   exam_model_->select();
   scan_model_ = new QSqlTableModel;
+  scan_model_->setEditStrategy(QSqlTableModel::OnFieldChange);
   scan_model_->setTable("scan");
   scan_model_->select();
 }
