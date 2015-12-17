@@ -54,9 +54,6 @@ MainWindow::MainWindow() :
   resize(800, 600);
   //showMaximized();
 
-  QToolBar* patient_toolbar = new QToolBar(this);
-  addToolBar(patient_toolbar);
-
   auto* patient_widget_toolbar = new PatientTreeToolbar(patient_widget_, this);
   addToolBar(patient_widget_toolbar);
 
@@ -104,6 +101,20 @@ MainWindow::MainWindow() :
   // PatientTreeWidget -> ScannerToolbar
   connect(patient_widget_, &PatientTreeWidget::itemClicked, [=] (QTreeWidgetItem* item, int column) {
     scanner_toolbar->setEnabled(PatientTreeItem::isExamination(item));
+  });
+
+  // PatientTreeToolbar -> MeshViewer
+  connect(patient_widget_toolbar, &PatientTreeToolbar::showScan, [=](int scanID) {
+    QSqlTableModel scan_model;
+    scan_model.setTable("scan");
+    scan_model.setFilter(QString("id == %1").arg(scanID));
+    scan_model.select();
+    if (scan_model.rowCount() == 1) {
+      QString meshFileName = scan_model.record(0).value("filename").toString();
+      qDebug() << "[INFO] Opening mesh: " << meshFileName;
+      openScan(meshFileName);
+      viewport_tabs_->setCurrentIndex(1);
+    }
   });
 }
 

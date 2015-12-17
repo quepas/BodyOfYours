@@ -17,9 +17,10 @@ private:
   QAction* remove_item_;
   QAction* calculate_diff_;
   QAction* calculate_mirror_;
-  QAction* show_scan_;
+  QAction* showScan_;
 
 signals:
   void calculateDiff();
   void calculateMirror();
+  void showScan(int id);
 };

@@ -17,8 +17,8 @@ PatientTreeToolbar::PatientTreeToolbar(PatientTreeWidget* patient_widget, QWidge
   calculate_diff_->setToolTip(tr("Roznica skanow"));
   calculate_mirror_ = addAction(QIcon("icon/two25.png"), tr("Odbicie lustrzane skanow"));
   calculate_mirror_->setToolTip(tr("Odbicie lustrzane skanow"));
-  show_scan_ = addAction(QIcon(tr("icon/radiography.png")), tr("Pokaz skan"));
-  show_scan_->setToolTip(tr("Wyswietl skan"));
+  showScan_ = addAction(QIcon(tr("icon/radiography.png")), tr("Pokaz skan"));
+  showScan_->setToolTip(tr("Wyswietl skan"));
 
   connect(add_patient_, &QAction::triggered, [=]{
     ActionHub::trigger(ActionAddNewPatient::TYPE());
@@ -31,8 +31,11 @@ PatientTreeToolbar::PatientTreeToolbar(PatientTreeWidget* patient_widget, QWidge
   });
   connect(calculate_diff_, &QAction::triggered, [=]{ emit calculateDiff(); });
   connect(calculate_mirror_, &QAction::triggered, [=]{ emit calculateMirror(); });
-  connect(show_scan_, &QAction::triggered, [=]{
-    ActionHub::trigger(ActionShowScanMesh::TYPE());
+  connect(showScan_, &QAction::triggered, [=]{
+    auto item = patient_widget->currentItem();
+    if (PatientTreeItem::isScan(item)) {
+      emit showScan(PatientTreeItem::getId(item));
+    }
   });
   connect(patient_widget, &PatientTreeWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
     if (current) {
@@ -40,7 +43,7 @@ PatientTreeToolbar::PatientTreeToolbar(PatientTreeWidget* patient_widget, QWidge
       add_examination_->setEnabled(is_patient);
       calculate_diff_->setEnabled(!is_patient);
       calculate_mirror_->setEnabled(!is_patient);
-      show_scan_->setEnabled(!is_patient);
+      showScan_->setEnabled(PatientTreeItem::isScan(current));
     }
   });
 }
@@ -52,5 +55,5 @@ PatientTreeToolbar::~PatientTreeToolbar()
   delete remove_item_;
   delete calculate_diff_;
   delete calculate_mirror_;
-  delete show_scan_;
+  delete showScan_;
 }
