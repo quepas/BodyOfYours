@@ -21,4 +21,8 @@ void flipMeshXAxis(CMesh& base, CMesh& out);
 void retriveQualityFromMesh(CMesh& mesh, float*& quality);
 void applyQualityToMesh(CMesh& mesh, float* quality);
 
+void generateRandomQualityForMesh(const CMesh& mesh, QVector<float>& qualityOut);
+void saveQualityToFile(QString filePath, const QVector<float>& quality);
+void loadQualityFromFile(QString filePath, QVector<float>& quality);
+
 void createDummyFile(QString filePath);

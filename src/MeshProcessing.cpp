@@ -195,3 +195,29 @@ void createDummyFile(QString filePath)
     stream << "dummy" << endl;
   }
 }
+
+void generateRandomQualityForMesh(const CMesh& mesh, QVector<float>& qualityOut)
+{
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  int vertNum = mesh.vert.size();
+  for (int i = 0; i < vertNum; ++i) {
+    qualityOut.push_back(std::generate_canonical<float, 10>(gen));
+  }
+}
+
+void saveQualityToFile(QString filePath, const QVector<float>& quality)
+{
+  QFile file(filePath);
+  file.open(QIODevice::WriteOnly);
+  QDataStream out(&file);
+  out << quality;
+}
+
+void loadQualityFromFile(QString filePath, QVector<float>& quality)
+{
+  QFile file(filePath);
+  file.open(QIODevice::ReadOnly);
+  QDataStream in(&file);
+  in >> quality;
+}
