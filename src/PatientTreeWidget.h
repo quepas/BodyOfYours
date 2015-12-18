@@ -35,7 +35,7 @@ private:
 public slots:
   void removeCurrentItem();
   void showCurrentScan();
-  void showScan();
+  void showScan(int scanID);
   void onItemDoubleClicked(QTreeWidgetItem* item, int column);
   void onDataChanged();
 

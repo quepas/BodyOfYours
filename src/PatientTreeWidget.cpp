@@ -84,36 +84,32 @@ void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTa
   }
 }
 
-void PatientTreeWidget::showScan()
+void PatientTreeWidget::showScan(int scanID)
+{
+  for (int i = 0; i < scan_model_->rowCount(); ++i) {
+    auto record = scan_model_->record(i);
+    if (record.value("id").toInt() == scanID) {
+      QString scanFilename = record.value("filename").toString();
+      qDebug() << "[INFO] Opening scan " << record.value("name").toString() << "(" << scanFilename << ")";
+      emit openScan(scanFilename);
+      return;
+    }
+  }
+}
+
+void PatientTreeWidget::showCurrentScan()
 {
   auto item = currentItem();
-  if (!item) {
-    qDebug() << "[WARNING] No item currently selected.";
-    return;
+  if (PatientTreeItem::isScan(item)) {
+    showScan(PatientTreeItem::getId(item));
   }
-  if (!PatientTreeItem::isExamination(item)) {
-    QMessageBox::information(this, "Pokaz skan", "W celu otwarcia skanu zaznacz badanie.");
-    return;
-  }
-  int id = PatientTreeItem::getId(item);
-  ExaminationData out;
-  Database::selectExamination(id, out);
-  emit openScan("data/" + out.scan_name);
 }
 
 void PatientTreeWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
 {
   if (PatientTreeItem::isScan(item)) {
     int scanID = PatientTreeItem::getId(item);
-    for (int i = 0; i < scan_model_->rowCount(); ++i) {
-      auto record = scan_model_->record(i);
-      if (record.value("id").toInt() == scanID) {
-        QString scanFilename = record.value("filename").toString();
-        qDebug() << "[INFO] Opening 3d mesh: " << scanFilename;
-        emit openScan(scanFilename);
-        return;
-      }
-    }
+    showScan(scanID);
   }
 }
 
@@ -151,7 +147,7 @@ void PatientTreeWidget::removeCurrentItem()
 void PatientTreeWidget::onDataChanged()
 {
   saveExpanded();
-  qDebug() << "---> PatientTreeWidget::onDataChanged()";
+  qDebug() << "---> Rebuild patient tree";
   clear();
   buildTreeFromModel(patient_model_, exam_model_);
   restorExpanded();
@@ -192,9 +188,4 @@ void PatientTreeWidget::restorExpanded()
       }
     }
   }
-}
-
-void PatientTreeWidget::showCurrentScan()
-{
-
 }

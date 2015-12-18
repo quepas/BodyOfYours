@@ -25,7 +25,7 @@ CREATE_ACTION(ActionDeleteCurrentItem, {
 }, PatientTreeWidget* widget)
 
 CREATE_ACTION(ActionShowScanMesh, {
-  widget->showScan();
+  widget->showCurrentScan();
 }, PatientTreeWidget* widget)
 
 CREATE_ACTION(ActionStartReconstruction, {

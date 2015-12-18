@@ -82,7 +82,7 @@ MainWindow::MainWindow() :
 
   // ScannerToolbar -> StackedFormWidget
   connect(scanner_toolbar, &ScannerToolbar::stopReconstruction, [=](QString meshFilePath) {
-    qDebug() << "[Info] Reconstruction stoped. Mesh save in: " << meshFilePath;
+    qDebug() << "[Info] Reconstruction stoped. Mesh saved in: " << meshFilePath;
     auto item = patient_widget_->currentItem();
     if (PatientTreeItem::isExamination(item)) {
       int examID = PatientTreeItem::getId(item);
