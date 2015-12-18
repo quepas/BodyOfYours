@@ -19,12 +19,7 @@ public:
   ~PatientTreeWidget();
 
 private:
-  void buildTree(const QList<PatientData>& patients);
   void buildTreeFromModel(QSqlTableModel* patient_model, QSqlTableModel* exam_model);
-
-  QTreeWidgetItem* addPatient(PatientData data);
-  QTreeWidgetItem* modifyPatient(PatientData data);
-  QTreeWidgetItem* addExamination(QTreeWidgetItem* parent, ExaminationData data);
 
   void saveExpanded();
   void restorExpanded();
@@ -39,16 +34,9 @@ private:
 
 public slots:
   void removeCurrentItem();
-
+  void showCurrentScan();
   void showScan();
-
-  void onSavePatient(PatientData data);
-  void onModifyPatient(PatientData data);
-  void onSaveExamination(ExaminationData data);
-  void onDeletePatient();
-
   void onItemDoubleClicked(QTreeWidgetItem* item, int column);
-
   void onDataChanged();
 
 signals:

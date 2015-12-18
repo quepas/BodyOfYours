@@ -42,19 +42,6 @@ PatientTreeWidget::~PatientTreeWidget()
 
 }
 
-void PatientTreeWidget::onSavePatient(PatientData data)
-{
-  PatientData saved;
-  Database::insertPatient(data, saved);
-  addPatient(saved);
-}
-
-void PatientTreeWidget::onModifyPatient(PatientData data)
-{
-  Database::updatePatientOnly(data);
-  modifyPatient(data);
-}
-
 void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTableModel* exam_model)
 {
   for (int i = 0; i < patient_model->rowCount(); ++i) {
@@ -97,24 +84,6 @@ void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTa
   }
 }
 
-void PatientTreeWidget::buildTree(const QList<PatientData>& patients)
-{
-  for (auto& patient : patients) {
-    auto top_item = addPatient(patient);
-    for (auto& exam : Database::selectExamination(patient.id)) {
-      addExamination(top_item, exam);
-    }
-  }
-}
-
-void PatientTreeWidget::onSaveExamination(ExaminationData data)
-{
-  ExaminationData saved;
-  data.patient_id = currentItem()->data(0, ID).toInt();
-  Database::insertExamination(data, saved);
-  addExamination(currentItem(), saved);
-}
-
 void PatientTreeWidget::showScan()
 {
   auto item = currentItem();
@@ -146,39 +115,6 @@ void PatientTreeWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
       }
     }
   }
-}
-
-QTreeWidgetItem* PatientTreeWidget::addPatient(PatientData data)
-{
-  auto item = PatientTreeItem::createPatientItem(data.id, data.prepareLabel());
-  item->setIcon(0, QIcon("icon/broken8.png"));
-  addTopLevelItem(item);
-  return item;
-}
-
-QTreeWidgetItem* PatientTreeWidget::modifyPatient(PatientData data)
-{
-  for (int i = 0; i < topLevelItemCount(); ++i) {
-    auto item = topLevelItem(i);
-    if (PatientTreeItem::isPatient(item) && PatientTreeItem::getId(item) == data.id) {
-      item->setText(0, data.prepareLabel());
-      return item;
-    }
-  }
-  return nullptr;
-}
-
-QTreeWidgetItem* PatientTreeWidget::addExamination(QTreeWidgetItem* parent, ExaminationData data)
-{
-  auto item = PatientTreeItem::createExamItem(data.id, data.prepareLabel());
-  item->setIcon(0, QIcon("icon/stethoscope1.png"));
-  parent->addChild(item);
-  return item;
-}
-
-void PatientTreeWidget::onDeletePatient()
-{
-  qDebug() << "To delete patient with ID: " << currentItem()->data(0, ID);
 }
 
 void PatientTreeWidget::removeCurrentItem()
@@ -256,4 +192,9 @@ void PatientTreeWidget::restorExpanded()
       }
     }
   }
+}
+
+void PatientTreeWidget::showCurrentScan()
+{
+
 }
