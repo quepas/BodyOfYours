@@ -134,13 +134,17 @@ void PatientTreeWidget::showScan()
 
 void PatientTreeWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
 {
-  qDebug() << "[INFO] Double click on: " << item->text(0) << " (" << PatientTreeItem::getId(item) << ")";
-  if (PatientTreeItem::isExamination(item)) {
-    ExaminationData data;
-    Database::selectExamination(PatientTreeItem::getId(item), data);
-    qDebug() << "[INFO] Opening 3d mesh: " << data.scan_name;
-    emit openScan("data/" + data.scan_name);
-    emit showTabWithIndex(1);
+  if (PatientTreeItem::isScan(item)) {
+    int scanID = PatientTreeItem::getId(item);
+    for (int i = 0; i < scan_model_->rowCount(); ++i) {
+      auto record = scan_model_->record(i);
+      if (record.value("id").toInt() == scanID) {
+        QString scanFilename = record.value("filename").toString();
+        qDebug() << "[INFO] Opening 3d mesh: " << scanFilename;
+        emit openScan(scanFilename);
+        return;
+      }
+    }
   }
 }
 
