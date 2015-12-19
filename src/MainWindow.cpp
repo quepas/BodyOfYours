@@ -22,7 +22,7 @@ MainWindow::MainWindow() :
   meshDiffDlg_(nullptr)
 #ifndef _DEBUG
   ,
-  viewer_(new MeshViewer())
+  viewer_(new CMeshViewer())
 #endif
 {
   main_form_ = nullptr;
@@ -107,7 +107,7 @@ MainWindow::MainWindow() :
   // StackedFormWidget -> ...
   connect(stack, &StackedFormWidget::showRefMeshWithQualityMap, [=](QString refScanFilename, QString qualityMapFilename) {
     openScan(refScanFilename);
-    CMesh* mesh = viewer_->getLastMesh();
+    CMesh* mesh = viewer_->last();
     QVector<float> quality;
     loadQualityFromFile(qualityMapFilename, quality);
     applyQualityToMesh(*mesh, quality);
@@ -143,10 +143,10 @@ MainWindow::~MainWindow()
 void MainWindow::openScan(QString filename)
 {
   qDebug() << "[INFO] Opening scan: " << filename;
-  viewer_->clearMesh();
+  viewer_->clear();
   CMesh* mesh = new CMesh;
   openMesh(filename, *(mesh));
-  viewer_->addMesh("open&show", mesh);
+  viewer_->insert(mesh);
 }
 
 void MainWindow::calculateDiff()
@@ -218,7 +218,7 @@ void MainWindow::calculateDiff()
 
 void MainWindow::calculateMirror()
 {
-  CMesh* mesh = viewer_->getLastMesh();
+  CMesh* mesh = viewer_->last();
   if (mesh) {
     flipMeshXAxis(*mesh);
     viewer_->update();

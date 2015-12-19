@@ -4,7 +4,7 @@
 #include "Action.h"
 
 #include "StackedFormWidget.h"
-#include "MeshViewer.h"
+#include "OGLMeshViewer.h"
 #include "PatientTreeWidget.h"
 #include "Scanner.h"
 
@@ -37,5 +37,5 @@ CREATE_ACTION(ActionStopReconstruction, {
 }, Scanner* scanner)
 
 CREATE_ACTION(ActionMeshViewerClear, {
-  viewer->clearMesh();
-}, MeshViewer* viewer);
+  viewer->clear();
+}, CMeshViewer* viewer);

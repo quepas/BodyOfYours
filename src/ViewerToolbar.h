@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MeshViewer.h"
+#include "OGLMeshViewer.h"
 #include <QAction>
 #include <QToolBar>
 
@@ -8,7 +8,7 @@ class ViewerToolbar : public QToolBar
 {
   Q_OBJECT
 public:
-  ViewerToolbar(MeshViewer* viewer, QWidget* parent);
+  ViewerToolbar(CMeshViewer* viewer, QWidget* parent);
   ~ViewerToolbar();
 
 private:
@@ -17,7 +17,7 @@ private:
   QAction* clear_viewer_;
   QAction* previous_quality_map_;
   QAction* next_quality_map_;
-  MeshViewer* viewer_;
+  CMeshViewer* viewer_;
 
   bool openMeshFromFile();
 

@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QFileDialog>
 
-ViewerToolbar::ViewerToolbar(MeshViewer* viewer, QWidget* parent) : QToolBar(parent), viewer_(viewer)
+ViewerToolbar::ViewerToolbar(CMeshViewer* viewer, QWidget* parent) : QToolBar(parent), viewer_(viewer)
 {
   open_mesh_ = addAction(QIcon("icon/eye106.png"), tr("Otworz siatke 3D"));
   open_mesh_->setToolTip(tr("Otworz siatke 3D"));
@@ -28,7 +28,7 @@ ViewerToolbar::ViewerToolbar(MeshViewer* viewer, QWidget* parent) : QToolBar(par
   });
   connect(previous_quality_map_, &QAction::triggered, [=]{
     qDebug() << "Prev quality map";
-    auto mesh = viewer_->getLastMesh();
+    auto mesh = viewer_->last();
     if (mesh) {
       QVector<float> quality;
       generateRandomQualityForMesh(*mesh, quality);
@@ -38,7 +38,7 @@ ViewerToolbar::ViewerToolbar(MeshViewer* viewer, QWidget* parent) : QToolBar(par
   });
   connect(next_quality_map_, &QAction::triggered, [=]{
     qDebug() << "Next quality map";
-    auto mesh = viewer_->getLastMesh();
+    auto mesh = viewer_->last();
     if (mesh) {
       QVector<float> quality;
       generateRandomQualityForMesh(*mesh, quality);
@@ -65,7 +65,7 @@ bool ViewerToolbar::openMeshFromFile()
     qDebug() << "[INFO] Opening mesh from file: " << filename;
     CMesh* mesh = new CMesh;
     openMesh(filename, *mesh);
-    viewer_->addMesh("open_mesh", mesh);
+    viewer_->insert(mesh);
     return true;
   }
   return false;
