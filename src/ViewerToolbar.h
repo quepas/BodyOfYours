@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OGLMeshViewer.h"
+#include "ScanViewer.h"
 #include <QAction>
 #include <QToolBar>
 
@@ -8,7 +8,7 @@ class ViewerToolbar : public QToolBar
 {
   Q_OBJECT
 public:
-  ViewerToolbar(CMeshViewer* viewer, QWidget* parent);
+  ViewerToolbar(ScanViewer* viewer, QWidget* parent);
   ~ViewerToolbar();
 
 private:

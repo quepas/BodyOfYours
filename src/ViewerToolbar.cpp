@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QFileDialog>
 
-ViewerToolbar::ViewerToolbar(CMeshViewer* viewer, QWidget* parent) : QToolBar(parent), viewer_(viewer)
+ViewerToolbar::ViewerToolbar(ScanViewer* viewer, QWidget* parent) : QToolBar(parent), viewer_(viewer)
 {
   open_mesh_ = addAction(QIcon("icon/eye106.png"), tr("Otworz siatke 3D"));
   open_mesh_->setToolTip(tr("Otworz siatke 3D"));

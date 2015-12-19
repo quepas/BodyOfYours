@@ -22,5 +22,5 @@ private:
 signals:
   void calculateDiff();
   void calculateMirror();
-  void showScan(int id);
+  void displayScan(int id);
 };

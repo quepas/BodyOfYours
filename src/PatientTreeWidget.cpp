@@ -22,7 +22,6 @@ PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableMod
   // init signal/slots
   connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
   connect(this, &PatientTreeWidget::itemClicked, [=](QTreeWidgetItem * item, int column){
-    qDebug() << "---> PatientTreeWidget::itemClicked";
     int itemID = PatientTreeItem::getId(item);
     if (PatientTreeItem::isPatient(item)) {
       form_widget->switchTo(StackedFormWidget::PATIENT_FORM, itemID);
@@ -83,7 +82,7 @@ void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTa
     }
   }
 }
-
+/*
 void PatientTreeWidget::showScan(int scanID)
 {
   for (int i = 0; i < scan_model_->rowCount(); ++i) {
@@ -96,12 +95,13 @@ void PatientTreeWidget::showScan(int scanID)
     }
   }
 }
+*/
 
 void PatientTreeWidget::showCurrentScan()
 {
   auto item = currentItem();
   if (PatientTreeItem::isScan(item)) {
-    showScan(PatientTreeItem::getId(item));
+    emit displayScan(PatientTreeItem::getId(item));
   }
 }
 
@@ -109,7 +109,7 @@ void PatientTreeWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
 {
   if (PatientTreeItem::isScan(item)) {
     int scanID = PatientTreeItem::getId(item);
-    showScan(scanID);
+    emit displayScan(scanID);
   }
 }
 

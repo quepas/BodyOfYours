@@ -7,7 +7,7 @@
 #include <QSqlTableModel>
 
 #include "ActionHub.h"
-#include "OGLMeshViewer.h"
+#include "ScanViewer.h"
 #include "MeshDifferenceDlg.h"
 #include "PatientTreeWidget.h"
 #include "Scanner.h"
@@ -27,7 +27,7 @@ public slots:
   void calculateMirror();
 
 private:
-  CMeshViewer* viewer_;
+  ScanViewer* viewer_;
   Scanner* scanner_;
   QGridLayout* main_layout;
   PatientTreeWidget* patient_widget_;

@@ -35,11 +35,12 @@ private:
 public slots:
   void removeCurrentItem();
   void showCurrentScan();
-  void showScan(int scanID);
+  /*void showScan(int scanID);*/
   void onItemDoubleClicked(QTreeWidgetItem* item, int column);
   void onDataChanged();
 
 signals:
   void openScan(QString filename);
+  void displayScan(int scanID);
   void showTabWithIndex(int);
 };

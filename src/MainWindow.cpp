@@ -22,7 +22,7 @@ MainWindow::MainWindow() :
   meshDiffDlg_(nullptr)
 #ifndef _DEBUG
   ,
-  viewer_(new CMeshViewer())
+  viewer_(new ScanViewer(this, 10))
 #endif
 {
   main_form_ = nullptr;
@@ -119,19 +119,14 @@ MainWindow::MainWindow() :
     scanner_toolbar->setEnabled(PatientTreeItem::isExamination(item));
   });
 
+  auto onDisplayScan = [=](int scanID) {
+    viewer_->load(scanID);
+    viewer_->show(scanID);
+    viewport_tabs_->setCurrentIndex(1);
+  };
+  connect(patient_widget_, &PatientTreeWidget::displayScan, onDisplayScan);
   // PatientTreeToolbar -> MeshViewer
-  connect(patient_widget_toolbar, &PatientTreeToolbar::showScan, [=](int scanID) {
-    QSqlTableModel scan_model;
-    scan_model.setTable("scan");
-    scan_model.setFilter(QString("id == %1").arg(scanID));
-    scan_model.select();
-    if (scan_model.rowCount() == 1) {
-      QString meshFileName = scan_model.record(0).value("filename").toString();
-      qDebug() << "[INFO] Opening mesh: " << meshFileName;
-      openScan(meshFileName);
-      viewport_tabs_->setCurrentIndex(1);
-    }
-  });
+  connect(patient_widget_toolbar, &PatientTreeToolbar::displayScan, onDisplayScan);
 }
 
 MainWindow::~MainWindow()

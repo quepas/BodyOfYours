@@ -16,11 +16,11 @@ template<typename Mesh, typename Face>
 class OGLMeshViewer : public QGLViewer
 {
 public:
-  OGLMeshViewer() {};
+  OGLMeshViewer(QWidget* parent) : QGLViewer(parent) {};
   ~OGLMeshViewer() { clear(); }
 
   void insert(Mesh* mesh);
-  void clear();
+  virtual void clear();
 
   Mesh* last();
 
