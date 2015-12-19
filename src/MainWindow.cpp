@@ -105,12 +105,10 @@ MainWindow::MainWindow() :
   
 
   // StackedFormWidget -> ...
-  connect(stack, &StackedFormWidget::showRefMeshWithQualityMap, [=](QString refScanFilename, QString qualityMapFilename) {
-    openScan(refScanFilename);
-    CMesh* mesh = viewer_->last();
-    QVector<float> quality;
-    loadQualityFromFile(qualityMapFilename, quality);
-    applyQualityToMesh(*mesh, quality);
+  connect(stack, &StackedFormWidget::displayMeshWithQualityMap, [=](int scanID, int diffID) {
+    viewer_->load(scanID);
+    viewer_->loadDiff(diffID);
+    viewer_->show(scanID, diffID);
     viewport_tabs_->setCurrentIndex(1);
   });
 

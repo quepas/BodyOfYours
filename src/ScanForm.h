@@ -15,7 +15,7 @@ public slots:
   virtual void setCurrentRowWithId(int rowId);
 
 signals:
-  void showRefMeshWithQualityMap(int refMeshID, QString qualityMapFilename);
+  void displayMeshWithQualityMap(int refMeshID, int diffID);
 
 private:
   QLineEdit* scanName_;

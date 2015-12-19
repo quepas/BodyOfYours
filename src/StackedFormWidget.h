@@ -23,7 +23,7 @@ public:
   FormWidget* form(FormID id) { return widgets_[id]; }
 
 signals:
-  void showRefMeshWithQualityMap(QString refMeshFilename, QString qualityMapFilename);
+  void displayMeshWithQualityMap(int scanID, int diffID);
 
 private:
   QList<FormWidget*> widgets_;

@@ -222,10 +222,11 @@ void saveQualityToFile(QString filePath, const QVector<float>& quality)
   out << quality;
 }
 
-void loadQualityFromFile(QString filePath, QVector<float>& quality)
+bool loadQualityFromFile(QString filePath, QVector<float>& quality)
 {
   QFile file(filePath);
-  file.open(QIODevice::ReadOnly);
+  if (!file.open(QIODevice::ReadOnly)) return false;
   QDataStream in(&file);
   in >> quality;
+  return true;
 }

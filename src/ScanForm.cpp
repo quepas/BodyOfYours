@@ -22,9 +22,7 @@ ScanForm::ScanForm(QSqlTableModel* model, QWidget* parent)
   connect(scanDiffTable_, &QTableView::doubleClicked, [=]{
     int scanDiffRow = scanDiffTable_->currentIndex().row();
     auto record = scanDiffModel_->record(scanDiffRow);
-    int refScanID = record.value("ref_id").toInt();
-    QString qualityFilename = record.value("filename").toString();
-    emit showRefMeshWithQualityMap(refScanID, qualityFilename);
+    emit displayMeshWithQualityMap(record.value("ref_id").toInt(), record.value("id").toInt());
   });
   formLayout_->addWidget(scanDiffTable_);
 }

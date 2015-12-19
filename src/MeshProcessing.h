@@ -15,6 +15,6 @@ void applyQualityToMesh(CMesh& mesh, const QVector<float>& quality);
 
 void generateRandomQualityForMesh(const CMesh& mesh, QVector<float>& qualityOut);
 void saveQualityToFile(QString filePath, const QVector<float>& quality);
-void loadQualityFromFile(QString filePath, QVector<float>& quality);
+bool loadQualityFromFile(QString filePath, QVector<float>& quality);
 
 void createDummyFile(QString filePath);

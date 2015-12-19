@@ -9,8 +9,11 @@ public:
   ~ScanViewer();
 
   bool load(int scanID);
+  bool loadDiff(int diffID);
   bool remove(int scanID);
+  bool removeDiff(int diffID);
   bool show(int scanID);
+  bool show(int scanID, int diffID);
   void clearDisplay();
 
   QList<int> currentScans() { return currentScans_; }
@@ -19,6 +22,7 @@ public:
 
 private:
   QMap<int, CMesh*> scans_;
+  QMap<int, QVector<float>> diffs_;
   QList<int> currentScans_;
 
   void refreshDisplay();
