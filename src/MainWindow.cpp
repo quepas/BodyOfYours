@@ -6,6 +6,7 @@
 #include <QCryptographicHash>
 #include <QAbstractItemModel>
 #include <QSqlError>
+#include <QSplitter>
 
 #include "GuiActions.h"
 #include "Database.h"
@@ -22,7 +23,8 @@ MainWindow::MainWindow() :
   meshDiffDlg_(nullptr)
 #ifndef _DEBUG
   ,
-  viewer_(new ScanViewer(this, 10))
+  viewer_(new ScanViewer(this, 10)),
+  miniScanViewer_(new ScanViewer(this, 10))
 #endif
 {
   main_form_ = nullptr;
@@ -40,7 +42,13 @@ MainWindow::MainWindow() :
   ScannerViewer* scanner_viewer = new ScannerViewer(scanner_->numSensor(), this);
   viewport_tabs_ = new QTabWidget(this);
   main_form_ = nullptr;
-  viewport_tabs_->addTab(stack, tr("Formatki"));
+
+  QSplitter* splitter = new QSplitter;
+  splitter->addWidget(stack);
+#ifndef _DEBUG
+  splitter->addWidget(miniScanViewer_);
+#endif
+  viewport_tabs_->addTab(splitter, tr("Formatki"));
 #ifndef _DEBUG
   viewport_tabs_->addTab(viewer_, tr("Wizualizacja"));
 #else
@@ -117,10 +125,17 @@ MainWindow::MainWindow() :
     scanner_toolbar->setEnabled(PatientTreeItem::isExamination(item));
   });
 
-  auto onDisplayScan = [=](int scanID) {
-    viewer_->load(scanID);
-    viewer_->show(scanID);
-    viewport_tabs_->setCurrentIndex(1);
+  auto onDisplayScan = [=](ScanViewer::ID viewerID, int scanID) {
+    switch (viewerID) {
+    case ScanViewer::FULL_VIEWER:
+      viewer_->load(scanID);
+      viewer_->show(scanID);
+      viewport_tabs_->setCurrentIndex(1);
+    case ScanViewer::MINI_VIEWER:
+      miniScanViewer_->load(scanID);
+      miniScanViewer_->show(scanID);
+      break;
+    }
   };
   connect(patient_widget_, &PatientTreeWidget::displayScan, onDisplayScan);
   // PatientTreeToolbar -> MeshViewer

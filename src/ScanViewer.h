@@ -20,6 +20,11 @@ public:
   bool isDisplayed(int scanID) { return currentScans_.contains(scanID); }
   CMesh* mesh(int scanID) { return scans_[scanID]; }
 
+  enum ID {
+    FULL_VIEWER,
+    MINI_VIEWER
+  };
+
 private:
   QMap<int, CMesh*> scans_;
   QMap<int, QVector<float>> diffs_;

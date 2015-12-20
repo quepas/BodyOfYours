@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ScanViewer.h"
 #include "PatientTreeWidget.h"
 #include <QAction>
 #include <QToolBar>
@@ -22,5 +23,5 @@ private:
 signals:
   void calculateDiff();
   void calculateMirror();
-  void displayScan(int id);
+  void displayScan(ScanViewer::ID viwerID, int id);
 };

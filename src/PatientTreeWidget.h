@@ -5,6 +5,7 @@
 #include "ExaminationData.h"
 #include "PatientTreeItem.h"
 #include "StackedFormWidget.h"
+#include "ScanViewer.h"
 
 #include <QTreeWidget>
 #include <QList>
@@ -41,6 +42,6 @@ public slots:
 
 signals:
   void openScan(QString filename);
-  void displayScan(int scanID);
+  void displayScan(ScanViewer::ID viewerID, int scanID);
   void showTabWithIndex(int);
 };

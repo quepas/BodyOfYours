@@ -34,7 +34,7 @@ PatientTreeToolbar::PatientTreeToolbar(PatientTreeWidget* patient_widget, QWidge
   connect(showScan_, &QAction::triggered, [=]{
     auto item = patient_widget->currentItem();
     if (PatientTreeItem::isScan(item)) {
-      emit displayScan(PatientTreeItem::getId(item));
+      emit displayScan(ScanViewer::ID::FULL_VIEWER, PatientTreeItem::getId(item));
     }
   });
   connect(patient_widget, &PatientTreeWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {

@@ -28,6 +28,7 @@ public slots:
 
 private:
   ScanViewer* viewer_;
+  ScanViewer* miniScanViewer_;
   Scanner* scanner_;
   QGridLayout* main_layout;
   PatientTreeWidget* patient_widget_;

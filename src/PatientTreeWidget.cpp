@@ -3,6 +3,7 @@
 #include "PatientTreeItem.h"
 #include "PatientForm.h"
 #include "ExaminationForm.h"
+#include "ScanViewer.h"
 
 #include <QTreeWidgetItem>
 
@@ -20,8 +21,8 @@ PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableMod
   connect(scan_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
   buildTreeFromModel(patient_model_, exam_model_);
   // init signal/slots
-  connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
-  connect(this, &PatientTreeWidget::itemClicked, [=](QTreeWidgetItem * item, int column){
+  connect(this, &PatientTreeWidget::itemSelectionChanged, [=]{
+    auto item = currentItem();
     int itemID = PatientTreeItem::getId(item);
     if (PatientTreeItem::isPatient(item)) {
       form_widget->switchTo(StackedFormWidget::PATIENT_FORM, itemID);
@@ -31,9 +32,14 @@ PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableMod
     }
     else if (PatientTreeItem::isScan(item)) {
       form_widget->switchTo(StackedFormWidget::SCAN_FORM, itemID);
+#ifndef _DEBUG
+      int scanID = PatientTreeItem::getId(item);
+      emit displayScan(ScanViewer::MINI_VIEWER, scanID);
+#endif
     }
     emit showTabWithIndex(0);
   });
+  connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onItemDoubleClicked(QTreeWidgetItem*, int)));
 }
 
 PatientTreeWidget::~PatientTreeWidget()
@@ -101,7 +107,7 @@ void PatientTreeWidget::showCurrentScan()
 {
   auto item = currentItem();
   if (PatientTreeItem::isScan(item)) {
-    emit displayScan(PatientTreeItem::getId(item));
+    emit displayScan(ScanViewer::ID::FULL_VIEWER, PatientTreeItem::getId(item));
   }
 }
 
@@ -109,7 +115,7 @@ void PatientTreeWidget::onItemDoubleClicked(QTreeWidgetItem* item, int column)
 {
   if (PatientTreeItem::isScan(item)) {
     int scanID = PatientTreeItem::getId(item);
-    emit displayScan(scanID);
+    emit displayScan(ScanViewer::ID::FULL_VIEWER, scanID);
   }
 }
 
