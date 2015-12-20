@@ -175,12 +175,12 @@ void flipMeshXAxis(CMesh& mesh)
   UpdatePosition<CMesh>::Matrix(mesh, transform, false);
 }
 
-void retriveQualityFromMesh(CMesh& mesh, float*& quality)
+void retriveQualityFromMesh(CMesh* mesh, QVector<float>& quality)
 {
-  int size = mesh.vert.size();
-  qDebug() << "Num. of vertex with quality: " << size;
-  for (CMesh::VertexIterator vi = mesh.vert.begin(); vi != mesh.vert.end(); ++vi) {
-    //float a = vi->Q();
+  int numVert = mesh->vert.size();
+  qDebug() << "Num. of vertex with quality: " << numVert;
+  for (CMesh::VertexIterator vi = mesh->vert.begin(); vi != mesh->vert.end(); ++vi) {
+    quality.push_back(vi->Q());
   }
 }
 
