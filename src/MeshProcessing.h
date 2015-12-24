@@ -18,3 +18,8 @@ void saveQualityToFile(QString filePath, const QVector<float>& quality);
 bool loadQualityFromFile(QString filePath, QVector<float>& quality);
 
 void createDummyFile(QString filePath);
+
+template<typename T>
+QString toString(vcg::Point3<T> point) {
+  return QString("(%1, %2, %3)").arg(point.X()).arg(point.Y()).arg(point.Z());
+}
