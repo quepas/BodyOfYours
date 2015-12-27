@@ -3,6 +3,7 @@
 #include "MeshProcessing.h"
 #include <QGLViewer/qglviewer.h>
 #include <assimp\vector3.h>
+#include "OGLDummy.h"
 
 template<typename Mesh, typename Face>
 class OGLMeshViewer;
@@ -46,6 +47,8 @@ void OGLMeshViewer<Mesh, Face>::initializeGL()
   QGLViewer::initializeGL();
   this->setSceneRadius(10000.0);
   this->toggleFPSIsDisplayed();
+  //this->setAxisIsDrawn(true);
+  this->setGridIsDrawn();
 }
 
 template<typename Mesh, typename Face>

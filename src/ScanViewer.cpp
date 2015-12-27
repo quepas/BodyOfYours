@@ -1,6 +1,9 @@
 #include "ScanViewer.h"
 #include "MeshProcessing.h"
 
+#include <vcg/complex/algorithms/update/bounding.h>
+#include <vcg/complex/algorithms/update/component_ep.h>
+#include <vcg/complex/append.h>
 #include <QDebug>
 #include <QSqlRecord>
 #include <QSqlTableModel>

@@ -88,20 +88,6 @@ void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTa
     }
   }
 }
-/*
-void PatientTreeWidget::showScan(int scanID)
-{
-  for (int i = 0; i < scan_model_->rowCount(); ++i) {
-    auto record = scan_model_->record(i);
-    if (record.value("id").toInt() == scanID) {
-      QString scanFilename = record.value("filename").toString();
-      qDebug() << "[INFO] Opening scan " << record.value("name").toString() << "(" << scanFilename << ")";
-      emit openScan(scanFilename);
-      return;
-    }
-  }
-}
-*/
 
 void PatientTreeWidget::showCurrentScan()
 {
