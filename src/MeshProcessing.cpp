@@ -2,8 +2,6 @@
 
 #include <QDebug>
 #include <QFile>
-#include <wrap/io_trimesh/import.h>
-#include <vcg/complex/algorithms/update/component_ep.h>
 #include <vcg/complex/algorithms/update/bounding.h>
 #include "sampling.h"
 #include <random>

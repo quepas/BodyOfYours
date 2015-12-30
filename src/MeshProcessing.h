@@ -1,6 +1,10 @@
 #pragma once
 
 #include "MeshDef.h"
+
+#include <wrap/io_trimesh/import.h>
+#include <vcg/complex/algorithms/update/component_ep.h>
+
 #include <QString>
 
 bool openMesh(QString filename, CMesh* out, bool clean_data = false);
@@ -37,18 +41,18 @@ namespace MeshProcessing {
 template <typename MeshT>
 bool loadMeshFromFile(QString filename, MeshT* outMesh, bool cleanData /*= false*/)
 {
-  int err = Importer<MeshT>::Open(*outMesh, qPrintable(filename));
+  int err = vcg::tri::io::Importer<MeshT>::Open(*outMesh, qPrintable(filename));
   if (err) {
-    qDebug() << "[ERROR@CMeshStorage] Error in reading" << filename << ":" << Importer<MeshT>::ErrorMsg(err);
-    if (Importer<MeshT>::ErrorCritical(err)) qDebug() << "[CRIT@CMeshStorage] It is a very serious error.";
+    qDebug() << "[ERROR@MeshProcessing] Error in reading" << filename << ":" << vcg::tri::io::Importer<MeshT>::ErrorMsg(err);
+    if (vcg::tri::io::Importer<MeshT>::ErrorCritical(err)) qDebug() << "[CRIT@MeshProcessing] It is a very serious error.";
     delete outMesh;
     return false;
   }
-  UpdateNormal<MeshT>::PerVertexNormalized(*outMesh);
-  qDebug() << "[INFO@CMeshStorage] Successfully read mesh" << filename;
+  vcg::tri::UpdateNormal<MeshT>::PerVertexNormalized(*outMesh);
+  qDebug() << "[INFO@MeshProcessing] Successfully read mesh" << filename;
   if (cleanData) {
-    int numDuplicated = Clean<MeshT>::RemoveDuplicateVertex(*outMesh);
-    int numUnref = Clean<MeshT>::RemoveUnreferencedVertex(*outMesh);
+    int numDuplicated = vcg::tri::Clean<MeshT>::RemoveDuplicateVertex(*outMesh);
+    int numUnref = vcg::tri::Clean<MeshT>::RemoveUnreferencedVertex(*outMesh);
     qDebug() << "Removed" << numDuplicated << "duplicate and" << numUnref << "unreferenced vertices from mesh" << filename;
   }
   return true;

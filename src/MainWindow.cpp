@@ -166,7 +166,7 @@ void MainWindow::openScan(QString filename)
   qDebug() << "[INFO] Opening scan: " << filename;
   viewer_->clear();
   CMesh* mesh = new CMesh;
-  openMesh(filename, *(mesh));
+  MeshProcessing::loadMeshFromFile<CMesh>(filename, mesh);
   viewer_->insert(mesh);
 }
 
