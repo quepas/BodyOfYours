@@ -5,7 +5,7 @@
 #include <assimp\vector3.h>
 #include "OGLDummy.h"
 
-template<typename Mesh, typename Face>
+template<typename MeshT, typename FaceT>
 class OGLMeshViewer;
 
 typedef OGLMeshViewer<CMesh, CFace> CMeshViewer;
@@ -13,17 +13,17 @@ typedef OGLMeshViewer<CMesh, CFace> CMeshViewer;
 /*
  * Draw all inserted meshes
  */
-template<typename Mesh, typename Face>
+template<typename MeshT, typename FaceT>
 class OGLMeshViewer : public QGLViewer
 {
 public:
   OGLMeshViewer(QWidget* parent) : QGLViewer(parent) {};
   ~OGLMeshViewer() { clear(); }
 
-  void insert(Mesh* mesh);
+  void insert(MeshT* mesh);
   virtual void clear();
 
-  Mesh* last();
+  MeshT* last();
 
 protected :
   virtual void initializeGL();
@@ -31,18 +31,18 @@ protected :
   virtual void init() { restoreStateFromFile(); }
 
 private:
-  void drawFace(Face& face);
-  void drawVertexFromFace(Face& face, int vertex_num);
+  void drawFace(FaceT& face);
+  void drawVertexFromFace(FaceT& face, int vertex_num);
 
-  QList<Mesh*> meshes_;
+  QList<MeshT*> meshes_;
 };
 
 //////////////////////////////////////////////////////////////////////////
 // template implementation
 //////////////////////////////////////////////////////////////////////////
 
-template<typename Mesh, typename Face>
-void OGLMeshViewer<Mesh, Face>::initializeGL()
+template<typename MeshT, typename FaceT>
+void OGLMeshViewer<MeshT, FaceT>::initializeGL()
 {
   QGLViewer::initializeGL();
   this->setSceneRadius(10000.0);
@@ -51,8 +51,8 @@ void OGLMeshViewer<Mesh, Face>::initializeGL()
   this->setGridIsDrawn();
 }
 
-template<typename Mesh, typename Face>
-void OGLMeshViewer<Mesh, Face>::draw()
+template<typename MeshT, typename FaceT>
+void OGLMeshViewer<MeshT, FaceT>::draw()
 {
   if (!meshes_.isEmpty()) {
     for (auto mesh : meshes_) {
@@ -66,16 +66,16 @@ void OGLMeshViewer<Mesh, Face>::draw()
   }
 }
 
-template<typename Mesh, typename Face>
-void OGLMeshViewer<Mesh, Face>::drawFace(Face& face)
+template<typename MeshT, typename FaceT>
+void OGLMeshViewer<MeshT, FaceT>::drawFace(FaceT& face)
 {
   for (int i = 0; i < face.VN(); ++i) {
     drawVertexFromFace(face, i);
   }
 }
 
-template<typename Mesh, typename Face>
-void OGLMeshViewer<Mesh, Face>::drawVertexFromFace(Face& face, int vertex_num)
+template<typename MeshT, typename FaceT>
+void OGLMeshViewer<MeshT, FaceT>::drawVertexFromFace(FaceT& face, int vertex_num)
 {
   auto point = face.V(vertex_num)->P();
   auto normal = face.V(vertex_num)->N();
@@ -85,21 +85,21 @@ void OGLMeshViewer<Mesh, Face>::drawVertexFromFace(Face& face, int vertex_num)
   glVertex3f(point.X(), point.Y(), point.Z());
 }
 
-template<typename Mesh, typename Face>
-Mesh* OGLMeshViewer<Mesh, Face>::last()
+template<typename MeshT, typename FaceT>
+MeshT* OGLMeshViewer<MeshT, FaceT>::last()
 {
   if (meshes_.isEmpty()) return nullptr;
   return meshes_.last();
 }
 
-template<typename Mesh, typename Face>
-void OGLMeshViewer<Mesh, Face>::insert(Mesh* mesh)
+template<typename MeshT, typename FaceT>
+void OGLMeshViewer<MeshT, FaceT>::insert(MeshT* mesh)
 {
   if (mesh) meshes_.append(mesh);
 }
 
-template<typename Mesh, typename Face>
-void OGLMeshViewer<Mesh, Face>::clear()
+template<typename MeshT, typename FaceT>
+void OGLMeshViewer<MeshT, FaceT>::clear()
 {
   meshes_.clear();
   update();
