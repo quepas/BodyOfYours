@@ -20,25 +20,28 @@ CMeshStorage::CMeshStorage()
 bool CMeshStorage::loadMesh(QString filename, int key, bool cleanData /*= true*/)
 {
   CMesh* mesh = new CMesh();
-  MeshProcessing::loadMeshFromFile<CMesh>(filename, mesh, cleanData);
+  if (!MeshProcessing::loadMeshFromFile<CMesh>(filename, mesh, cleanData)) {
+    qDebug() << "[ERROR@CMeshStorage] Failure adding mesh to MeshStorage" << filename;
+    return false;
+  }
   meshes_.insert(key, mesh);
+  return true;
+}
+
+bool CMeshStorage::loadQualityMap(QString filename, int key)
+{
+  QVector<float> quality;
+  if (!MeshProcessing::loadQualityMapFromFile<QVector<float>>(filename, quality)) {
+    qDebug() << "[ERROR@CMeshStorage] Failure adding quality map to MeshStorage" << filename;
+    return false;
+  }
+  qualityMaps_.insert(key, quality);
   return true;
 }
 
 CMeshStorage::~CMeshStorage()
 {
   deleteAll();
-}
-
-bool CMeshStorage::loadQualityMap(QString filename, int key)
-{
-  QVector<float> quality;
-  QFile file(filename);
-  if (!file.open(QIODevice::ReadOnly)) return false;
-  QDataStream in(&file);
-  in >> quality;
-  qualityMaps_.insert(key, quality);
-  return true;
 }
 
 CMesh* CMeshStorage::mesh(int key) const

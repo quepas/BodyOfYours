@@ -5,36 +5,16 @@
 #include <wrap/io_trimesh/import.h>
 #include <vcg/complex/algorithms/update/component_ep.h>
 
+#include <QFile>
 #include <QString>
 
 namespace MeshProcessing {
 // #MeshProcessing
 template <typename MeshT>
 bool loadMeshFromFile(QString filename, MeshT* outMesh, bool cleanData = false);
-// ~MeshProcessing
-}
+template <typename QualityMapT>
+bool loadQualityMapFromFile(QString filename, QualityMapT& outQualityMap);
 
-aiColor4D toOGLColor(vcg::Color4<unsigned char>& color);
-void computeDifference(CMesh& reference, CMesh& mesh, CMesh& out);
-void computeMirror(CMesh& reference, CMesh& mesh, CMesh& out);
-void flipMeshXAxis(CMesh& mesh);
-void flipMeshXAxis(CMesh& base, CMesh& out);
-void retriveQualityFromMesh(CMesh* mesh, QVector<float>& quality);
-void applyQualityToMesh(CMesh& mesh, const QVector<float>& quality);
-
-void generateRandomQualityForMesh(const CMesh& mesh, QVector<float>& qualityOut);
-void saveQualityToFile(QString filePath, const QVector<float>& quality);
-bool loadQualityFromFile(QString filePath, QVector<float>& quality);
-
-void createDummyFile(QString filePath);
-
-template<typename T>
-QString toString(vcg::Point3<T> point) {
-  return QString("(%1, %2, %3)").arg(point.X()).arg(point.Y()).arg(point.Z());
-}
-
-namespace MeshProcessing {
-// #MeshProcessing
 template <typename MeshT>
 bool loadMeshFromFile(QString filename, MeshT* outMesh, bool cleanData /*= false*/)
 {
@@ -54,5 +34,34 @@ bool loadMeshFromFile(QString filename, MeshT* outMesh, bool cleanData /*= false
   }
   return true;
 }
+
+template <typename QualityMapT>
+bool MeshProcessing::loadQualityMapFromFile(QString filename, QualityMapT& outQualityMap)
+{
+  QFile file(filename);
+  if (!file.open(QIODevice::ReadOnly)) return false;
+  QDataStream in(&file);
+  in >> outQualityMap;
+  return true;
+}
+
 // ~MeshProcessing
+}
+
+aiColor4D toOGLColor(vcg::Color4<unsigned char>& color);
+void computeDifference(CMesh& reference, CMesh& mesh, CMesh& out);
+void computeMirror(CMesh& reference, CMesh& mesh, CMesh& out);
+void flipMeshXAxis(CMesh& mesh);
+void flipMeshXAxis(CMesh& base, CMesh& out);
+void retriveQualityFromMesh(CMesh* mesh, QVector<float>& quality);
+void applyQualityToMesh(CMesh& mesh, const QVector<float>& quality);
+
+void generateRandomQualityForMesh(const CMesh& mesh, QVector<float>& qualityOut);
+void saveQualityToFile(QString filePath, const QVector<float>& quality);
+
+void createDummyFile(QString filePath);
+
+template<typename T>
+QString toString(vcg::Point3<T> point) {
+  return QString("(%1, %2, %3)").arg(point.X()).arg(point.Y()).arg(point.Z());
 }

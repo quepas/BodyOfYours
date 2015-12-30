@@ -30,7 +30,7 @@ bool ScanViewer::loadDiff(int diffID)
   if (diffModel.rowCount() == 1) {
     QString diffFileName = diffModel.record(0).value("filename").toString();
     QVector<float> quality;
-    if (!loadQualityFromFile(diffFileName, quality)) {
+    if (!MeshProcessing::loadQualityMapFromFile<QVector<float>>(diffFileName, quality)) {
       qDebug() << "[ERROR@ScanViewer] Loading scan diff (quality map) failed" << diffID;
       return false;
     }
