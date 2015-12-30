@@ -1,4 +1,5 @@
 #include "CMeshStorage.h"
+#include "MeshProcessing.h"
 
 // VCGLib
 #include <wrap/io_trimesh/import.h>
@@ -19,20 +20,7 @@ CMeshStorage::CMeshStorage()
 bool CMeshStorage::loadMesh(QString filename, int key, bool cleanData /*= true*/)
 {
   CMesh* mesh = new CMesh();
-  int err = Importer<CMesh>::Open(*mesh, qPrintable(filename));
-  if (err) {
-    qDebug() << "[ERROR@CMeshStorage] Error in reading" << filename << ":" << Importer<CMesh>::ErrorMsg(err);
-    if (Importer<CMesh>::ErrorCritical(err)) qDebug() << "[CRIT@CMeshStorage] It is a very serious error.";
-    delete mesh;
-    return false;
-  }
-  UpdateNormal<CMesh>::PerVertexNormalized(*mesh);
-  qDebug() << "[INFO@CMeshStorage] Successfully read mesh" << filename;
-  if (cleanData) {
-    int numDuplicated = Clean<CMesh>::RemoveDuplicateVertex(*mesh);
-    int numUnref = Clean<CMesh>::RemoveUnreferencedVertex(*mesh);
-    qDebug() << "Removed" << numDuplicated << "duplicate and" << numUnref << "unreferenced vertices from mesh" << filename;
-  }
+  MeshProcessing::loadMeshFromFile<CMesh>(filename, mesh, cleanData);
   meshes_.insert(key, mesh);
   return true;
 }
