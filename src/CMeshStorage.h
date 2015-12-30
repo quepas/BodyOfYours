@@ -7,6 +7,12 @@
 #include <memory>
 #include <QString>
 
+struct DeleteMeshPtrStrategy { static void onDestroy(CMesh* mesh) { delete mesh; }};
+struct DoNothingStrategy { static void onDestroy(QVector<float>) {}};
+
+typedef LimitedDataStorage<int, CMesh*, DeleteMeshPtrStrategy> Meshes;
+typedef LimitedDataStorage<int, QVector<float>, DoNothingStrategy> QualityMaps;
+
 /*
  * WARNING: mesh or quality map with negative key are consider as 'helper entities'
  */
@@ -27,12 +33,12 @@ public:
 
   QVector<float> qualityMap(int key) const;
 
-  const LimitedDataStorage<int, CMesh*>& meshes() const { return meshes_; }
-  const LimitedDataStorage<int, QVector<float>>& qualityMaps() const { return qualityMaps_; }
+  const Meshes& meshes() const { return meshes_; }
+  const QualityMaps& qualityMaps() const { return qualityMaps_; }
 
   void deleteAll();
 
 private:
-  LimitedDataStorage<int, CMesh*> meshes_;
-  LimitedDataStorage<int, QVector<float>> qualityMaps_;
+  Meshes meshes_;
+  QualityMaps qualityMaps_;
 };
