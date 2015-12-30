@@ -15,5 +15,14 @@ public:
       }
     }
   }
-  //static void deleteExaminationFromPatient(int patient_id);
+
+  static bool findScanFilename(int scanID, QString& outFilename) {
+    QSqlTableModel scanModel;
+    scanModel.setTable("scan");
+    scanModel.setFilter(QString("id == %1").arg(scanID));
+    scanModel.select();
+    if (scanModel.rowCount() != 1) return false;
+    outFilename = scanModel.record(0).value("filename").toString();
+    return true;
+  }
 };
