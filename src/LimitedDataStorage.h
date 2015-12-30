@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QMap>
+#include <QList>
 #include <QVector>
 /*
  * TODO: add removing strategy, add insert/gc strategy
@@ -16,11 +17,13 @@ public:
   void remove(KeyT key);
   void removeFirst();
 
-  bool contains(KeyT key);
-  DataT data(KeyT key);
-  int order(KeyT key);
-  bool isEmpty();
-  int size();
+  bool contains(KeyT key) const;
+  DataT data(KeyT key) const;
+  QList<KeyT> keys() const;
+  int order(KeyT key) const;
+  bool isEmpty() const;
+  bool isFull() const;
+  int size() const;
 
 protected:
   int MAX_NUM_;
@@ -29,7 +32,19 @@ protected:
 };
 
 template<typename KeyT, typename DataT>
-int LimitedDataStorage<KeyT, DataT>::order(KeyT key)
+QList<KeyT> LimitedDataStorage<KeyT, DataT>::keys() const
+{
+  return data_.keys();
+}
+
+template<typename KeyT, typename DataT>
+bool LimitedDataStorage<KeyT, DataT>::isFull() const
+{
+  return data_.size() >= MAX_NUM_;
+}
+
+template<typename KeyT, typename DataT>
+int LimitedDataStorage<KeyT, DataT>::order(KeyT key) const
 {
   return insertion_order_.indexOf(key);
 }
@@ -49,19 +64,19 @@ LimitedDataStorage<KeyT, DataT>::~LimitedDataStorage()
 }
 
 template<typename KeyT, typename DataT>
-int LimitedDataStorage<KeyT, DataT>::size()
+int LimitedDataStorage<KeyT, DataT>::size() const
 {
   return data_.size();
 }
 
 template<typename KeyT, typename DataT>
-bool LimitedDataStorage<KeyT, DataT>::isEmpty()
+bool LimitedDataStorage<KeyT, DataT>::isEmpty() const
 {
   return size() == 0;
 }
 
 template<typename KeyT, typename DataT>
-bool LimitedDataStorage<KeyT, DataT>::contains(KeyT key)
+bool LimitedDataStorage<KeyT, DataT>::contains(KeyT key) const
 {
   return data_.contains(key);
 }
@@ -90,7 +105,7 @@ void LimitedDataStorage<KeyT, DataT>::insert(KeyT key, DataT data)
 }
 
 template<typename KeyT, typename DataT>
-DataT LimitedDataStorage<KeyT, DataT>::data(KeyT key)
+DataT LimitedDataStorage<KeyT, DataT>::data(KeyT key) const
 {
   return data_[key];
 }
