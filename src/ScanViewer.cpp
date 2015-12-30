@@ -17,7 +17,7 @@ ScanViewer::ScanViewer(const CMeshStorage* meshStorage, QWidget* parent, int max
 
 ScanViewer::~ScanViewer()
 {
-  currentScans_.clear();
+  clearDisplay();
 }
 
 void ScanViewer::debugNumScan()
@@ -30,7 +30,7 @@ bool ScanViewer::show(int scanId)
 {
   clearDisplay();
   if (meshStorage_->hasMesh(scanId)) {
-    currentScans_.insert(scanId, meshStorage_->mesh(scanId));
+    currentScans_.append({ scanId, meshStorage_->mesh(scanId), false });
     refreshDisplay();
     return true;
   }
@@ -40,10 +40,10 @@ bool ScanViewer::show(int scanId)
 bool ScanViewer::show(int scanID, int diffID)
 {
   clearDisplay();
-  if (meshStorage_->hasMesh(scanID) && meshStorage_->hasMesh(diffID)) {
+  if (meshStorage_->hasMesh(scanID) && meshStorage_->hasQualityMap(diffID)) {
     auto clone = meshStorage_->meshClone(scanID);
     applyQualityToMesh(*clone, meshStorage_->qualityMap(diffID));
-    currentScans_.insert(scanID, clone);
+    currentScans_.append({ scanID, clone, true });
     refreshDisplay();
     return true;
   }
@@ -53,11 +53,15 @@ bool ScanViewer::show(int scanID, int diffID)
 void ScanViewer::refreshDisplay()
 {
   clear();
-  std::for_each(currentScans_.begin(), currentScans_.end(), [=](CMesh* mesh) { this->insert(mesh); });
+  std::for_each(currentScans_.begin(), currentScans_.end(), [=](Scan scan) { this->insert(scan.mesh); });
   update();
 }
 
 void ScanViewer::clearDisplay()
 {
+  std::for_each(currentScans_.begin(), currentScans_.end(),
+    [=](Scan scan) {
+    if (scan.isClone) delete scan.mesh;
+  });
   currentScans_.clear();
 }

@@ -19,8 +19,15 @@ public:
   };
 
 private:
+  struct Scan
+  {
+    int id;
+    CMesh* mesh;
+    bool isClone;
+  };
+
   QMap<int, QVector<float>> diffs_;
-  QMap<int, CMesh*> currentScans_;
+  QList<Scan> currentScans_;
   const CMeshStorage* meshStorage_;
 
   void refreshDisplay();
