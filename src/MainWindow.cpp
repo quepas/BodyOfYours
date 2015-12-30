@@ -204,7 +204,7 @@ void MainWindow::calculateDiff()
       }
       // load mesh for it
       CMesh mesh;
-      openMesh(fileName, mesh);
+      MeshProcessing::loadMeshFromFile<CMesh>(fileName, &mesh);
       // save it
       QVector<float> quality;
       generateRandomQualityForMesh(mesh, quality);

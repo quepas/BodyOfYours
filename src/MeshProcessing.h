@@ -7,9 +7,6 @@
 
 #include <QString>
 
-bool openMesh(QString filename, CMesh* out, bool clean_data = false);
-bool openMesh(QString filename, CMesh& out, bool clean_data = false);
-
 namespace MeshProcessing {
 // #MeshProcessing
 template <typename MeshT>

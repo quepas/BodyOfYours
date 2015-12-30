@@ -64,7 +64,7 @@ bool ViewerToolbar::openMeshFromFile()
   if (!filename.isEmpty()) {
     qDebug() << "[INFO] Opening mesh from file: " << filename;
     CMesh* mesh = new CMesh;
-    openMesh(filename, *mesh);
+    MeshProcessing::loadMeshFromFile<CMesh>(filename, mesh);
     viewer_->insert(mesh);
     return true;
   }

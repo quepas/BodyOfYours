@@ -12,31 +12,6 @@ using vcg::tri::UpdatePosition;
 using vcg::tri::io::Importer;
 using vcg::Matrix44d;
 
-
-bool openMesh(QString filename, CMesh* out, bool clean_data /*= false*/)
-{
-  return openMesh(filename, *out, clean_data);
-}
-
-bool openMesh(QString filename, CMesh& out, bool clean_data /*= false*/)
-{
-  int err = Importer<CMesh>::Open(out, qPrintable(filename));
-  if (err) {
-    qDebug() << "[Error] Error in reading " << filename << ":" << Importer<CMesh>::ErrorMsg(err);
-    if (Importer<CMesh>::ErrorCritical(err))
-      qDebug() << "[Critical] Serious error.";
-    return false;
-  }
-  UpdateNormal<CMesh>::PerVertexNormalized(out);
-  qDebug() << "[Info] Read mesh " << filename;
-  if (clean_data){
-    int dup = Clean<CMesh>::RemoveDuplicateVertex(out);
-    int unref = Clean<CMesh>::RemoveUnreferencedVertex(out);
-    qDebug() << "Removed " << dup << " duplicate and " << unref << " unreferenced vertices from mesh " << filename;
-  }
-  return true;
-}
-
 aiColor4D toOGLColor(vcg::Color4<unsigned char>& color)
 {
   return aiColor4D(color.X() / 255.0f,
