@@ -117,11 +117,29 @@ MainWindow::MainWindow() :
   
 
   // StackedFormWidget -> ...
-  connect(stack, &StackedFormWidget::displayMeshWithQualityMap, [=](int scanID, int diffID) {
-//    viewer_->load(scanID);
-    viewer_->loadDiff(diffID);
-    viewer_->show(scanID, diffID);
-    viewport_tabs_->setCurrentIndex(1);
+  connect(stack, &StackedFormWidget::displayScan, [=](int scanID, int diffId) {
+    // Load mesh first
+    if (!meshStorage_->hasMesh(scanID)) {
+      QString filename;
+      if (!ModelHelper::findScanFilename(scanID, filename)) {
+        qDebug() << "[ERROR@MainWindow->OnDisplayScan] Couldn't find scan with ID" << scanID;
+        return;
+      };
+      if (filename.isEmpty()) return;
+      meshStorage_->loadMesh(filename, scanID);
+    }
+    // Load quality map
+    if (!meshStorage_->hasQualityMap(diffId)) {
+      QString filename;
+      if (!ModelHelper::findScanDiffFilename(diffId, filename)) {
+        qDebug() << "[ERROR@MainWindow->OnDisplayScan] Couldn't find scan diff with ID" << diffId;
+        return;
+      }
+      if (filename.isEmpty()) return;
+      meshStorage_->loadQualityMap(filename, diffId);
+    }
+    miniScanViewer_->show(scanID, diffId);
+    //viewport_tabs_->setCurrentIndex(1);
   });
 
   // PatientTreeWidget -> ScannerToolbar

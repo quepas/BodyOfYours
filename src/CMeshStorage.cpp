@@ -75,3 +75,8 @@ bool CMeshStorage::hasQualityMap(int key) const
 {
   return meshes_.contains(key);
 }
+
+QVector<float> CMeshStorage::qualityMap(int key) const
+{
+  return qualityMaps_.data(key);
+}

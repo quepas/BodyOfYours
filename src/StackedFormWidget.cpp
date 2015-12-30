@@ -19,7 +19,7 @@ StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableMod
     });
   }
   connect(dynamic_cast<ScanForm*>(widgets_[3]), &ScanForm::displayMeshWithQualityMap, [=] (int refScanID, int diffID) {
-    emit displayMeshWithQualityMap(refScanID, diffID);
+    emit displayScan(refScanID, diffID);
   });
 
   connect(widgets_[0], &FormWidget::deleted, [=](int deletedItemId) {

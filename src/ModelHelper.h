@@ -25,4 +25,14 @@ public:
     outFilename = scanModel.record(0).value("filename").toString();
     return true;
   }
+
+  static bool findScanDiffFilename(int diffId, QString& outFilename) {
+    QSqlTableModel scanDiffModel;
+    scanDiffModel.setTable("scan_diff");
+    scanDiffModel.setFilter(QString("id == %1").arg(diffId));
+    scanDiffModel.select();
+    if (scanDiffModel.rowCount() != 1) return false;
+    outFilename = scanDiffModel.record(0).value("filename").toString();
+    return true;
+  }
 };

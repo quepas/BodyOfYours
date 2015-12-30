@@ -24,6 +24,7 @@ public:
 
 signals:
   void displayMeshWithQualityMap(int scanID, int diffID);
+  void displayScan(int scanId, int diffId);
 
 private:
   QList<FormWidget*> widgets_;
