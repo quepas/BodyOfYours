@@ -11,6 +11,7 @@
 #include "GuiActions.h"
 #include "Database.h"
 #include "MeshProcessing.h"
+#include "ModelHelper.h"
 #include "PatientTreeItem.h"
 #include "PatientTreeToolbar.h"
 #include "ScannerToolbar.h"
@@ -21,16 +22,19 @@
 MainWindow::MainWindow() :
   scanner_(nullptr),
   meshDiffDlg_(nullptr)
-#ifndef _DEBUG
-  ,
-  viewer_(new ScanViewer(this, 10)),
-  miniScanViewer_(new ScanViewer(this, 10))
-#endif
 {
   main_form_ = nullptr;
   Database db("database.db");
   db.createScheme();
   initModels();
+
+  // Mesh & viewers
+  meshStorage_ = new CMeshStorage();
+#ifndef _DEBUG
+  viewer_ = new ScanViewer(meshStorage_, this, 10);
+  miniScanViewer_ = new ScanViewer(meshStorage_, this, 10);
+#endif
+
   StackedFormWidget* stack = new StackedFormWidget(patient_model_, exam_model_, scan_model_);
   patient_widget_ = new PatientTreeWidget(patient_model_, exam_model_, scan_model_, stack, Database::selectPatient());
   connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(openScan(QString)));
@@ -114,7 +118,7 @@ MainWindow::MainWindow() :
 
   // StackedFormWidget -> ...
   connect(stack, &StackedFormWidget::displayMeshWithQualityMap, [=](int scanID, int diffID) {
-    viewer_->load(scanID);
+//    viewer_->load(scanID);
     viewer_->loadDiff(diffID);
     viewer_->show(scanID, diffID);
     viewport_tabs_->setCurrentIndex(1);
@@ -126,13 +130,22 @@ MainWindow::MainWindow() :
   });
 
   auto onDisplayScan = [=](ScanViewer::ID viewerID, int scanID) {
+    // Load mesh first
+    if (!meshStorage_->hasMesh(scanID)) {
+      QString filename;
+      if (!ModelHelper::findScanFilename(scanID, filename)) {
+        qDebug() << "[ERROR@MainWindow->OnDisplayScan] Couldn't find scan with ID" << scanID;
+        return;
+      };
+      qDebug() << "[INFO@MainWindow->OnDisplayScan] Loading scan" << filename;
+      if (filename.isEmpty()) return;
+      meshStorage_->loadMesh(filename, scanID);
+    }
     switch (viewerID) {
     case ScanViewer::FULL_VIEWER:
-      viewer_->load(scanID);
       viewer_->show(scanID);
       viewport_tabs_->setCurrentIndex(1);
     case ScanViewer::MINI_VIEWER:
-      miniScanViewer_->load(scanID);
       miniScanViewer_->show(scanID);
       break;
     }

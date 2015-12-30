@@ -12,6 +12,7 @@
 #include "PatientTreeWidget.h"
 #include "Scanner.h"
 #include "FormWidget.h"
+#include "CMeshStorage.h"
 
 class MainWindow : public QMainWindow
 {
@@ -27,6 +28,7 @@ public slots:
   void calculateMirror();
 
 private:
+  CMeshStorage* meshStorage_;
   ScanViewer* viewer_;
   ScanViewer* miniScanViewer_;
   Scanner* scanner_;
