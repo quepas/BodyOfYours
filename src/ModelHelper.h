@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QFile>
 #include <QSqlRecord>
 #include <QSqlTableModel>
 
@@ -22,6 +23,10 @@ public:
       QSqlRecord record = scan_model->record(i);
       if (record.value("exam_id").toInt() == examination_id) {
         int scan_id = record.value("id").toInt();
+        QString filename = record.value("filename").toString();
+        if (!QFile::remove(filename)) {
+          qDebug() << "[ERROR@deleteScans] Couldn't delete scan file " << filename;
+        }
         deleteScanDiffs(scan_id, scan_diff_model);
         scan_model->removeRow(i);
       }
@@ -32,6 +37,10 @@ public:
     for (int i = 0; i < scan_diff_model->rowCount(); ++i) {
       QSqlRecord record = scan_diff_model->record(i);
       if (record.value("ref_id").toInt() == scan_id) {
+        QString filename = record.value("filename").toString();
+        if (!QFile::remove(filename)) {
+          qDebug() << "[ERROR@deleteScanDiffs] Couldn't delete scan diff file " << filename;
+        }
         scan_diff_model->removeRow(i);
       }
     }
