@@ -59,6 +59,8 @@ cmake_install.cmake
 /external/include
 /external/lib
 /data
+*.dat
+.qglviewer.xml
 
 # Database
 *.db
