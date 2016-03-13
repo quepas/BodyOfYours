@@ -10,13 +10,18 @@
 
 namespace MeshProcessing {
 // #MeshProcessing
+// Loading data
 template <typename MeshT>
-bool loadMeshFromFile(QString filename, MeshT* outMesh, bool cleanData = false);
+bool loadMeshFromFile(const QString& filename, MeshT* outMesh, bool cleanData = false);
 template <typename QualityMapT>
-bool loadQualityMapFromFile(QString filename, QualityMapT& outQualityMap);
+bool loadQualityMapFromFile(const QString& filename, QualityMapT& outQualityMap);
+
+// Processing data
+template<typename MeshT, typename QualityMapT>
+bool computeDifference(const MeshT* refMesh, const MeshT* compMesh, QualityMapT& outQualityMap);
 
 template <typename MeshT>
-bool loadMeshFromFile(QString filename, MeshT* outMesh, bool cleanData /*= false*/)
+bool loadMeshFromFile(const QString& filename, MeshT* outMesh, bool cleanData /*= false*/)
 {
   int err = vcg::tri::io::Importer<MeshT>::Open(*outMesh, qPrintable(filename));
   if (err) {
@@ -36,13 +41,19 @@ bool loadMeshFromFile(QString filename, MeshT* outMesh, bool cleanData /*= false
 }
 
 template <typename QualityMapT>
-bool MeshProcessing::loadQualityMapFromFile(QString filename, QualityMapT& outQualityMap)
+bool MeshProcessing::loadQualityMapFromFile(const QString& filename, QualityMapT& outQualityMap)
 {
   QFile file(filename);
   if (!file.open(QIODevice::ReadOnly)) return false;
   QDataStream in(&file);
   in >> outQualityMap;
   return true;
+}
+
+template<typename MeshT, typename QualityMapT>
+bool computeDifference(const MeshT* refMesh, const MeshT* compMesh, QualityMapT& outQualityMap)
+{
+
 }
 
 // ~MeshProcessing
