@@ -35,7 +35,7 @@ MainWindow::MainWindow() :
   miniScanViewer_ = new ScanViewer(meshStorage_, this, 10);
 #endif
 
-  StackedFormWidget* stack = new StackedFormWidget(patient_model_, exam_model_, scan_model_);
+  StackedFormWidget* stack = new StackedFormWidget(patient_model_, exam_model_, scan_model_, scanDiffModel_);
   patient_widget_ = new PatientTreeWidget(patient_model_, exam_model_, scan_model_, stack, Database::selectPatient());
   connect(patient_widget_, SIGNAL(openScan(QString)), this, SLOT(openScan(QString)));
   QGridLayout* grid = new QGridLayout;

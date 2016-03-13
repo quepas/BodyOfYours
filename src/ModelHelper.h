@@ -6,12 +6,33 @@
 class ModelHelper
 {
 public:
-  static void deletePatientRemains(int id, QSqlTableModel* exam_model) {
+  static void deleteExaminations(int patient_id, QSqlTableModel* exam_model, QSqlTableModel* scan_model, QSqlTableModel* scan_diff_model) {
     for (int i = 0; i < exam_model->rowCount(); ++i) {
       QSqlRecord record = exam_model->record(i);
-      if (record.value("patient_id") == id) {
+      if (record.value("patient_id").toInt() == patient_id) {
+        int exam_id = record.value("id").toInt();
+        deleteScans(exam_id, scan_model, scan_diff_model);
         exam_model->removeRow(i);
-        // TODO: delete exam's scans
+      }
+    }
+  }
+
+  static void deleteScans(int examination_id, QSqlTableModel* scan_model, QSqlTableModel* scan_diff_model) {
+    for (int i = 0; i < scan_model->rowCount(); ++i) {
+      QSqlRecord record = scan_model->record(i);
+      if (record.value("exam_id").toInt() == examination_id) {
+        int scan_id = record.value("id").toInt();
+        deleteScanDiffs(scan_id, scan_diff_model);
+        scan_model->removeRow(i);
+      }
+    }
+  }
+
+  static void deleteScanDiffs(int scan_id, QSqlTableModel* scan_diff_model) {
+    for (int i = 0; i < scan_diff_model->rowCount(); ++i) {
+      QSqlRecord record = scan_diff_model->record(i);
+      if (record.value("ref_id").toInt() == scan_id) {
+        scan_diff_model->removeRow(i);
       }
     }
   }
