@@ -26,6 +26,7 @@ PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableMod
   // init signal/slots
   connect(this, &PatientTreeWidget::itemSelectionChanged, [=]{
     auto item = currentItem();
+    if (!item) return;
     int itemID = PatientTreeItem::getId(item);
     if (PatientTreeItem::isPatient(item)) {
       form_widget->switchTo(StackedFormWidget::PATIENT_FORM, itemID);
