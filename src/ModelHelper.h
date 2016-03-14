@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QDebug>
 #include <QFile>
 #include <QSqlRecord>
 #include <QSqlTableModel>
@@ -7,6 +8,17 @@
 class ModelHelper
 {
 public:
+  static void deletePatient(int patient_id, QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, QSqlTableModel* scan_diff_model) {
+    for (int i = 0; i < patient_model->rowCount(); ++i) {
+      QSqlRecord record = patient_model->record(i);
+      if (record.value("id").toInt() == patient_id) {
+        patient_model->removeRow(i);
+        break;
+      }
+    }
+    deleteExaminations(patient_id, exam_model, scan_model, scan_diff_model);
+  }
+
   static void deleteExaminations(int patient_id, QSqlTableModel* exam_model, QSqlTableModel* scan_model, QSqlTableModel* scan_diff_model) {
     for (int i = 0; i < exam_model->rowCount(); ++i) {
       QSqlRecord record = exam_model->record(i);

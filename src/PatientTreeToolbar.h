@@ -20,6 +20,8 @@ private:
   QAction* calculate_mirror_;
   QAction* showScan_;
 
+  void setDisabledExceptNewPatient(bool disabled);
+
 signals:
   void calculateDiff();
   void calculateMirror();

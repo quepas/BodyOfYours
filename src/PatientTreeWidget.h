@@ -15,7 +15,7 @@ class PatientTreeWidget : public QTreeWidget
 {
   Q_OBJECT
 public:
-  PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent = 0);
+  PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, QSqlTableModel* scan_diff_model, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent = 0);
   ~PatientTreeWidget();
 
 private:
@@ -31,6 +31,7 @@ private:
   QSqlTableModel* patient_model_;
   QSqlTableModel* exam_model_;
   QSqlTableModel* scan_model_;
+  QSqlTableModel* scan_diff_model_;
 
 public slots:
   void removeCurrentItem();

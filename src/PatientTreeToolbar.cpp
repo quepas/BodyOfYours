@@ -19,6 +19,7 @@ PatientTreeToolbar::PatientTreeToolbar(PatientTreeWidget* patient_widget, QWidge
   calculate_mirror_->setToolTip(tr("Odbicie lustrzane skanow"));
   showScan_ = addAction(QIcon(tr("icon/radiography.png")), tr("Pokaz skan"));
   showScan_->setToolTip(tr("Wyswietl skan"));
+  setDisabledExceptNewPatient(true);
 
   connect(add_patient_, &QAction::triggered, [=]{
     ActionHub::trigger(ActionAddNewPatient::TYPE());
@@ -39,12 +40,16 @@ PatientTreeToolbar::PatientTreeToolbar(PatientTreeWidget* patient_widget, QWidge
   });
   connect(patient_widget, &PatientTreeWidget::currentItemChanged, [=](QTreeWidgetItem* current, QTreeWidgetItem* previous) {
     if (current) {
+      remove_item_->setEnabled(true);
       bool is_patient = PatientTreeItem::isPatient(current);
       add_examination_->setEnabled(is_patient);
       bool isScan = PatientTreeItem::isScan(current);
       calculate_diff_->setEnabled(isScan);
       calculate_mirror_->setEnabled(isScan);
       showScan_->setEnabled(isScan);
+    }
+    else {
+      setDisabledExceptNewPatient(true);
     }
   });
 }
@@ -57,4 +62,13 @@ PatientTreeToolbar::~PatientTreeToolbar()
   delete calculate_diff_;
   delete calculate_mirror_;
   delete showScan_;
+}
+
+void PatientTreeToolbar::setDisabledExceptNewPatient(bool disabled)
+{
+  add_examination_->setDisabled(disabled);
+  remove_item_->setDisabled(disabled);
+  calculate_diff_->setDisabled(disabled);
+  calculate_mirror_->setDisabled(disabled);
+  showScan_->setDisabled(disabled);
 }

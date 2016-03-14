@@ -4,6 +4,7 @@
 #include "PatientForm.h"
 #include "ExaminationForm.h"
 #include "ScanViewer.h"
+#include "ModelHelper.h"
 
 #include <QTreeWidgetItem>
 
@@ -12,13 +13,15 @@
 #include <QAction>
 #include <QPushButton>
 
-PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent /*= 0*/) : QTreeWidget(parent), form_widget_(form_widget), patient_model_(patient_model), exam_model_(exam_model), scan_model_(scan_model)
+PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, QSqlTableModel* scan_diff_model, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent /*= 0*/) : QTreeWidget(parent), form_widget_(form_widget), patient_model_(patient_model), exam_model_(exam_model), scan_model_(scan_model), scan_diff_model_(scan_diff_model)
 {
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
   setHeaderLabels(QStringList(("Pacjent")));
   connect(patient_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
   connect(exam_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
   connect(scan_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
+  // TODO: do we need to update scan_diff model?
+  connect(scan_diff_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
   buildTreeFromModel(patient_model_, exam_model_);
   // init signal/slots
   connect(this, &PatientTreeWidget::itemSelectionChanged, [=]{
@@ -110,28 +113,16 @@ void PatientTreeWidget::removeCurrentItem()
   QTreeWidgetItem* item = currentItem();
   if (item != nullptr) {
     int id = PatientTreeItem::getId(item);
-    qDebug() << "Remove current item: " << item->text(0) 
-             << " (" << (PatientTreeItem::isPatient(item) ? "PATIENT" : "EXAMINATION") 
-             << ":" << id << ")";
-    if (PatientTreeItem::isPatient(item)) {
-      // Remove children
-      for (int i = 0; i < item->childCount(); ++i) {
-        delete item->child(i);
-      }
-      // Remove parent
-      delete item;
-      if (!Database::deletePatient(id)) {
-        qDebug() << "[ERROR] Couldn't remove patient from DB with id: " << id;
-      }
-    }
-    else if (PatientTreeItem::isExamination(item)) {
-      delete item;
-      if (!Database::deleteExamination(id)) {
-        qDebug() << "[ERROR] Couldn't remove examination from DB with id: " << id;
-      }
-    }
-    else {
-      qDebug() << "[WARNING] Wrong type of item in PatientWidget with name: " << item->text(0);
+    switch (item->type()) {
+    case PATIENT:
+      ModelHelper::deletePatient(id, patient_model_, exam_model_, scan_model_, scan_diff_model_);
+      break;
+    case EXAM:
+      ModelHelper::deleteExaminations(id, exam_model_, scan_model_, scan_diff_model_);
+      break;
+    case SCAN:
+      ModelHelper::deleteScans(id, scan_model_, scan_diff_model_);
+      break;
     }
   }
 }
@@ -143,6 +134,7 @@ void PatientTreeWidget::onDataChanged()
   clear();
   buildTreeFromModel(patient_model_, exam_model_);
   restorExpanded();
+
 }
 
 void PatientTreeWidget::saveExpanded()
