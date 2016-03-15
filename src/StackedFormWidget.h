@@ -1,13 +1,14 @@
 #pragma once
 
 #include "FormWidget.h"
+#include "SQLTableModelHandler.h"
 #include <QStackedWidget>
 
 class StackedFormWidget : public QStackedWidget
 {
   Q_OBJECT
 public:
-  StackedFormWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, QSqlTableModel* scan_diff_model, QWidget* parent = nullptr);
+  StackedFormWidget(SQLTableModelHandler handler, QWidget* parent = nullptr);
   ~StackedFormWidget();
 
   enum FormID {

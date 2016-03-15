@@ -13,16 +13,16 @@
 #include <QAction>
 #include <QPushButton>
 
-PatientTreeWidget::PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, QSqlTableModel* scan_diff_model, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent /*= 0*/) : QTreeWidget(parent), form_widget_(form_widget), patient_model_(patient_model), exam_model_(exam_model), scan_model_(scan_model), scan_diff_model_(scan_diff_model)
+PatientTreeWidget::PatientTreeWidget(SQLTableModelHandler handler, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent /*= 0*/) : QTreeWidget(parent), form_widget_(form_widget), handler_(handler)
 {
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
   setHeaderLabels(QStringList(("Pacjent")));
-  connect(patient_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
-  connect(exam_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
-  connect(scan_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
+  connect(handler.patient, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
+  connect(handler.examination, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
+  connect(handler.scan, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
   // TODO: do we need to update scan_diff model?
-  connect(scan_diff_model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
-  buildTreeFromModel(patient_model_, exam_model_);
+  connect(handler.scan_diff, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
+  buildTreeFromModel(handler.patient, handler.examination);
   // init signal/slots
   connect(this, &PatientTreeWidget::itemSelectionChanged, [=]{
     auto item = currentItem();
@@ -73,6 +73,7 @@ void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTa
             exam_item->setIcon(0, QIcon("icon/stethoscope1.png"));
             item->addChild(exam_item);
             // insert exam's scans
+            auto scan_model_ = handler_.scan;
             for (int k = 0; k < scan_model_->rowCount(); ++k) {
               QSqlRecord scan = scan_model_->record(k);
               if (!scan.isNull("id")) {
@@ -116,13 +117,13 @@ void PatientTreeWidget::removeCurrentItem()
     int id = PatientTreeItem::getId(item);
     switch (item->type()) {
     case PATIENT:
-      ModelHelper::deletePatient(id, patient_model_, exam_model_, scan_model_, scan_diff_model_);
+      ModelHelper::deletePatient(id, handler_.patient, handler_.examination, handler_.scan, handler_.scan_diff);
       break;
     case EXAM:
-      ModelHelper::deleteExaminations(id, exam_model_, scan_model_, scan_diff_model_);
+      ModelHelper::deleteExaminations(id, handler_.examination, handler_.scan, handler_.scan_diff);
       break;
     case SCAN:
-      ModelHelper::deleteScans(id, scan_model_, scan_diff_model_);
+      ModelHelper::deleteScans(id, handler_.scan, handler_.scan_diff);
       break;
     }
   }
@@ -133,7 +134,7 @@ void PatientTreeWidget::onDataChanged()
   saveExpanded();
   qDebug() << "---> Rebuild patient tree";
   clear();
-  buildTreeFromModel(patient_model_, exam_model_);
+  buildTreeFromModel(handler_.patient, handler_.examination);
   restorExpanded();
 
 }

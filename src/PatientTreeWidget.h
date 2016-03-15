@@ -6,6 +6,7 @@
 #include "PatientTreeItem.h"
 #include "StackedFormWidget.h"
 #include "ScanViewer.h"
+#include "SQLTableModelHandler.h"
 
 #include <QTreeWidget>
 #include <QList>
@@ -15,7 +16,7 @@ class PatientTreeWidget : public QTreeWidget
 {
   Q_OBJECT
 public:
-  PatientTreeWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, QSqlTableModel* scan_diff_model, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent = 0);
+  PatientTreeWidget(SQLTableModelHandler handler, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent = 0);
   ~PatientTreeWidget();
 
 private:
@@ -28,10 +29,7 @@ private:
   QList<int> exam_exp_;
 
   StackedFormWidget* form_widget_;
-  QSqlTableModel* patient_model_;
-  QSqlTableModel* exam_model_;
-  QSqlTableModel* scan_model_;
-  QSqlTableModel* scan_diff_model_;
+  SQLTableModelHandler handler_;
 
 public slots:
   void removeCurrentItem();

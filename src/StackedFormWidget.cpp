@@ -7,12 +7,12 @@
 #include "ScanForm.h"
 #include "ModelHelper.h"
 
-StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableModel* exam_model, QSqlTableModel* scan_model, QSqlTableModel* scan_diff_model, QWidget* parent /*= nullptr*/) : QStackedWidget(parent), currentRowID_(-1)
+StackedFormWidget::StackedFormWidget(SQLTableModelHandler handler, QWidget* parent /*= nullptr*/) : QStackedWidget(parent), currentRowID_(-1)
 {
-  widgets_.append(new PatientForm(patient_model, this));
-  widgets_.append(new ExaminationForm(exam_model, this));
+  widgets_.append(new PatientForm(handler.patient, this));
+  widgets_.append(new ExaminationForm(handler.examination, this));
   widgets_.append(new FormWidget(this));
-  widgets_.append(new ScanForm(scan_model, this));
+  widgets_.append(new ScanForm(handler.scan, this));
   for (int i = 0; i < 2; ++i) {
     connect(widgets_[i], &FormWidget::canceled, [=]{
       switchTo(EMPTY_FORM);
@@ -23,7 +23,7 @@ StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableMod
   });
 
   connect(widgets_[0], &FormWidget::deleted, [=](int deletedItemId) {
-    ModelHelper::deleteExaminations(deletedItemId, exam_model, scan_model, scan_diff_model);
+    ModelHelper::deleteExaminations(deletedItemId, handler.examination, handler.scan, handler.scan_diff);
     switchTo(EMPTY_FORM);
   });
   connect(widgets_[1], &FormWidget::deleted, [=]{
@@ -34,8 +34,8 @@ StackedFormWidget::StackedFormWidget(QSqlTableModel* patient_model, QSqlTableMod
   });
   connect(widgets_[1], &FormWidget::saved, [=](int currentRowIndex) {
     if (currentRowID_ != -1) {
-      auto idx = exam_model->index(currentRowIndex, exam_model->fieldIndex("patient_id"));
-      exam_model->setData(idx, currentRowID_);
+      auto idx = handler.examination->index(currentRowIndex, handler.examination->fieldIndex("patient_id"));
+      handler.examination->setData(idx, currentRowID_);
     }
     switchTo(EMPTY_FORM);
   });
