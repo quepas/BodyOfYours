@@ -22,7 +22,7 @@ PatientTreeWidget::PatientTreeWidget(SQLTableModelHandler handler, StackedFormWi
   connect(handler.scan, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
   // TODO: do we need to update scan_diff model?
   connect(handler.scan_diff, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
-  buildTreeFromModel(handler.patient, handler.examination);
+  buildTreeFromModel(handler_);
   // init signal/slots
   connect(this, &PatientTreeWidget::itemSelectionChanged, [=]{
     auto item = currentItem();
@@ -51,10 +51,10 @@ PatientTreeWidget::~PatientTreeWidget()
 
 }
 
-void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTableModel* exam_model)
+void PatientTreeWidget::buildTreeFromModel(SQLTableModelHandler handler)
 {
-  for (int i = 0; i < patient_model->rowCount(); ++i) {
-    QSqlRecord record = patient_model->record(i);
+  for (int i = 0; i < handler.patient->rowCount(); ++i) {
+    QSqlRecord record = handler.patient->record(i);
     if (!record.isNull("id")) {
       int id = record.value("id").toInt();
       auto item = PatientTreeItem::createPatientItem(id,
@@ -63,8 +63,8 @@ void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTa
       item->setIcon(0, QIcon("icon/broken8.png"));
       addTopLevelItem(item);
       // insert patient's examinations
-      for (int j = 0; j < exam_model->rowCount(); ++j) {
-        QSqlRecord exam = exam_model->record(j);
+      for (int j = 0; j < handler.examination->rowCount(); ++j) {
+        QSqlRecord exam = handler.examination->record(j);
         if (!exam.isNull("id")) {
           int exam_fk_id = exam.value("patient_id").toInt();
           int exam_id = exam.value("id").toInt();
@@ -73,9 +73,8 @@ void PatientTreeWidget::buildTreeFromModel(QSqlTableModel* patient_model, QSqlTa
             exam_item->setIcon(0, QIcon("icon/stethoscope1.png"));
             item->addChild(exam_item);
             // insert exam's scans
-            auto scan_model_ = handler_.scan;
-            for (int k = 0; k < scan_model_->rowCount(); ++k) {
-              QSqlRecord scan = scan_model_->record(k);
+            for (int k = 0; k < handler.scan->rowCount(); ++k) {
+              QSqlRecord scan = handler.scan->record(k);
               if (!scan.isNull("id")) {
                 int scan_exam_fk_id = scan.value("exam_id").toInt();
                 if (scan_exam_fk_id == exam_id) {
@@ -117,13 +116,13 @@ void PatientTreeWidget::removeCurrentItem()
     int id = PatientTreeItem::getId(item);
     switch (item->type()) {
     case PATIENT:
-      ModelHelper::deletePatient(id, handler_.patient, handler_.examination, handler_.scan, handler_.scan_diff);
+      ModelHelper::deletePatient(id, handler_);
       break;
     case EXAM:
-      ModelHelper::deleteExaminations(id, handler_.examination, handler_.scan, handler_.scan_diff);
+      ModelHelper::deleteExaminations(id, handler_);
       break;
     case SCAN:
-      ModelHelper::deleteScans(id, handler_.scan, handler_.scan_diff);
+      ModelHelper::deleteScans(id, handler_);
       break;
     }
   }
@@ -134,7 +133,7 @@ void PatientTreeWidget::onDataChanged()
   saveExpanded();
   qDebug() << "---> Rebuild patient tree";
   clear();
-  buildTreeFromModel(handler_.patient, handler_.examination);
+  buildTreeFromModel(handler_);
   restorExpanded();
 
 }

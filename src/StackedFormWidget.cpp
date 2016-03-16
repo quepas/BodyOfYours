@@ -23,7 +23,7 @@ StackedFormWidget::StackedFormWidget(SQLTableModelHandler handler, QWidget* pare
   });
 
   connect(widgets_[0], &FormWidget::deleted, [=](int deletedItemId) {
-    ModelHelper::deleteExaminations(deletedItemId, handler.examination, handler.scan, handler.scan_diff);
+    ModelHelper::deleteExaminations(deletedItemId, handler);
     switchTo(EMPTY_FORM);
   });
   connect(widgets_[1], &FormWidget::deleted, [=]{

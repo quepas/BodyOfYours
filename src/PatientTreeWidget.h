@@ -20,7 +20,7 @@ public:
   ~PatientTreeWidget();
 
 private:
-  void buildTreeFromModel(QSqlTableModel* patient_model, QSqlTableModel* exam_model);
+  void buildTreeFromModel(SQLTableModelHandler handler);
 
   void saveExpanded();
   void restorExpanded();
