@@ -7,18 +7,18 @@
 
 PatientTreeToolbar::PatientTreeToolbar(PatientTreeWidget* patient_widget, QWidget* parent /*= nullptr*/) : QToolBar(parent)
 {
-  add_patient_ = addAction(QIcon("icon/broken8.png"), tr("Nowy pacjent"));
-  add_patient_->setToolTip(tr("Nowy pacjent"));
-  add_examination_ = addAction(QIcon("icon/stethoscope1.png"), tr("Nowe badanie"));
-  add_examination_->setToolTip(tr("Nowe badanie"));
-  remove_item_ = addAction(QIcon("icon/remove22.png"), tr("Usun element"));
-  remove_item_->setToolTip(tr("Usun element"));
-  calculate_diff_ = addAction(QIcon("icon/woman52.png"), tr("Roznica skanow"));
-  calculate_diff_->setToolTip(tr("Roznica skanow"));
-  calculate_mirror_ = addAction(QIcon("icon/two25.png"), tr("Odbicie lustrzane skanow"));
-  calculate_mirror_->setToolTip(tr("Odbicie lustrzane skanow"));
-  showScan_ = addAction(QIcon(tr("icon/radiography.png")), tr("Pokaz skan"));
-  showScan_->setToolTip(tr("Wyswietl skan"));
+  add_patient_ = addAction(QIcon("icon/broken8.png"), tr(":new_patient"));
+  add_patient_->setToolTip(tr(":new_patient_tooltip"));
+  add_examination_ = addAction(QIcon("icon/stethoscope1.png"), tr(":new_examination"));
+  add_examination_->setToolTip(tr(":new_examination_tooltip"));
+  remove_item_ = addAction(QIcon("icon/remove22.png"), tr(":remove_element"));
+  remove_item_->setToolTip(tr(":remove_element_tooltip"));
+  calculate_diff_ = addAction(QIcon("icon/woman52.png"), tr(":scans_difference"));
+  calculate_diff_->setToolTip(tr(":scans_difference_tooltip"));
+  calculate_mirror_ = addAction(QIcon("icon/two25.png"), tr(":scans_mirror"));
+  calculate_mirror_->setToolTip(tr(":scans_mirror_tooltip"));
+  showScan_ = addAction(QIcon(tr("icon/radiography.png")), tr(":show_scan"));
+  showScan_->setToolTip(tr(":show_scan_tooltip"));
   setDisabledExceptNewPatient(true);
 
   connect(add_patient_, &QAction::triggered, [=]{

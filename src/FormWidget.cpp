@@ -61,11 +61,11 @@ void FormWidget::initLayouts()
 
 void FormWidget::initButtons()
 {
-  lockButton_ = new QPushButton(QIcon(tr("icon/locked59.png")), tr("Zablokuj"), this);
-  unlockButton_ = new QPushButton(QIcon(tr("icon/tool683.png")), tr("Odblokuj"), this);
-  saveButton_ = new QPushButton(QIcon(tr("icon/save29.png")), tr("Zapisz"), this);
-  cancelButton_ = new QPushButton(QIcon(tr("icon/delete85.png")), tr("Anuluj"), this);
-  deleteButton_ = new QPushButton(QIcon(tr("icon/delete81.png")), tr("Usun"), this);
+  lockButton_ = new QPushButton(QIcon(tr("icon/locked59.png")), tr(":lock"), this);
+  unlockButton_ = new QPushButton(QIcon(tr("icon/tool683.png")), tr(":unlock"), this);
+  saveButton_ = new QPushButton(QIcon(tr("icon/save29.png")), tr(":save"), this);
+  cancelButton_ = new QPushButton(QIcon(tr("icon/delete85.png")), tr(":cancel"), this);
+  deleteButton_ = new QPushButton(QIcon(tr("icon/delete81.png")), tr(":delete"), this);
 
   buttonLayout_->addWidget(deleteButton_);
   buttonLayout_->addWidget(saveButton_);

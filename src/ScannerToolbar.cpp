@@ -8,15 +8,15 @@
 
 ScannerToolbar::ScannerToolbar(QWidget* parent /*= nullptr*/) : QToolBar(parent)
 {
-  numSensorLabel_ = new QLabel(tr("Brak sensorow"));
+  numSensorLabel_ = new QLabel(tr(":no_sensors"));
   addWidget(numSensorLabel_);
   addSeparator();
-  start_recon_ = addAction(QIcon("icon/player2.png"), tr("Rozpocznij rekonstrukcje"));
-  start_recon_->setToolTip(tr("Rozpocznij rekonstrukcje"));
-  stop_recon_ = addAction(QIcon("icon/stop48.png"), tr("Zatrzymaj rekonstrukcje"));
-  stop_recon_->setToolTip(tr("Zatrzymaj rekonstrukcje"));
-  addExternalMesh_ = addAction(QIcon("icon/film63.png"), tr("Dodaj zewnetrzny skan"));
-  addExternalMesh_->setToolTip(tr("Dodaj zewnetrzny skan"));
+  start_recon_ = addAction(QIcon("icon/player2.png"), tr(":start_reconstruction"));
+  start_recon_->setToolTip(tr(":start_reconstruction_tooltip"));
+  stop_recon_ = addAction(QIcon("icon/stop48.png"), tr(":stop_reconstruction"));
+  stop_recon_->setToolTip(tr(":stop_reconstruction_tooltip"));
+  addExternalMesh_ = addAction(QIcon("icon/film63.png"), tr(":add_external_scan"));
+  addExternalMesh_->setToolTip(tr(":add_external_scan_tooltip"));
   setEnabled(false);
   connect(start_recon_, &QAction::triggered, [=]{
     emit startReconstruction();
@@ -32,9 +32,9 @@ ScannerToolbar::ScannerToolbar(QWidget* parent /*= nullptr*/) : QToolBar(parent)
     // find external mesh
     QString filename = QFileDialog::
       getOpenFileName(this,
-      tr("Otworz plik ze skanem"),
+      tr(":open_file_with_scan"),
       QString("data/"),
-      tr("Skany 3D w formacie PLY (*.ply); Wszystkie pliki (*)"));
+      tr(":scans_3d_ply_or_any_other_files")); // Skany 3D w formacie PLY (*.ply); Wszystkie pliki (*)
     if (!filename.isEmpty()) emit stopReconstruction(filename);
     // TODO: copy external scan to local 'data' directory, change filename
   });
@@ -57,5 +57,5 @@ void ScannerToolbar::setEnabled(bool enabled)
 void ScannerToolbar::showNumSensor(int numSensor)
 {
   if (numSensor > 0)
-    numSensorLabel_->setText(QString("Sensory: %1").arg(numSensor));
+    numSensorLabel_->setText(QString(":sensor_num").arg(numSensor)); // Sensory: %1
 }

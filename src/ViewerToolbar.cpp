@@ -7,15 +7,15 @@
 
 ViewerToolbar::ViewerToolbar(ScanViewer* viewer, QWidget* parent) : QToolBar(parent), viewer_(viewer)
 {
-  open_mesh_ = addAction(QIcon("icon/eye106.png"), tr("Otworz siatke 3D"));
-  open_mesh_->setToolTip(tr("Otworz siatke 3D"));
-  clear_viewer_ = addAction(QIcon("icon/warning39.png"), tr("Wyczysc widok wizualizacji"));
-  clear_viewer_->setToolTip(tr("Wyczysc widok wizualizacji"));
+  open_mesh_ = addAction(QIcon("icon/eye106.png"), tr(":open_mesh_3d"));
+  open_mesh_->setToolTip(tr(":open_mesh_3d_tooltip"));
+  clear_viewer_ = addAction(QIcon("icon/warning39.png"), tr(":clean_visualization_view"));
+  clear_viewer_->setToolTip(tr(":clean_visualization_view_tooltip"));
 
-  previous_quality_map_ = addAction(QIcon("icon/window58.png"), tr("Poprzednia mapa kolorow"));
-  previous_quality_map_->setToolTip(tr("Poprzednia mapa kolorow"));
-  next_quality_map_ = addAction(QIcon("icon/expand43.png"), tr("Nastepna mapa kolorow"));
-  previous_quality_map_->setToolTip(tr("Nastepna mapa kolorow"));
+  previous_quality_map_ = addAction(QIcon("icon/window58.png"), tr(":previous_quality_map"));
+  previous_quality_map_->setToolTip(tr(":previous_quality_map_tooltip"));
+  next_quality_map_ = addAction(QIcon("icon/expand43.png"), tr(":next_quality_map"));
+  previous_quality_map_->setToolTip(tr(":next_quality_map_tooltip"));
 
   connect(open_mesh_, &QAction::triggered, [=]{
     if (openMeshFromFile()) {
@@ -58,9 +58,9 @@ bool ViewerToolbar::openMeshFromFile()
 {
   QString filename = QFileDialog::
     getOpenFileName(this,
-        tr("Otworz plik z modelem 3D"),
+        tr(":open_file_with_scan"),
         QString(),
-        tr("Modele 3D w formacie PLY (*.ply); Wszystkie pliki (*)"));
+        tr(":scans_3d_ply_or_any_other_files")); // Modele 3D w formacie PLY (*.ply); Wszystkie pliki (*)
   if (!filename.isEmpty()) {
     qDebug() << "[INFO] Opening mesh from file: " << filename;
     CMesh* mesh = new CMesh;

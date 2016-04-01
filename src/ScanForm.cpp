@@ -7,8 +7,8 @@ ScanForm::ScanForm(QSqlTableModel* model, QWidget* parent)
 {
   scanName_ = new QLineEdit(this);
   scanFilePath_ = new QLineEdit(this);
-  formLayout_->addRow(tr("Nazwa skanu"), scanName_);
-  formLayout_->addRow(tr("Plik skanu"), scanFilePath_);
+  formLayout_->addRow(tr(":scan_name"), scanName_);
+  formLayout_->addRow(tr(":scan_file"), scanFilePath_);
   scanFilePath_->setEnabled(false);
 
   mapper_->addMapping(scanName_, model_->fieldIndex("name"));

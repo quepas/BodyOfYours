@@ -53,13 +53,13 @@ MainWindow::MainWindow() :
 #ifndef _DEBUG
   splitter->addWidget(miniScanViewer_);
 #endif
-  viewport_tabs_->addTab(splitter, tr("Formatki"));
+  viewport_tabs_->addTab(splitter, tr(":forms"));
 #ifndef _DEBUG
-  viewport_tabs_->addTab(viewer_, tr("Wizualizacja"));
+  viewport_tabs_->addTab(viewer_, tr(":visualization"));
 #else
-  viewport_tabs_->addTab(new QLabel(tr("Debug mode")), tr("Wizualizacja"));
+  viewport_tabs_->addTab(new QLabel(tr(":debug_mode")), tr(":visualization"));
 #endif
-  viewport_tabs_->addTab(scanner_viewer, tr("Podglad"));
+  viewport_tabs_->addTab(scanner_viewer, tr(":quick_view"));
   grid->addWidget(viewport_tabs_, 0, 1, 2, 1);
   QWidget* central_widget = new QWidget;
   central_widget->setLayout(grid);

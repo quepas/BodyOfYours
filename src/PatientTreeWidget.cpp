@@ -16,7 +16,7 @@
 PatientTreeWidget::PatientTreeWidget(SQLTableModelHandler handler, StackedFormWidget* form_widget, const QList<PatientData>& patients, QWidget* parent /*= 0*/) : QTreeWidget(parent), form_widget_(form_widget), handler_(handler)
 {
   setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
-  setHeaderLabels(QStringList(("Pacjent")));
+  setHeaderLabels(QStringList(tr(":patient")));
   connect(handler.patient, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
   connect(handler.examination, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));
   connect(handler.scan, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(onDataChanged()));

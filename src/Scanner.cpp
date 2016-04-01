@@ -56,8 +56,8 @@ Scanner::Scanner(QWidget* parent)
 
   m_calibMessageBox = new QMessageBox(parent_);
   m_calibMessageBox->setIcon(QMessageBox::Information);
-  m_calibMessageBox->setWindowTitle("Calibration");
-  m_calibMessageBox->setText("Press OK to capture calibration frame");
+  m_calibMessageBox->setWindowTitle(tr(":calibration"));
+  m_calibMessageBox->setText(tr(":press_ok_to_capture_frame"));
   m_calibMessageBox->setDefaultButton(QMessageBox::Ok);
   connect(m_calibMessageBox, SIGNAL(accepted()), this, SLOT(performCalibration()));
   connect(m_calibMessageBox, SIGNAL(finished(int)), this, SLOT(performCalibration()));
@@ -235,11 +235,11 @@ void Scanner::performCalibration()
       calib.getTransformation(i, data->T);
       qDebug() << mat4ToString(data->T);
     }
-    QMessageBox::information(parent_, "Calibration", "Calibration succeeded");
+    QMessageBox::information(parent_, tr(":calibration"), tr(":calibration_succeeded"));
   }
   else
   {
-    QMessageBox::information(parent_, "Calibration", "Calibration failed");
+    QMessageBox::information(parent_, tr(":calibration"), tr(":calibration_failed"));
   }
 }
 
@@ -253,7 +253,7 @@ void Scanner::calibrate()
 
 void Scanner::saveCalibration()
 {
-  QString filename = QFileDialog::getSaveFileName(parent_, "Save calibration");
+  QString filename = QFileDialog::getSaveFileName(parent_, tr(":save_calibration"));
   if (filename.isEmpty()) return;
   // Save calibrations to file as 4x4 matrices in row-major order
   std::ofstream out(filename.toStdString());
@@ -271,12 +271,12 @@ void Scanner::saveCalibration()
 
 void Scanner::loadCalibration()
 {
-  QString filename = QFileDialog::getOpenFileName(parent_, "Load calibration");
+  QString filename = QFileDialog::getOpenFileName(parent_, tr(":load_calibration"));
   if (filename.isEmpty()) return;
   std::ifstream in(filename.toStdString());
   if (!in.is_open() || !in.good())
   {
-    QMessageBox::information(parent_, "Load calibration", "Couldn't open calibration file");
+    QMessageBox::information(parent_, tr(":load_calibration"), tr(":couldnt_open_calibration_file"));
     return;
   }
   // Load calibration from file
@@ -289,7 +289,7 @@ void Scanner::loadCalibration()
   }
   if (in.fail())
   {
-    QMessageBox::information(parent_, "Load calibration", "Error reading calibration file");
+    QMessageBox::information(parent_, tr("load_calibration"), tr(":error_reading_calibration_file"));
     return;
   }
   in.close();

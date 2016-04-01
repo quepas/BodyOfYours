@@ -6,7 +6,7 @@
 
 MeshDifferenceDlg::MeshDifferenceDlg(QWidget* parent, QMap<int, QString> data, int refScanID) : QDialog(parent)
 {
-  setWindowTitle("Wylicz roznice skanow");
+  setWindowTitle(tr(":compute_scan_difference"));
   setMinimumWidth(400);
   QVBoxLayout* layout = new QVBoxLayout(this);
   refScanComboBox_ = new QComboBox(this);
@@ -20,15 +20,15 @@ MeshDifferenceDlg::MeshDifferenceDlg(QWidget* parent, QMap<int, QString> data, i
       refScanComboBox_->insertItem(index++, data[key], key);
   }
   QFormLayout* form = new QFormLayout();
-  form->addRow(tr("Skan referencyjny"), refScanComboBox_);
-  form->addRow(tr("Porownaj z"), compScanComboBox_);
+  form->addRow(tr(":reference_scan"), refScanComboBox_);
+  form->addRow(tr(":compare_to"), compScanComboBox_);
   layout->addLayout(form);
   QHBoxLayout* buttons = new QHBoxLayout();
-  calculateButton_ = new QPushButton(QIcon("icon/two25.png"), tr("Wylicz"), this);
+  calculateButton_ = new QPushButton(QIcon("icon/two25.png"), tr(":compute"), this);
   calculateButton_->setEnabled(data.size() > 1);
   buttons->addStretch();
   buttons->addWidget(calculateButton_);
-  closeButton_ = new QPushButton(QIcon("icon/delete85.png"), tr("Anuluj"), this);
+  closeButton_ = new QPushButton(QIcon("icon/delete85.png"), tr(":cancel"), this);
   buttons->addWidget(closeButton_);
   layout->addLayout(buttons);
 
