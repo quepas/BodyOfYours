@@ -1,12 +1,14 @@
 #pragma once
 
-#include "ImageData.h"
-#include "SensorData.h"
 #include <QObject>
 #include <QImage>
 #include <QTimer>
 #include <QMessageBox>
+
 #include <RecFusion.h>
+
+#include "ImageData.h"
+#include "SensorData.h"
 
 class Scanner : public QObject
 {
@@ -15,19 +17,23 @@ public:
   Scanner(QWidget* parent);
   ~Scanner();
 
-  int numSensor() { return numSensor_; }
+  int numSensor();
+  bool setLicense(QString file);
+  bool hasLicense();
 
 private:
   static const int MAX_NUM_SENSORS = 3;
   int numSensor_;
   RecFusion::Sensor* sensors_[MAX_NUM_SENSORS];
   RecFusion::Reconstruction* reconstruction_;
-  SensorData* sensors_data_[MAX_NUM_SENSORS];
-  bool rec_in_progress_;
-  bool calib_in_progress_;
+  SensorData* sensorsData_[MAX_NUM_SENSORS];
+  bool recInProgress_;
+  bool calibInProgress_;
   QTimer* timer_;
   QWidget* parent_;
   QMessageBox* m_calibMessageBox;
+
+  bool hasLicense_;
 
 public slots:
   void startReconstruction();

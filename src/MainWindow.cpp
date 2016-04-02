@@ -233,27 +233,6 @@ void MainWindow::calculateDiff()
     });
     meshDiffDlg_->show();
   }
-  /*
-  auto items = patient_widget_->selectedItems();
-  if (items.size() == 2) {
-    int idA = PatientTreeItem::getId(items[0]);
-    int idB = PatientTreeItem::getId(items[1]);
-
-    ExaminationData data;
-    Database::selectExamination(idA, data);
-    CMesh meshA;
-    openMesh("data/" + data.scan_name, meshA);
-    Database::selectExamination(idB, data);
-    CMesh meshB;
-    openMesh("data/" + data.scan_name, meshB);
-    CMesh out;
-    computeDifference(meshA, meshB, out);
-    auto* pmesh = new CMesh;
-    vcg::tri::Append<CMesh, CMesh>::MeshCopy(*(pmesh), meshB);
-    viewer_->clearMesh();
-    viewer_->addMesh("diff", pmesh);
-    viewport_tabs_->setCurrentIndex(1);
-  }*/
 }
 
 void MainWindow::calculateMirror()

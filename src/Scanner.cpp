@@ -18,22 +18,21 @@ using RecFusion::Vec3i;
 
 Scanner::Scanner(QWidget* parent) 
   : reconstruction_(nullptr),
-    rec_in_progress_(false),
-    calib_in_progress_(false),
+    recInProgress_(false),
+    calibInProgress_(false),
     timer_(nullptr),
     parent_(parent)
 {
   // Output RecFusion SDK version
   qDebug() << "[INFO] Using RecFusionSDK " << RecFusionSDK::majorVersion() << "." << RecFusionSDK::minorVersion();
 
-  // Load license file
-  bool ok = RecFusionSDK::setLicenseFile("License.dat");
-  if (!ok)
+  setLicense("License.dat"); // TODO: parametrize this
+  if (!hasLicense())
     qDebug() << "[WARNING] Invalid RecFusion license. Export will be disabled.";
 
   for (int i = 0; i < MAX_NUM_SENSORS; ++i) {
     sensors_[i] = new Sensor();
-    sensors_data_[i] = nullptr;
+    sensorsData_[i] = nullptr;
   }
   numSensor_ = sensors_[0]->deviceCount();
   qDebug() << "[INFO] Num. of sensor devices connected: " << numSensor_;
@@ -44,7 +43,7 @@ Scanner::Scanner(QWidget* parent)
       qDebug() << "[ERROR] Couldn't open sensor with num.: " << i;
     }
     else {
-      sensors_data_[i] = new SensorData(*sensors_[i]);
+      sensorsData_[i] = new SensorData(*sensors_[i]);
       /*int w = m_sensor[i]->depthWidth();
       int h = m_sensor[i]->depthHeight();
       m_imgLabel[i]->resize(w, h);*/
@@ -68,7 +67,7 @@ Scanner::~Scanner()
 {
   for (int i = 0; i < MAX_NUM_SENSORS; ++i) {
     delete sensors_[i];
-    delete sensors_data_[i];
+    delete sensorsData_[i];
   }
   delete reconstruction_;
   delete timer_;
@@ -76,15 +75,15 @@ Scanner::~Scanner()
 
 void Scanner::startReconstruction()
 {
-  if (rec_in_progress_) {
+  if (recInProgress_) {
     qDebug() << "[WARNING] Reconstruction already take place. Returning.";
     return;
   }
-  rec_in_progress_ = false;
+  recInProgress_ = false;
   delete reconstruction_;
   ReconstructionParams parameters(numSensor_);
   for (int i = 0; i < numSensor_; ++i) {
-    SensorData* data = sensors_data_[i];
+    SensorData* data = sensorsData_[i];
     auto depth_image = data->depth_image;
     auto color_image = data->color_image;
     parameters.setImageSize(color_image->width(), color_image->height(), depth_image->width(), depth_image->height(), i);
@@ -95,12 +94,12 @@ void Scanner::startReconstruction()
   parameters.setVolumeSize(Vec3(500, 500, 500));
 
   reconstruction_ = new Reconstruction(parameters);
-  rec_in_progress_ = true;
+  recInProgress_ = true;
 }
 
 void Scanner::stopReconstruction()
 {
-  rec_in_progress_ = false;
+  recInProgress_ = false;
   if (!reconstruction_) {
     qDebug() << "[ERROR] Reconstruction class failed.";
     return;
@@ -113,27 +112,31 @@ void Scanner::stopReconstruction()
     qDebug() << "[ERROR] Retrieving mesh failed.";
     return;
   }
-  MeshViewer viewer;
-  viewer.showMesh(mesh);
-  /*
-  std::cout << "Reconstructed mesh (" << mesh.vertexCount() << " vertices, " << mesh.triangleCount() << " triangles)" << std::endl;
-  // Save mesh to file
-  ok = mesh.save("mesh.ply", Mesh::PLY);
-  if (ok)
-  std::cout << "Saved mesh as PLY (" << mesh.vertexCount() << " vertices, " << mesh.triangleCount() << " triangles)" << std::endl;
-  */
+
+  // If no valid license - display reconstructed mesh
+  if (!hasLicense()) {
+    MeshViewer viewer;
+    viewer.showMesh(mesh);
+  }
+  // If valid license - save mesh
+  else {
+    std::string meshFile = "mesh.ply"; // TODO: parametrize this!
+    if (mesh->save(meshFile.c_str(), Mesh::PLY)) {
+      qDebug() << "[INFO@Scanner]: Saved mesh as PLY (" << meshFile.c_str() << ")";
+    }
+  }
 }
 
 void Scanner::processFrames()
 {
   for (int i = 0; i < numSensor_; ++i) {
-    if (!sensors_data_[i]->HasRegularImages())
+    if (!sensorsData_[i]->HasRegularImages())
       return;
   }
   // Grab images from sensor
   bool is_data_ok[3];
   for (int i = 0; i < numSensor_; ++i) {
-    is_data_ok[i] = sensors_[i]->readImage(*(sensors_data_[i]->depth_image), *(sensors_data_[i]->color_image), 40);
+    is_data_ok[i] = sensors_[i]->readImage(*(sensorsData_[i]->depth_image), *(sensorsData_[i]->color_image), 40);
   }
   QList<ImageData> img_camera;
   QList<ImageData> img_scene;
@@ -141,13 +144,13 @@ void Scanner::processFrames()
   for (int i = 0; i < numSensor_; ++i)
   {
     if (!is_data_ok[i]) continue;
-    auto data = sensors_data_[i];
+    auto data = sensorsData_[i];
 
     // Get image size
     int w = data->color_image->width();
     int h = data->color_image->height();
 
-    if (rec_in_progress_ && reconstruction_)
+    if (recInProgress_ && reconstruction_)
     {
       // Add frame to reconstruction
       bool is_recon_ok = false;
@@ -188,7 +191,7 @@ void Scanner::processFrames()
 void Scanner::performCalibration()
 {
   for (int i = 0; i < numSensor_; ++i) {
-    sensors_data_[i]->ResetT();
+    sensorsData_[i]->ResetT();
   }
   // Create calibration object for two sensors
   Calibration calib;
@@ -201,25 +204,25 @@ void Scanner::performCalibration()
   {
     // Reset valid flag for capturing calibration images
     for (int j = 0; j < numSensor_; ++j) {
-      sensors_data_[j]->calib_image_valid = false;
+      sensorsData_[j]->calib_image_valid = false;
     }
     // Setting m_calibrate to true, instructs the capture loop to capture calibration images
-    calib_in_progress_ = true;
+    calibInProgress_ = true;
     // Wait until calibration images for both sensors have been captured
     bool waiting = true;
     while (waiting) {
       for (int i = 0; i < numSensor_; ++i) {
-        waiting = waiting && !(sensors_data_[i]->IsCalibrated());
+        waiting = waiting && !(sensorsData_[i]->IsCalibrated());
       }
       QCoreApplication::processEvents();
     }
 
     // Stop calibration frame capturing
-    calib_in_progress_ = false;
+    calibInProgress_ = false;
 
     // Pass captured images to calibration
     for (int i = 0; i < numSensor_; ++i) {
-      auto data = sensors_data_[i];
+      auto data = sensorsData_[i];
       calib.setImage(i, *(data->calib_depth_image), *(data->calib_color_image), data->K, data->K);
     }
     // Run calibration
@@ -231,7 +234,7 @@ void Scanner::performCalibration()
   {
     // Retrieve sensor transformation if calibration succeeded
     for (int i = 0; i < numSensor_; ++i) {
-      auto data = sensors_data_[i];
+      auto data = sensorsData_[i];
       calib.getTransformation(i, data->T);
       qDebug() << mat4ToString(data->T);
     }
@@ -246,7 +249,7 @@ void Scanner::performCalibration()
 void Scanner::calibrate()
 {
   // Show message box to let user choose correct frame before starting calibration
-  calib_in_progress_ = false;
+  calibInProgress_ = false;
   /*m_calibMessageBox->setText("Press OK to capture calibration frames.");
   m_calibMessageBox->show();*/
 }
@@ -262,7 +265,7 @@ void Scanner::saveCalibration()
     for (int row = 0; row < 4; ++row)
     {
       for (int col = 0; col < 4; ++col)
-        out << sensors_data_[i]->T(row, col) << " ";
+        out << sensorsData_[i]->T(row, col) << " ";
       out << std::endl;
     }
   }
@@ -297,5 +300,20 @@ void Scanner::loadCalibration()
   for (int i = 0; i < numSensor_; ++i)
     for (int row = 0; row < 4; ++row)
       for (int col = 0; col < 4; ++col)
-        sensors_data_[i]->T(row, col) = temp[i][col * 4 + row];
+        sensorsData_[i]->T(row, col) = temp[i][col * 4 + row];
+}
+
+int Scanner::numSensor() {
+  return numSensor_;
+}
+
+bool Scanner::hasLicense() {
+  return hasLicense_;
+}
+
+bool Scanner::setLicense(QString file)
+{
+  const char* name = file.toStdString().c_str();
+  hasLicense_ = RecFusionSDK::setLicenseFile(name);
+  return hasLicense_;
 }

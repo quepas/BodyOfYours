@@ -44,5 +44,7 @@ private:
   QSqlTableModel* scan_model_;
   QSqlTableModel* scanDiffModel_;
 
+  bool hasRFLicense;
+
   void initModels();
 };
