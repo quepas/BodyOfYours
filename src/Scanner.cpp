@@ -134,40 +134,39 @@ void Scanner::processFrames()
       return;
   }
   // Grab images from sensor
-  bool is_data_ok[3];
+  bool isDataOk[3];
   for (int i = 0; i < numSensor_; ++i) {
-    is_data_ok[i] = sensors_[i]->readImage(*(sensorsData_[i]->depth_image), *(sensorsData_[i]->color_image), 40);
+    isDataOk[i] = sensors_[i]->readImage(*(sensorsData_[i]->depth_image), *(sensorsData_[i]->color_image), 40);
   }
-  QList<ImageData> img_camera;
-  QList<ImageData> img_scene;
+  QList<ImageData> imgCamera;
+  QList<ImageData> imgScene;
   // Process images
   for (int i = 0; i < numSensor_; ++i)
   {
-    if (!is_data_ok[i]) continue;
+    if (!isDataOk[i]) continue;
     auto data = sensorsData_[i];
 
     // Get image size
-    int w = data->color_image->width();
-    int h = data->color_image->height();
+    int width = data->color_image->width();
+    int height = data->color_image->height();
 
     if (recInProgress_ && reconstruction_)
     {
       // Add frame to reconstruction
-      bool is_recon_ok = false;
-      bool is_frame_ok = reconstruction_->addFrame(
+      bool isRecOk = false;
+      bool isFrameOk = reconstruction_->addFrame(
         i,
-        *data->depth_image,
-        *data->color_image,
-        &is_recon_ok,
+        *data->depth_image, *data->color_image,
+        &isRecOk,
         data->scene_image,
         0,
         &data->T);
 
-      if (is_frame_ok && is_recon_ok)
+      if (isFrameOk && isRecOk)
       {
-        // Display rendering of current reconstruction when tracking succeeded
-       QImage image(data->scene_image->data(), w, h, QImage::Format_RGB888);
-       img_scene.append({image, w, h});
+        // Prepare rendered image of reconstructed scene
+       QImage image(data->scene_image->data(), width, height, QImage::Format_RGB888);
+       imgScene.append({image, width, height});
       }
     }
     /*else if (m_calibrate)
@@ -182,10 +181,10 @@ void Scanner::processFrames()
     }*/
 
     // Display captured images in GUI
-    QImage image(data->color_image->data(), w, h, QImage::Format_RGB888);
-    img_camera.append({image, w, h});
+    QImage image(data->color_image->data(), width, height, QImage::Format_RGB888);
+    imgCamera.append({image, width, height});
   }
-  emit sendImages(img_camera, img_scene);
+  emit sendImages(imgCamera, imgScene);
 }
 
 void Scanner::performCalibration()
