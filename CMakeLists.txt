@@ -9,8 +9,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
 # libraries path
-set (RECFUSION_INC "D:/Programowanie/Biblioteki/RecFusion SDK 1.2.8/include")
-set (RECFUSION_LIB "D:/Programowanie/Biblioteki/RecFusion SDK 1.2.8/lib")
+set (RECFUSION_INC "D:/Programowanie/Biblioteki/RecFusion SDK 1.2.11/include")
+set (RECFUSION_LIB "D:/Programowanie/Biblioteki/RecFusion SDK 1.2.11/lib")
 set (QOGLVIEWER_INC "D:/Programowanie/Biblioteki/libQGLViewer-2.6.3")
 set (QOGLVIEWER_LIB "D:/Programowanie/Biblioteki/libQGLViewer-2.6.3/QGLViewer")
 set (ASSIMP_INC "D:/Programowanie/Biblioteki/assimp/include")
