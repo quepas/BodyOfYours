@@ -130,7 +130,7 @@ void Scanner::stopReconstruction()
 void Scanner::processFrames()
 {
   for (int i = 0; i < numSensor_; ++i) {
-    if (!sensorsData_[i]->HasRegularImages())
+    if (!sensorsData_[i]->HasImages())
       return;
   }
   // Grab images from sensor
@@ -169,16 +169,13 @@ void Scanner::processFrames()
        imgScene.append({image, width, height});
       }
     }
-    /*else if (m_calibrate)
+    else if (calibInProgress_)
     {
       // Save calibration frame
-      for (unsigned i = 0; i < num_sensor_; ++i) {
-        auto data = sensors_data_[i];
-        memcpy(data->calib_color_image->data(), data->color_image->data(), w * h * 3);
-        memcpy(data->calib_depth_image->data(), data->depth_image->data(), w * h * 2);
+      for (int i = 0; i < numSensor_; ++i) {
         data->calib_image_valid = true;
       }
-    }*/
+    }
 
     // Display captured images in GUI
     QImage image(data->color_image->data(), width, height, QImage::Format_RGB888);
@@ -222,7 +219,7 @@ void Scanner::performCalibration()
     // Pass captured images to calibration
     for (int i = 0; i < numSensor_; ++i) {
       auto data = sensorsData_[i];
-      calib.setImage(i, *(data->calib_depth_image), *(data->calib_color_image), data->K, data->K);
+      calib.setImage(i, *(data->depth_image), *(data->color_image), data->K, data->K);
     }
     // Run calibration
     ok = calib.calibrate();
@@ -249,8 +246,8 @@ void Scanner::calibrate()
 {
   // Show message box to let user choose correct frame before starting calibration
   calibInProgress_ = false;
-  /*m_calibMessageBox->setText("Press OK to capture calibration frames.");
-  m_calibMessageBox->show();*/
+  m_calibMessageBox->setText("Press OK to capture calibration frames.");
+  m_calibMessageBox->show();
 }
 
 void Scanner::saveCalibration()

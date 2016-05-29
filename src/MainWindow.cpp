@@ -92,6 +92,7 @@ MainWindow::MainWindow() :
   // ScannerToolbar -> Scanner
   connect(scanner_toolbar, SIGNAL(startReconstruction()), scanner_, SLOT(startReconstruction()));
   connect(scanner_toolbar, SIGNAL(stopReconstruction(QString)), scanner_, SLOT(stopReconstruction()));
+  connect(scanner_toolbar, SIGNAL(startCalibration()), scanner_, SLOT(calibrate()));
 
   // ScannerToolbar -> StackedFormWidget
   connect(scanner_toolbar, &ScannerToolbar::stopReconstruction, [=](QString meshFilePath) {

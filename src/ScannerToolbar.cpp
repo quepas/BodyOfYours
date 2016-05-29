@@ -17,6 +17,8 @@ ScannerToolbar::ScannerToolbar(QWidget* parent /*= nullptr*/) : QToolBar(parent)
   stop_recon_->setToolTip(tr(":stop_reconstruction_tooltip"));
   addExternalMesh_ = addAction(QIcon("icon/film63.png"), tr(":add_external_scan"));
   addExternalMesh_->setToolTip(tr(":add_external_scan_tooltip"));
+  start_calibration_ = addAction(QIcon("icon/"), tr("start_calibration"));
+  start_calibration_->setToolTip(tr("start_calibration"));
   setEnabled(false);
   connect(start_recon_, &QAction::triggered, [=]{
     emit startReconstruction();
@@ -37,6 +39,9 @@ ScannerToolbar::ScannerToolbar(QWidget* parent /*= nullptr*/) : QToolBar(parent)
       tr(":scans_3d_ply_or_any_other_files")); // Skany 3D w formacie PLY (*.ply); Wszystkie pliki (*)
     if (!filename.isEmpty()) emit stopReconstruction(filename);
     // TODO: copy external scan to local 'data' directory, change filename
+  });
+  connect(start_calibration_, &QAction::triggered, [=]{
+    emit startCalibration();
   });
 }
 

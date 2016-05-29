@@ -13,6 +13,7 @@ public:
 
 signals:
   void startReconstruction();
+  void startCalibration();
   void stopReconstruction(QString meshFilePath);
 
 public slots:
@@ -23,5 +24,6 @@ private:
   QAction* start_recon_;
   QAction* stop_recon_;
   QAction* addExternalMesh_;
+  QAction* start_calibration_;
   QLabel* numSensorLabel_;
 };

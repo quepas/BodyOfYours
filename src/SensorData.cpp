@@ -14,8 +14,6 @@ SensorData::SensorData(const Sensor& sensor)
   color_image = new ColorImage(w, h);
   depth_image = new DepthImage(w, h);
   scene_image = new ColorImage(w, h);
-  calib_color_image = new ColorImage(w, h);
-  calib_depth_image = new DepthImage(w, h);
 }
 
 SensorData::~SensorData()
@@ -23,18 +21,11 @@ SensorData::~SensorData()
   delete color_image;
   delete depth_image;
   delete scene_image;
-  delete calib_color_image;
-  delete calib_depth_image;
 }
 
-bool SensorData::HasRegularImages()
+bool SensorData::HasImages()
 {
   return color_image && depth_image;
-}
-
-bool SensorData::HasCalibrationImages()
-{
-  return calib_color_image && calib_depth_image;
 }
 
 void SensorData::ResetT()
